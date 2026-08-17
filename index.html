@@ -351,6 +351,11 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;font-size:11.5px;color
         <div><label for="t-pitch">투구수 (불펜)</label><input type="number" id="t-pitch" min="0"></div>
       </div>
       <div style="margin-top:12px"><label for="t-memo">내용</label><textarea id="t-memo" placeholder="오늘 무엇을 했는지"></textarea></div>
+      <div class="grid g2" style="margin-top:12px">
+        <div><label for="t-vid">유튜브 링크 <span class="muted">— 일부공개로 업로드</span></label><input id="t-vid" placeholder="https://youtu.be/..."></div>
+        <div><label for="t-album">사진 앨범 링크 <span class="muted">— 구글 포토 공유</span></label><input id="t-album" placeholder="https://photos.app.goo.gl/..."></div>
+        <div><label for="t-photo">대표 사진 파일명 <span class="muted">— photos/ 폴더</span></label><input id="t-photo" placeholder="20260817_bullpen.jpg"></div>
+      </div>
       <div class="row-actions" style="margin-top:12px"><button class="btn" id="save-train">훈련 저장</button></div>
     </div>
     <div id="trainbody"></div>
@@ -1292,11 +1297,12 @@ function renderSplits(){
 if($('#save-train')){
   $('#save-train').addEventListener('click',()=>{
     const t={id:uid(), date:$('#t-date').value||today(), type:$('#t-type').value,
-             hours:num($('#t-hours').value), pitch:iv($('#t-pitch').value), memo:$('#t-memo').value};
+             hours:num($('#t-hours').value), pitch:iv($('#t-pitch').value), memo:$('#t-memo').value,
+             vid:$('#t-vid').value.trim(), album:$('#t-album').value.trim(), photo:$('#t-photo').value.trim()};
     DB.trainings.push(t);
     DB.trainings.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
     persist(); toast('훈련을 저장했습니다');
-    $('#t-hours').value=''; $('#t-pitch').value=''; $('#t-memo').value='';
+    ['#t-hours','#t-pitch','#t-memo','#t-vid','#t-album','#t-photo'].forEach(s=>$(s).value='');
     renderTrain();
   });
 }
@@ -1316,14 +1322,64 @@ function renderTrain(){
     statCell('기록 건수', DB.trainings.length+'건','')+
   '</div>';
   h+='<h3 class="sec">월별 훈련 일수</h3>'+barChart(mk.map(m=>m.slice(2).replace('-','/')), mk.map(m=>byM[m].days.size), '#3D6B4F');
-  h+='</div><div class="card"><h2>훈련 일지</h2><div class="scroll"><table><thead><tr><th>날짜</th><th>유형</th><th>시간</th><th>투구</th><th>내용</th><th></th></tr></thead><tbody>'+
-    DB.trainings.map(t=>'<tr><td class="num">'+esc(t.date)+'</td><td>'+esc(t.type)+'</td><td class="num">'+(t.hours||'')+'</td><td class="num">'+(t.pitch||'')+'</td>'+
-      '<td style="text-align:left;white-space:pre-wrap">'+esc(t.memo||'')+'</td><td>'+(ADMIN?'<button class="xbtn" data-del-t="'+t.id+'">×</button>':'')+'</td></tr>').join('')+
-  '</tbody></table></div></div>';
+  h+='</div><div class="card"><h2>훈련 일지 <span class="hint">'+DB.trainings.length+'건</span></h2>'+
+    '<div class="filterbar"><select id="tf-type"><option value="">전체 유형</option>'+
+      Array.from(new Set(DB.trainings.map(t=>t.type))).map(v=>'<option value="'+esc(v)+'">'+esc(v)+'</option>').join('')+
+    '</select><select id="tf-media"><option value="">전체</option><option value="y">영상·사진 있는 것만</option></select></div>'+
+    '<div id="trainlist"></div></div>';
   el.innerHTML=h;
+  const tt=$('#tf-type'), tm=$('#tf-media');
+  if(tt) tt.addEventListener('change',renderTrainList);
+  if(tm) tm.addEventListener('change',renderTrainList);
+  renderTrainList();
+}
+function renderTrainList(){
+  const el=$('#trainlist'); if(!el) return;
+  const ft=$('#tf-type')?$('#tf-type').value:'';
+  const fm=$('#tf-media')?$('#tf-media').value:'';
+  const list=DB.trainings.filter(t=>{
+    if(ft && t.type!==ft) return false;
+    if(fm==='y' && !(t.vid||t.album||t.photo)) return false;
+    return true;
+  });
+  if(!list.length){ el.innerHTML='<div class="empty" style="padding:26px">해당하는 훈련 기록이 없습니다</div>'; return; }
+  el.innerHTML=list.map(function(t){
+    const vid=ytid(t.vid);
+    const bits=[];
+    if(t.hours) bits.push(r1(t.hours)+'시간');
+    if(t.pitch) bits.push(t.pitch+'구');
+    return '<article class="logcard" style="border-left-color:var(--field)">'+
+      '<div class="top">'+
+        '<div><div class="dt">'+esc(t.date||'')+'</div>'+
+        '<div class="vs" style="font-size:17px">'+esc(t.type||'훈련')+'</div></div>'+
+        '<div style="text-align:right">'+(bits.length?'<span class="score">'+esc(bits.join(' · '))+'</span>':'')+'</div>'+
+      '</div>'+
+      (t.memo?'<div class="memo">'+esc(t.memo)+'</div>':'')+
+      (t.photo?'<div style="margin-top:10px"><img src="photos/'+esc(t.photo)+'" alt="" style="max-width:100%;border:1px solid var(--rule);border-radius:2px" loading="lazy"></div>':'')+
+      (vid?'<div class="videowrap"><iframe src="https://www.youtube.com/embed/'+esc(vid)+'" title="훈련 영상" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen loading="lazy"></iframe></div>':'')+
+      ((t.album||ADMIN)?'<div class="links">'+
+        (t.album?'<a href="'+esc(t.album)+'" target="_blank" rel="noopener">사진 앨범</a>':'')+
+        (ADMIN?'<a href="#" data-edit-t="'+t.id+'">수정</a><a href="#" data-del-t="'+t.id+'">삭제</a>':'')+
+      '</div>':'')+
+    '</article>';
+  }).join('');
 }
 $('#trainbody').addEventListener('click',ev=>{
+  const e=ev.target.closest('[data-edit-t]');
+  if(e){
+    ev.preventDefault();
+    const t=DB.trainings.find(x=>x.id===e.dataset.editT); if(!t) return;
+    $('#t-date').value=t.date||today(); $('#t-type').value=t.type||'팀훈련';
+    $('#t-hours').value=t.hours||''; $('#t-pitch').value=t.pitch||''; $('#t-memo').value=t.memo||'';
+    $('#t-vid').value=t.vid||''; $('#t-album').value=t.album||''; $('#t-photo').value=t.photo||'';
+    DB.trainings=DB.trainings.filter(x=>x.id!==t.id);
+    persist(); renderTrain();
+    window.scrollTo({top:0,behavior:'smooth'});
+    toast('위 입력창으로 불러왔습니다. 고친 뒤 다시 저장하세요');
+    return;
+  }
   const b=ev.target.closest('[data-del-t]'); if(!b) return;
+  ev.preventDefault();
   if(confirm('이 훈련 기록을 삭제할까요?')){ DB.trainings=DB.trainings.filter(x=>x.id!==b.dataset.delT); persist(); renderTrain(); toast('삭제했습니다'); }
 });
 
@@ -1467,8 +1523,8 @@ if($('#exp-pub')){
     download('야구_'+grp.label+'별집계_'+stamp()+'.csv', csv(rows), 'text/csv;charset=utf-8');
   });
   $('#csv-train').addEventListener('click',()=>{
-    const rows=[['날짜','유형','시간','불펜투구수','내용']];
-    DB.trainings.forEach(t=>rows.push([t.date,t.type,t.hours||'',t.pitch||'',(t.memo||'').replace(/\n/g,' ')]));
+    const rows=[['날짜','유형','시간','불펜투구수','내용','영상링크','앨범링크','사진파일']];
+    DB.trainings.forEach(t=>rows.push([t.date,t.type,t.hours||'',t.pitch||'',(t.memo||'').replace(/\n/g,' '),t.vid||'',t.album||'',t.photo||'']));
     download('야구_훈련_'+stamp()+'.csv', csv(rows), 'text/csv;charset=utf-8');
   });
   $('#csv-growth').addEventListener('click',()=>{
