@@ -242,12 +242,6 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;font-size:11.5px;color
         <div><label for="e-venue">구장</label><input id="e-venue" placeholder="목동구장" list="dl-venue"><datalist id="dl-venue"></datalist></div>
         <div><label for="e-tour">대회명 <span class="muted">— 집계 기준</span></label><input id="e-tour" placeholder="OO기 전국대회" list="dl-tour"><datalist id="dl-tour"></datalist></div>
         <div><label for="e-round">라운드</label><input id="e-round" placeholder="16강"></div>
-        <div><label for="e-weather">날씨·기온</label><input id="e-weather" placeholder="맑음 / 28도"></div>
-        <div><label for="e-order">타순</label><input type="number" id="e-order" min="1" max="12" placeholder="3"></div>
-        <div><label for="e-ts">우리팀 득점</label><input type="number" id="e-ts" min="0"></div>
-        <div><label for="e-os">상대팀 득점</label><input type="number" id="e-os" min="0"></div>
-        <div><label for="e-sb">도루 성공</label><input type="number" id="e-sb" min="0"></div>
-        <div><label for="e-cs">도루 실패</label><input type="number" id="e-cs" min="0"></div>
       </div>
     </div>
 
@@ -259,9 +253,7 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;font-size:11.5px;color
 
     <div class="card">
       <h2>투구 기록 <span class="hint">상대한 타자 한 명당 한 블록</span></h2>
-      <div class="grid g4" style="margin-bottom:14px">
-        <div><label for="e-velo">최고구속 (km/h)</label><input type="number" id="e-velo" min="0" max="200"></div>
-        <div><label for="e-pitches">주 구종</label><input id="e-pitches" placeholder="직구, 커브"></div>
+      <div class="grid g2" style="margin-bottom:14px">
         <div><label for="e-role">등판 상황</label><select id="e-role"><option value="">해당없음</option><option>선발</option><option>구원</option><option>마무리</option></select></div>
         <div><label for="e-dec">투수 승패</label><select id="e-dec"><option value="">해당없음</option><option>승</option><option>패</option><option>세이브</option><option>홀드</option></select></div>
       </div>
@@ -493,7 +485,7 @@ const SHORT = {'1B':'안타','IFH':'내야','2B':'2루타','3B':'3루타','HR':'
   'E':'실책','FC':'야선','CI':'방해'};
 
 const RUNNERS = [{v:'none',t:'주자 없음'},{v:'first',t:'1루만'},{v:'risp',t:'득점권 (2·3루)'}];
-const POSITIONS = ['투수','포수','1루수','2루수','3루수','유격수','좌익수','중견수','우익수','지명타자'];
+const POSITIONS = [{v:'',t:'포지션 선택'},{v:'투수',t:'투수'},{v:'포수',t:'포수'},{v:'1루수',t:'1루수'},{v:'2루수',t:'2루수'},{v:'3루수',t:'3루수'},{v:'유격수',t:'유격수'},{v:'좌익수',t:'좌익수'},{v:'중견수',t:'중견수'},{v:'우익수',t:'우익수'},{v:'지명타자',t:'지명타자'}];
 
 /* ================= 저장소 ================= */
 let MEM = null, LS_OK = true;
@@ -644,7 +636,7 @@ function paBlock(d){
       '<div><label>최종 결과</label><select class="pa-res">'+optList(RESULTS, d.res||'1B', true)+'</select></div>'+
       '<div><label>주자 상황</label><select class="pa-run">'+optList(RUNNERS, d.run||'none', true)+'</select></div>'+
       '<div><label>타점</label><input type="number" min="0" class="pa-rbi" value="'+(d.rbi??'')+'"></div>'+
-      '<div><label>이닝</label><input type="number" min="1" class="pa-inn" value="'+(d.inn??'')+'"></div>'+
+      '<div><label>득점</label><input type="number" min="0" max="1" class="pa-scored" value="'+(d.scored??'')+'"></div>'+
     '</div></div>';
 }
 function bfBlock(d){
@@ -666,7 +658,7 @@ function fdBlock(d){
   return '<div class="blk fd">'+
     '<div class="bhead"><span class="idx">수비</span><button class="xbtn" data-del title="삭제">×</button></div>'+
     '<div class="grid g4">'+
-      '<div><label>포지션</label><select class="fd-pos">'+optList(POSITIONS, d.pos||'투수')+'</select></div>'+
+      '<div><label>포지션</label><select class="fd-pos">'+optList(POSITIONS, d.pos||'', true)+'</select></div>'+
       '<div><label>수비 이닝</label><input type="number" min="0" step="0.5" class="fd-inn" value="'+(d.inn??'')+'"></div>'+
       '<div><label>자살 PO</label><input type="number" min="0" class="fd-po" value="'+(d.po??'')+'"></div>'+
       '<div><label>보살 A</label><input type="number" min="0" class="fd-a" value="'+(d.a??'')+'"></div>'+
@@ -713,7 +705,7 @@ let EDIT_ID = null;
 function readForm(){
   const pas=$$('#pa-rows .blk').map(r=>({
     seq:r.dataset.seq||'', res:r.querySelector('.pa-res').value, run:r.querySelector('.pa-run').value,
-    rbi:iv(r.querySelector('.pa-rbi').value), inn:iv(r.querySelector('.pa-inn').value)
+    rbi:iv(r.querySelector('.pa-rbi').value), scored:iv(r.querySelector('.pa-scored').value)
   }));
   const bfs=$$('#bf-rows .blk').map(r=>({
     seq:r.dataset.seq||'', res:r.querySelector('.bf-res').value, inn:iv(r.querySelector('.bf-inn').value),
@@ -729,11 +721,6 @@ function readForm(){
     type: $('#e-type').value,
     opp: $('#e-opp').value.trim(), venue: $('#e-venue').value.trim(),
     tour: $('#e-tour').value.trim(), round: $('#e-round').value.trim(),
-    weather: $('#e-weather').value.trim(), order: iv($('#e-order').value),
-    ts: $('#e-ts').value===''?null:iv($('#e-ts').value),
-    os: $('#e-os').value===''?null:iv($('#e-os').value),
-    sb: iv($('#e-sb').value), cs: iv($('#e-cs').value),
-    velo: iv($('#e-velo').value), pitchTypes: $('#e-pitches').value.trim(),
     dec: $('#e-dec').value, role: $('#e-role').value,
     sba: iv($('#e-sba').value), csx: iv($('#e-csx').value), pb: iv($('#e-pb').value),
     vid: $('#e-vid').value.trim(), vid2: $('#e-vid2').value.trim(),
@@ -747,11 +734,7 @@ function fillForm(g){
   g = g||{};
   $('#e-date').value=g.date||today();
   $('#e-type').value=g.type||'정식';
-  ['opp','venue','tour','round','weather','memo'].forEach(k=>{ $('#e-'+k).value=g[k]||''; });
-  $('#e-order').value=g.order||'';
-  $('#e-ts').value=g.ts??''; $('#e-os').value=g.os??'';
-  $('#e-sb').value=g.sb||''; $('#e-cs').value=g.cs||'';
-  $('#e-velo').value=g.velo||''; $('#e-pitches').value=g.pitchTypes||'';
+  ['opp','venue','tour','round','memo'].forEach(k=>{ $('#e-'+k).value=g[k]||''; });
   $('#e-dec').value=g.dec||''; $('#e-role').value=g.role||'';
   $('#e-sba').value=g.sba||''; $('#e-csx').value=g.csx||''; $('#e-pb').value=g.pb||'';
   $('#e-vid').value=g.vid||''; $('#e-vid2').value=g.vid2||'';
@@ -778,10 +761,10 @@ if($('#save-game')){
 
 /* ================= 집계 ================= */
 function battingAgg(games, filter){
-  const a={G:0,PA:0,AB:0,H:0,B1:0,B2:0,B3:0,HR:0,BB:0,HBP:0,SO:0,SF:0,SH:0,RBI:0,TB:0,
+  const a={G:0,PA:0,AB:0,H:0,B1:0,B2:0,B3:0,HR:0,BB:0,HBP:0,SO:0,SF:0,SH:0,R:0,RBI:0,TB:0,
            P:0,STRK:0,SWING:0,WHIFF:0,FOUL:0,FPS:0,
            rispAB:0,rispH:0,rispRBI:0,emptyAB:0,emptyH:0,
-           twoAB:0,twoH:0,aheadAB:0,aheadH:0,SB:0,CS:0};
+           twoAB:0,twoH:0,aheadAB:0,aheadH:0};
   games.forEach(g=>{
     let used=false;
     (g.pas||[]).forEach(pa=>{
@@ -789,7 +772,7 @@ function battingAgg(games, filter){
       const r=RMAP[pa.res]; if(!r) return;
       used=true;
       const q=seqStats(pa.seq);
-      a.PA++; a.RBI+=pa.rbi||0;
+      a.PA++; a.R+=pa.scored||0; a.RBI+=pa.rbi||0;
       a.P+=q.pitches; a.STRK+=q.strikes; a.SWING+=q.swings; a.WHIFF+=q.whiffs; a.FOUL+=q.fouls;
       if(q.first && q.first.strike) a.FPS++;
       a.AB+=r.ab||0; a.H+=r.h||0; a.TB+=r.tb||0;
@@ -802,7 +785,7 @@ function battingAgg(games, filter){
         if(q.bAt>q.sAt){ a.aheadAB+=r.ab||0; a.aheadH+=r.h||0; }
       }
     });
-    if(used){ a.G++; a.SB+=g.sb||0; a.CS+=g.cs||0; }
+    if(used) a.G++;
   });
   a.AVG=a.AB?a.H/a.AB:null;
   const den=a.AB+a.BB+a.HBP+a.SF;
@@ -820,18 +803,16 @@ function battingAgg(games, filter){
   a.EMPT=a.emptyAB?a.emptyH/a.emptyAB:null;
   a.TWO=a.twoAB?a.twoH/a.twoAB:null;
   a.AHEAD=a.aheadAB?a.aheadH/a.aheadAB:null;
-  a.SBR=(a.SB+a.CS)?a.SB/(a.SB+a.CS):null;
   return a;
 }
 function pitchAgg(games){
   const a={G:0,BF:0,OUT:0,P:0,STRK:0,SWING:0,WHIFF:0,FOUL:0,FPS:0,
-           H:0,BB:0,HBP:0,K:0,R:0,ER:0,HR:0,maxVelo:0,W:0,L:0,SV:0};
+           H:0,BB:0,HBP:0,K:0,R:0,ER:0,HR:0,W:0,L:0,SV:0};
   games.forEach(g=>{
     const bfs=g.bfs||[], ips=g.ips||[];
     if(!bfs.length && !ips.length) return;
     a.G++;
     if(g.dec==='승') a.W++; else if(g.dec==='패') a.L++; else if(g.dec==='세이브') a.SV++;
-    if((g.velo||0)>a.maxVelo) a.maxVelo=g.velo;
     bfs.forEach(bf=>{
       const q=seqStats(bf.seq), r=RMAP[bf.res]||{};
       a.BF++;
@@ -868,8 +849,10 @@ function fieldAgg(games){
   games.forEach(g=>{
     (g.fds||[]).forEach(f=>{
       a.PO+=f.po||0; a.A+=f.a||0; a.E+=f.e||0; a.INN+=f.inn||0;
-      const p=a.byPos[f.pos]||(a.byPos[f.pos]={INN:0,PO:0,A:0,E:0,G:0});
-      p.INN+=f.inn||0; p.PO+=f.po||0; p.A+=f.a||0; p.E+=f.e||0; p.G++;
+      if(f.pos){
+        const p=a.byPos[f.pos]||(a.byPos[f.pos]={INN:0,PO:0,A:0,E:0,G:0});
+        p.INN+=f.inn||0; p.PO+=f.po||0; p.A+=f.a||0; p.E+=f.e||0; p.G++;
+      }
     });
     a.SBA+=g.sba||0; a.CSX+=g.csx||0; a.PB+=g.pb||0;
   });
@@ -993,7 +976,7 @@ function statCell(k,v,d,hi){
 /* ================= 01 경기 일지 ================= */
 function gameLine(g){
   const b=battingAgg([g]), p=pitchAgg([g]), out=[];
-  if(b.PA) out.push(b.AB+'타수 '+b.H+'안타'+(b.RBI?' '+b.RBI+'타점':'')+(b.BB?' '+b.BB+'볼넷':'')+(b.P?' · '+b.P+'구 봄':''));
+  if(b.PA) out.push(b.AB+'타수 '+b.H+'안타'+(b.R?' '+b.R+'득점':'')+(b.RBI?' '+b.RBI+'타점':'')+(b.BB?' '+b.BB+'볼넷':'')+(b.P?' · '+b.P+'구 봄':''));
   if(p.BF||p.P) out.push(ipText(p.OUT)+'이닝 '+p.P+'구 '+p.K+'K '+p.ER+'자책'+(p.STRP!=null?' · 스트라이크 '+pct(p.STRP):''));
   return out.join('   ·   ');
 }
@@ -1079,6 +1062,7 @@ function renderStats(){
     statCell('OPS', r3(b.OPS), '출루+장타', true)+
     statCell('득점권 타율', r3(b.RISP), b.rispH+' / '+b.rispAB+'타수 · '+b.rispRBI+'타점', true)+
     statCell('P/PA 타석당 투구수', r2(b.PPA), '총 '+b.P+'구', true)+
+    statCell('R 득점', b.R, '')+
     statCell('RBI 타점', b.RBI, '')+
     statCell('본 스트라이크 비율', pct(b.STRP), b.STRK+' / '+b.P+'구')+
     statCell('헛스윙률', pct(b.WHF), b.WHIFF+'헛스윙 / '+b.SWING+'스윙')+
@@ -1088,7 +1072,6 @@ function renderStats(){
     statCell('삼진율', pct(b.KR), b.SO+'삼진')+
     statCell('볼넷율', pct(b.BBR), b.BB+'볼넷')+
     statCell('ISO 순장타력', r3(b.ISO), '2루타 '+b.B2+' 3루타 '+b.B3+' 홈런 '+b.HR)+
-    statCell('도루 성공률', pct(b.SBR), b.SB+'성공 '+b.CS+'실패')+
   '</div>';
 
   const rispA=battingAgg(games,pa=>pa.run==='risp');
@@ -1121,7 +1104,6 @@ function renderStats(){
       statCell('경기당 투구수', r1(p.PG), '')+
       statCell('삼진율', pct(p.KRT), '타자 기준')+
       statCell('사사구율', pct(p.BBRT), '타자 기준')+
-      statCell('최고구속', p.maxVelo?p.maxVelo+'<span style="font-size:12px"> km/h</span>':'–', '')+
       statCell('승-패-세이브', p.W+'-'+p.L+'-'+p.SV, '')+
     '</div>';
 
@@ -1224,18 +1206,18 @@ function renderSplits(){
   let h='';
 
   h+='<div class="card"><h2>'+esc(grp.label)+'별 타격</h2><div class="scroll"><table><thead><tr>'+
-    '<th>'+esc(grp.label)+'</th><th>경기</th><th>타석</th><th>타수</th><th>안타</th><th>2B</th><th>3B</th><th>HR</th><th>타점</th><th>볼넷</th><th>삼진</th>'+
+    '<th>'+esc(grp.label)+'</th><th>경기</th><th>타석</th><th>타수</th><th>안타</th><th>2B</th><th>3B</th><th>HR</th><th>득점</th><th>타점</th><th>볼넷</th><th>삼진</th>'+
     '<th>타율</th><th>출루율</th><th>장타율</th><th>OPS</th><th>득점권</th><th>P/PA</th></tr></thead><tbody>'+
     rows.filter(r=>r.b.PA).map(function(r){
       return '<tr><td>'+esc(r.k)+'</td><td class="num">'+r.b.G+'</td><td class="num">'+r.b.PA+'</td><td class="num">'+r.b.AB+'</td>'+
         '<td class="num">'+r.b.H+'</td><td class="num">'+r.b.B2+'</td><td class="num">'+r.b.B3+'</td><td class="num">'+r.b.HR+'</td>'+
-        '<td class="num">'+r.b.RBI+'</td><td class="num">'+r.b.BB+'</td><td class="num">'+r.b.SO+'</td>'+
+        '<td class="num">'+r.b.R+'</td><td class="num">'+r.b.RBI+'</td><td class="num">'+r.b.BB+'</td><td class="num">'+r.b.SO+'</td>'+
         '<td class="num">'+r3(r.b.AVG)+'</td><td class="num">'+r3(r.b.OBP)+'</td><td class="num">'+r3(r.b.SLG)+'</td>'+
         '<td class="num">'+r3(r.b.OPS)+'</td><td class="num">'+r3(r.rr.AVG)+'</td><td class="num">'+r2(r.b.PPA)+'</td></tr>';
     }).join('')+
     (totB.PA?'<tr class="totrow"><td>전체</td><td class="num">'+totB.G+'</td><td class="num">'+totB.PA+'</td><td class="num">'+totB.AB+'</td>'+
       '<td class="num">'+totB.H+'</td><td class="num">'+totB.B2+'</td><td class="num">'+totB.B3+'</td><td class="num">'+totB.HR+'</td>'+
-      '<td class="num">'+totB.RBI+'</td><td class="num">'+totB.BB+'</td><td class="num">'+totB.SO+'</td>'+
+      '<td class="num">'+totB.R+'</td><td class="num">'+totB.RBI+'</td><td class="num">'+totB.BB+'</td><td class="num">'+totB.SO+'</td>'+
       '<td class="num">'+r3(totB.AVG)+'</td><td class="num">'+r3(totB.OBP)+'</td><td class="num">'+r3(totB.SLG)+'</td>'+
       '<td class="num">'+r3(totB.OPS)+'</td><td class="num">'+r3(totB.RISP)+'</td><td class="num">'+r2(totB.PPA)+'</td></tr>':'')+
   '</tbody></table></div></div>';
@@ -1474,12 +1456,11 @@ if($('#exp-pub')){
     rd.readAsText(f);
   });
   $('#csv-game').addEventListener('click',()=>{
-    const rows=[['날짜','구분','대회','라운드','상대','구장','우리득점','상대득점','결과','타석','타수','안타','타점','볼넷','삼진','타율','출루율','장타율','OPS','득점권타율','P/PA','투구이닝','투구수','스트라이크%','초구스트%','피안타','사사구','탈삼진','실점','자책','ERA','WHIP','메모']];
+    const rows=[['날짜','구분','대회','라운드','상대','구장','타석','타수','안타','득점','타점','볼넷','삼진','타율','출루율','장타율','OPS','득점권타율','P/PA','투구이닝','투구수','스트라이크%','초구스트%','피안타','사사구','탈삼진','실점','자책','ERA','WHIP','메모']];
     DB.games.forEach(function(g){
       const b=battingAgg([g]), p=pitchAgg([g]), rr=battingAgg([g],pa=>pa.run==='risp');
-      const res=(g.ts!=null&&g.os!=null)?(g.ts>g.os?'승':(g.ts<g.os?'패':'무')):'';
-      rows.push([g.date,g.type,g.tour,g.round,g.opp,g.venue,g.ts,g.os,res,
-        b.PA,b.AB,b.H,b.RBI,b.BB,b.SO,
+      rows.push([g.date,g.type,g.tour,g.round,g.opp,g.venue,
+        b.PA,b.AB,b.H,b.R,b.RBI,b.BB,b.SO,
         b.AVG!=null?b.AVG.toFixed(3):'', b.OBP!=null?b.OBP.toFixed(3):'', b.SLG!=null?b.SLG.toFixed(3):'',
         b.OPS!=null?b.OPS.toFixed(3):'', rr.AVG!=null?rr.AVG.toFixed(3):'', b.PPA!=null?b.PPA.toFixed(2):'',
         p.OUT?ipText(p.OUT):'', p.P||'', p.STRP!=null?(p.STRP*100).toFixed(1):'', p.FPSP!=null?(p.FPSP*100).toFixed(1):'',
@@ -1490,30 +1471,30 @@ if($('#exp-pub')){
     download('야구_경기요약_'+stamp()+'.csv', csv(rows), 'text/csv;charset=utf-8');
   });
   $('#csv-pa').addEventListener('click',()=>{
-    const rows=[['날짜','구분','대회','상대','타석순번','이닝','결과','주자상황','득점권','타점','투구수','시퀀스','한글시퀀스','최종카운트','승부시카운트']];
+    const rows=[['날짜','구분','대회','상대','타석순번','득점','결과','주자상황','득점권','타점','투구수','시퀀스','한글시퀀스','최종카운트','승부시카운트']];
     DB.games.forEach(g=>(g.pas||[]).forEach(function(pa,i){
       const q=seqStats(pa.seq);
       const rn=(RUNNERS.filter(r=>r.v===pa.run)[0]||{}).t||'';
-      rows.push([g.date,g.type,g.tour,g.opp,i+1,pa.inn||'',(RMAP[pa.res]||{}).t||pa.res,rn,pa.run==='risp'?'Y':'N',pa.rbi||'',
+      rows.push([g.date,g.type,g.tour,g.opp,i+1,pa.scored||'',(RMAP[pa.res]||{}).t||pa.res,rn,pa.run==='risp'?'Y':'N',pa.rbi||'',
         q.pitches,pa.seq||'',seqText(pa.seq),countLabel(pa.seq),q.bAt+'-'+q.sAt]);
     }));
     download('야구_타석상세_'+stamp()+'.csv', csv(rows), 'text/csv;charset=utf-8');
   });
   $('#csv-pitch').addEventListener('click',()=>{
-    const rows=[['날짜','구분','대회','상대','상대타자순번','이닝','결과','투구수','스트라이크','볼','시퀀스','한글시퀀스','실점','자책','최고구속']];
+    const rows=[['날짜','구분','대회','상대','상대타자순번','이닝','결과','투구수','스트라이크','볼','시퀀스','한글시퀀스','실점','자책']];
     DB.games.forEach(g=>(g.bfs||[]).forEach(function(bf,i){
       const q=seqStats(bf.seq);
       rows.push([g.date,g.type,g.tour,g.opp,i+1,bf.inn||'',(RMAP[bf.res]||{}).t||bf.res,
-        q.pitches,q.strikes,q.balls,bf.seq||'',seqText(bf.seq),bf.r||'',bf.er||'',g.velo||'']);
+        q.pitches,q.strikes,q.balls,bf.seq||'',seqText(bf.seq),bf.r||'',bf.er||'']);
     }));
     download('야구_투구상세_'+stamp()+'.csv', csv(rows), 'text/csv;charset=utf-8');
   });
   $('#csv-split').addEventListener('click',()=>{
     const cur=currentSplit(), grp=cur.grp;
-    const rows=[[grp.label,'경기','타석','타수','안타','타점','타율','출루율','장타율','OPS','득점권타율','P/PA','등판','이닝','투구수','피안타','사사구','탈삼진','실점','자책','ERA','WHIP','K/9','스트라이크%','초구스트%']];
+    const rows=[[grp.label,'경기','타석','타수','안타','득점','타점','타율','출루율','장타율','OPS','득점권타율','P/PA','등판','이닝','투구수','피안타','사사구','탈삼진','실점','자책','ERA','WHIP','K/9','스트라이크%','초구스트%']];
     grp.keys.forEach(function(k){
       const gs=grp.map.get(k), b=battingAgg(gs), p=pitchAgg(gs), rr=battingAgg(gs,pa=>pa.run==='risp');
-      rows.push([k,b.G,b.PA,b.AB,b.H,b.RBI,
+      rows.push([k,b.G,b.PA,b.AB,b.H,b.R,b.RBI,
         b.AVG!=null?b.AVG.toFixed(3):'',b.OBP!=null?b.OBP.toFixed(3):'',b.SLG!=null?b.SLG.toFixed(3):'',
         b.OPS!=null?b.OPS.toFixed(3):'',rr.AVG!=null?rr.AVG.toFixed(3):'',b.PPA!=null?b.PPA.toFixed(2):'',
         p.G,p.OUT?ipText(p.OUT):'',p.P||'',p.H||'',(p.BB+p.HBP)||'',p.K||'',p.R||'',p.ER||'',
