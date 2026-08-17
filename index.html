@@ -205,6 +205,18 @@ svg.chart{display:block;min-width:520px;width:100%;height:auto}
   background:var(--red-soft);border:1px solid var(--red);border-radius:2px;
   padding:11px 13px;font-size:13px;color:var(--ink);margin-bottom:16px;
 }
+.badge{
+  display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.12em;
+  padding:2px 8px;border-radius:2px;vertical-align:middle;margin-left:8px;
+  background:var(--ink);color:#fff;text-transform:uppercase;
+}
+.badge.pub{background:var(--field)}
+.badge.draft{background:var(--red)}
+.pubbox{
+  background:#FFF8E8;border:1px solid #D9A441;border-radius:2px;
+  padding:12px 14px;font-size:13.5px;margin:0 0 16px;color:#6B4400;
+}
+.pubbox b{color:#8A5A00}
 .toast{
   position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(80px);
   background:var(--ink);color:#fff;padding:11px 20px;border-radius:2px;font-size:13.5px;
@@ -368,7 +380,7 @@ footer{
 
   <!-- ============ 04 TRAINING ============ -->
   <section class="panel" id="p-train">
-    <div class="card">
+    <div class="card" id="train-form">
       <h2>훈련 기록 추가</h2>
       <div class="grid g4">
         <div><label for="t-date">날짜</label><input type="date" id="t-date"></div>
@@ -384,7 +396,7 @@ footer{
 
   <!-- ============ 05 GROWTH ============ -->
   <section class="panel" id="p-growth">
-    <div class="card">
+    <div class="card" id="growth-form">
       <h2>신체 · 능력 측정 추가</h2>
       <div class="grid g4">
         <div><label for="g-date">측정일</label><input type="date" id="g-date"></div>
@@ -408,6 +420,23 @@ footer{
         <div><label for="pf-pos">주 포지션</label><input id="pf-pos" placeholder="예: 투수 / 유격수"></div>
       </div>
       <div class="row-actions" style="margin-top:12px"><button class="btn ghost" id="save-profile">선수 정보 저장</button></div>
+    </div>
+
+    <div class="card" id="publish-card">
+      <h2>발행 <span class="hint">공개 사이트에 보이는 내용을 갱신합니다</span></h2>
+      <p class="tiny muted" style="margin-top:-4px">
+        지금 이 기기에 있는 기록을 <code style="font-family:var(--mono)">data.json</code> 파일로 내보낸 뒤, GitHub 저장소에 올리면
+        방문자들이 보는 화면이 그 내용으로 바뀝니다. 올리기 전까지는 아무에게도 보이지 않습니다.
+      </p>
+      <div class="row-actions" style="margin-top:14px">
+        <button class="btn" id="exp-pub">발행 파일 내보내기</button>
+        <span class="tiny muted" id="pubstate"></span>
+      </div>
+      <hr class="rule">
+      <p class="tiny muted" style="margin:0">
+        올리는 법 — GitHub 저장소 <b>baseball</b> → <b>Add file</b> → <b>Upload files</b> →
+        내려받은 <b>data.json</b> 끌어다 놓기 → <b>Commit changes</b>. 1~2분 뒤 반영됩니다.
+      </p>
     </div>
 
     <div class="card">
@@ -452,6 +481,16 @@ footer{
 
 /* ================= 상수 ================= */
 const KEY = 'baseball_archive_v1';
+const ADMIN_KEY = 'baseball_admin';
+
+/* ================= 모드 ================= */
+const QP = new URLSearchParams(location.search);
+let ADMIN = false;
+try{
+  if(QP.get('admin')==='1') localStorage.setItem(ADMIN_KEY,'1');
+  if(QP.get('admin')==='0') localStorage.removeItem(ADMIN_KEY);
+  ADMIN = localStorage.getItem(ADMIN_KEY)==='1';
+}catch(e){ ADMIN = QP.get('admin')==='1'; }
 
 const RESULTS = [
   {v:'1B', t:'안타',          b:1, ab:1, h:1, tb:1},
@@ -509,7 +548,35 @@ let DB = store.load() || blank();
 ['games','trainings','growth'].forEach(k=>{ if(!Array.isArray(DB[k])) DB[k]=[]; });
 if(!DB.player) DB.player = {name:'',team:'',pos:''};
 
-function persist(){ store.save(DB); }
+function persist(){ if(ADMIN) store.save(DB); }
+
+/* 발행된 data.json 불러오기 */
+let PUB_LOADED = false;
+function loadPublished(){
+  fetch('data.json?t='+Date.now(), {cache:'no-store'})
+    .then(r=> r.ok ? r.json() : null)
+    .then(d=>{
+      if(!d || !Array.isArray(d.games)) return;
+      PUB_LOADED = true;
+      const empty = !DB.games.length && !DB.trainings.length && !DB.growth.length;
+      if(!ADMIN || empty){
+        DB = d;
+        ['games','trainings','growth'].forEach(k=>{ if(!Array.isArray(DB[k])) DB[k]=[]; });
+        if(!DB.player) DB.player = {name:'',team:'',pos:''};
+        applyPlayer(); renderLog();
+        if($('#p-stats').classList.contains('on')) renderStats();
+        if($('#p-train').classList.contains('on')) renderTrain();
+        if($('#p-growth').classList.contains('on')) renderGrowth();
+      }
+      if(ADMIN) markPubState();
+    })
+    .catch(()=>{});
+}
+function markPubState(){
+  const el = $('#pubstate'); if(!el) return;
+  el.textContent = PUB_LOADED ? '발행된 내용이 있습니다. 최근 변경은 파일을 올려야 반영됩니다.'
+                              : '아직 한 번도 발행하지 않았습니다.';
+}
 function showStoreWarn(){
   document.getElementById('storewarn').innerHTML =
     '<div class="warn"><b>브라우저에 저장하지 못했습니다.</b> 이 창을 닫으면 지금 입력한 기록이 사라집니다. ' +
@@ -871,8 +938,7 @@ function renderLog(){
       '<div class="links">'+
         (vids[1]?'<a href="https://youtu.be/'+esc(vids[1])+'" target="_blank" rel="noopener">영상 2 열기</a>':'')+
         (g.album?'<a href="'+esc(g.album)+'" target="_blank" rel="noopener">사진 앨범</a>':'')+
-        '<a href="#" data-edit="'+g.id+'">수정</a>'+
-        '<a href="#" data-del-game="'+g.id+'">삭제</a>'+
+        (ADMIN?'<a href="#" data-edit="'+g.id+'">수정</a><a href="#" data-del-game="'+g.id+'">삭제</a>':'')+
       '</div>'+
     '</article>';
   }).join('');
@@ -1111,7 +1177,7 @@ function renderTrain(){
   h += '<h3 class="sec">월별 훈련 일수</h3>'+barChart(mk.map(m=>m.slice(2).replace('-','/')), mk.map(m=>byM[m].days.size), 'var(--field)');
   h += '</div><div class="card"><h2>훈련 일지</h2><div class="scroll"><table><thead><tr><th>날짜</th><th>유형</th><th>시간</th><th>투구</th><th>내용</th><th></th></tr></thead><tbody>'+
     DB.trainings.map(t=>'<tr><td class="num">'+esc(t.date)+'</td><td>'+esc(t.type)+'</td><td class="num">'+(t.hours||'')+'</td><td class="num">'+(t.pitch||'')+'</td>'+
-      '<td style="text-align:left;white-space:pre-wrap">'+esc(t.memo||'')+'</td><td><button class="xbtn" data-del-t="'+t.id+'">×</button></td></tr>').join('')+
+      '<td style="text-align:left;white-space:pre-wrap">'+esc(t.memo||'')+'</td><td>'+(ADMIN?'<button class="xbtn" data-del-t="'+t.id+'">×</button>':'')+'</td></tr>').join('')+
     '</tbody></table></div></div>';
   el.innerHTML=h;
 }
@@ -1157,7 +1223,7 @@ function renderGrowth(){
   h += '</div><div class="card"><h2>측정 기록</h2><div class="scroll"><table><thead><tr><th>날짜</th><th>신장</th><th>체중</th><th>구속</th><th>메모</th><th></th></tr></thead><tbody>'+
     G.slice().reverse().map(x=>'<tr><td class="num">'+esc(x.date)+'</td><td class="num">'+(x.h||'')+'</td><td class="num">'+(x.w||'')+'</td><td class="num">'+(x.v||'')+'</td>'+
       '<td style="text-align:left">'+esc(x.note||'')+'</td>'+
-      '<td><button class="xbtn" data-del-g="'+x.id+'">×</button></td></tr>').join('')+
+      '<td>'+(ADMIN?'<button class="xbtn" data-del-g="'+x.id+'">×</button>':'')+'</td></tr>').join('')+
     '</tbody></table></div></div>';
   el.innerHTML=h;
 }
@@ -1182,6 +1248,10 @@ function csv(rows){
   }).join(',')).join('\r\n');
   return '\uFEFF'+body;
 }
+$('#exp-pub').addEventListener('click',()=>{
+  download('data.json', JSON.stringify(DB,null,2));
+  toast('data.json 을 내려받았습니다 — GitHub에 올리면 공개됩니다');
+});
 $('#exp-json').addEventListener('click',()=>{
   download('야구기록_'+stamp()+'.json', JSON.stringify(DB,null,2));
   toast('백업 파일을 내려받았습니다');
@@ -1286,18 +1356,36 @@ function renderData(){
 /* ================= 초기화 ================= */
 function applyPlayer(){
   const p = DB.player||{};
-  $('#title').innerHTML = p.name ? esc(p.name)+' <em>기록장</em>' : '야구 <em>기록장</em>';
+  $('#title').innerHTML = (p.name ? esc(p.name)+' <em>기록장</em>' : '야구 <em>기록장</em>')
+    + (ADMIN ? '<span class="badge draft">관리자</span>' : '');
   $('#eyebrow').textContent = (p.team? p.team.toUpperCase()+' · ' : '') + 'SCOREBOOK';
   $('#subtitle').textContent = p.pos ? p.pos+' · 경기 하나하나가 쌓여서 시즌이 됩니다.' : '경기 하나하나가 쌓여서 시즌이 됩니다.';
   document.title = (p.name? p.name+' ':'')+'야구 기록장';
-  $('#foot').textContent = '기록은 이 브라우저에 저장됩니다 · 데이터 탭에서 JSON 백업을 정기적으로 내려받으세요';
+  $('#foot').textContent = ADMIN
+    ? '관리자 모드 · 변경은 데이터 탭에서 발행해야 공개 화면에 반영됩니다'
+    : '경기 기록 아카이브';
 }
+function applyMode(){
+  if(ADMIN) return;
+  ['entry','data'].forEach(t=>{
+    const b = $$('#nav button').filter(x=>x.dataset.tab===t)[0];
+    if(b) b.remove();
+    const p = $('#p-'+t);
+    if(p) p.remove();
+  });
+  const tf = $('#train-form'), gf = $('#growth-form');
+  if(tf) tf.remove();
+  if(gf) gf.remove();
+}
+
 $('#t-date').value = today();
 $('#g-date').value = today();
 fillForm(null);
+applyMode();
 applyPlayer();
 renderLog();
-if(!LS_OK) showStoreWarn();
+loadPublished();
+if(ADMIN && !LS_OK) showStoreWarn();
 </script>
 </body>
 </html>
