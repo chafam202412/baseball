@@ -265,11 +265,6 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;font-size:11.5px;color
       <h2>수비 기록 <span class="hint">포지션이 바뀌었으면 줄을 나눠서</span></h2>
       <div class="rowset" id="fd-rows"></div>
       <div style="margin-top:11px"><button class="btn ghost sm" id="add-fd">+ 수비 추가</button></div>
-      <div class="grid g3" style="margin-top:14px">
-        <div><label for="e-sba">(포수) 도루 허용</label><input type="number" id="e-sba" min="0"></div>
-        <div><label for="e-csx">(포수) 도루 저지</label><input type="number" id="e-csx" min="0"></div>
-        <div><label for="e-pb">(포수) 포일</label><input type="number" id="e-pb" min="0"></div>
-      </div>
     </div>
 
     <div class="card">
@@ -722,7 +717,6 @@ function readForm(){
     opp: $('#e-opp').value.trim(), venue: $('#e-venue').value.trim(),
     tour: $('#e-tour').value.trim(), round: $('#e-round').value.trim(),
     dec: $('#e-dec').value, role: $('#e-role').value,
-    sba: iv($('#e-sba').value), csx: iv($('#e-csx').value), pb: iv($('#e-pb').value),
     vid: $('#e-vid').value.trim(), vid2: $('#e-vid2').value.trim(),
     album: $('#e-album').value.trim(), photo: $('#e-photo').value.trim(),
     memo: $('#e-memo').value, pas, bfs, fds
@@ -736,7 +730,6 @@ function fillForm(g){
   $('#e-type').value=g.type||'정식';
   ['opp','venue','tour','round','memo'].forEach(k=>{ $('#e-'+k).value=g[k]||''; });
   $('#e-dec').value=g.dec||''; $('#e-role').value=g.role||'';
-  $('#e-sba').value=g.sba||''; $('#e-csx').value=g.csx||''; $('#e-pb').value=g.pb||'';
   $('#e-vid').value=g.vid||''; $('#e-vid2').value=g.vid2||'';
   $('#e-album').value=g.album||''; $('#e-photo').value=g.photo||'';
   $('#pa-rows').innerHTML=(g.pas&&g.pas.length?g.pas:[{}]).map(paBlock).join('');
@@ -845,7 +838,7 @@ function pitchAgg(games){
   return a;
 }
 function fieldAgg(games){
-  const a={PO:0,A:0,E:0,INN:0,SBA:0,CSX:0,PB:0,byPos:{}};
+  const a={PO:0,A:0,E:0,INN:0,byPos:{}};
   games.forEach(g=>{
     (g.fds||[]).forEach(f=>{
       a.PO+=f.po||0; a.A+=f.a||0; a.E+=f.e||0; a.INN+=f.inn||0;
@@ -854,11 +847,9 @@ function fieldAgg(games){
         p.INN+=f.inn||0; p.PO+=f.po||0; p.A+=f.a||0; p.E+=f.e||0; p.G++;
       }
     });
-    a.SBA+=g.sba||0; a.CSX+=g.csx||0; a.PB+=g.pb||0;
   });
   const ch=a.PO+a.A+a.E;
   a.FPCT=ch?(a.PO+a.A)/ch:null;
-  a.CSR=(a.SBA+a.CSX)?a.CSX/(a.SBA+a.CSX):null;
   return a;
 }
 function teamAgg(games){
@@ -1139,8 +1130,6 @@ function renderStats(){
       statCell('수비율 FPCT', r3(f.FPCT), '자살 '+f.PO+' 보살 '+f.A+' 실책 '+f.E, true)+
       statCell('수비 이닝', r1(f.INN), '')+
       statCell('실책', f.E, '')+
-      (f.SBA+f.CSX?statCell('도루 저지율', pct(f.CSR), f.CSX+' / '+(f.SBA+f.CSX)+'시도', true):'')+
-      (f.PB?statCell('포일', f.PB, ''):'')+
     '</div>';
     const pk=Object.keys(f.byPos);
     if(pk.length){
