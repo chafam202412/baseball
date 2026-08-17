@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+<meta name="robots" content="noindex, nofollow">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>야구 기록장</title>
@@ -9,19 +10,25 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=Nanum+Myeongjo:wght@700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --paper:#E7EBE3;
-  --card:#F7F8F4;
-  --ink:#16263F;
-  --ink-soft:#5C6E85;
-  --ink-faint:#93A0B0;
-  --rule:#C6CFC2;
-  --rule-soft:#DCE2D7;
-  --red:#C1332B;
-  --red-soft:#F0DAD7;
-  --field:#3D6B4F;
-  --amber:#B07A12;
-  --amber-soft:#F7EBD2;
-  --shadow:0 1px 0 var(--rule), 0 2px 12px rgba(22,38,63,.06);
+  --paper:#EAEEF3;
+  --card:#FFFFFF;
+  --card-tint:#F6F8FB;
+  --ink:#12253F;
+  --ink-soft:#546679;
+  --ink-faint:#8B9AAC;
+  --rule:#C3CEDC;
+  --rule-soft:#DFE6EE;
+  --blue:#1D4E89;
+  --blue-mid:#2E6FB7;
+  --blue-soft:#E3ECF7;
+  --sky:#4A90D9;
+  --red:#B03A32;
+  --red-soft:#F4E2E0;
+  --field:#2F6B57;
+  --field-soft:#E2EFEA;
+  --amber:#9A6A12;
+  --amber-soft:#F6EDDA;
+  --shadow:0 1px 2px rgba(18,37,63,.05), 0 8px 24px rgba(18,37,63,.06);
   --mono:'IBM Plex Mono','SFMono-Regular',Consolas,monospace;
   --sans:'IBM Plex Sans KR',-apple-system,BlinkMacSystemFont,'Malgun Gothic',sans-serif;
   --serif:'Nanum Myeongjo',Georgia,serif;
@@ -30,8 +37,8 @@
 html,body{margin:0;padding:0}
 body{
   background:var(--paper);
-  background-image:linear-gradient(var(--rule-soft) 1px,transparent 1px),linear-gradient(90deg,var(--rule-soft) 1px,transparent 1px);
-  background-size:28px 28px;
+  background-image:linear-gradient(rgba(29,78,137,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(29,78,137,.05) 1px,transparent 1px);
+  background-size:30px 30px;
   color:var(--ink);
   font-family:var(--sans);
   font-size:15px;
@@ -40,13 +47,15 @@ body{
 }
 a{color:var(--red)}
 
-header{border-bottom:2px solid var(--ink);background:var(--card);padding:22px 20px 0}
+header{border-bottom:1px solid var(--rule);background:var(--card);padding:24px 20px 0;box-shadow:0 1px 0 rgba(18,37,63,.04)}
+header::before{content:'';position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--blue) 0%,var(--sky) 45%,var(--field) 100%)}
+header{position:relative}
 .hwrap{max-width:1180px;margin:0 auto}
 .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:6px}
-h1{font-family:var(--serif);font-weight:800;font-size:30px;line-height:1.15;margin:0 0 2px;letter-spacing:-.01em}
-h1 em{font-style:normal;color:var(--red)}
+h1{font-family:var(--serif);font-weight:800;font-size:31px;line-height:1.15;margin:0 0 3px;letter-spacing:-.02em;color:var(--ink)}
+h1 em{font-style:normal;color:var(--blue-mid)}
 .sub{color:var(--ink-soft);font-size:13.5px;margin:0 0 16px}
-.badge{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.12em;padding:2px 8px;border-radius:2px;vertical-align:middle;margin-left:9px;background:var(--red);color:#fff;text-transform:uppercase}
+.badge{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.12em;padding:3px 9px;border-radius:99px;vertical-align:middle;margin-left:9px;background:var(--blue-soft);color:var(--blue);border:1px solid #C2D6EC;text-transform:uppercase;font-weight:600}
 
 nav{display:flex;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
 nav::-webkit-scrollbar{display:none}
@@ -57,9 +66,9 @@ nav button{
 }
 nav button .n{font-family:var(--mono);font-size:10.5px;color:var(--ink-faint)}
 nav button:hover{color:var(--ink)}
-nav button.on{color:var(--ink);font-weight:600;border-bottom-color:var(--red)}
-nav button.on .n{color:var(--red)}
-nav button:focus-visible{outline:2px solid var(--red);outline-offset:-3px}
+nav button.on{color:var(--blue);font-weight:700;border-bottom-color:var(--blue)}
+nav button.on .n{color:var(--blue)}
+nav button:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px}
 
 main{max-width:1180px;margin:0 auto;padding:24px 20px 90px}
 
@@ -68,8 +77,8 @@ main{max-width:1180px;margin:0 auto;padding:24px 20px 90px}
 @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 .card{background:var(--card);border:1px solid var(--rule);border-radius:3px;padding:18px 18px 20px;margin-bottom:16px;box-shadow:var(--shadow)}
 .card>h2{
-  font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--ink-soft);margin:0 0 14px;padding-bottom:9px;border-bottom:1px solid var(--rule-soft);
+  font-family:var(--sans);font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--blue);margin:0 0 15px;padding-bottom:10px;border-bottom:1px solid var(--rule-soft);
   display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
 }
 .card>h2 .hint{font-weight:400;letter-spacing:0;text-transform:none;font-size:12px;color:var(--ink-faint)}
@@ -87,14 +96,14 @@ label{display:block;font-size:11.5px;font-weight:500;color:var(--ink-soft);margi
 input,select,textarea{width:100%;min-width:0;font-family:var(--sans);font-size:14px;color:var(--ink);background:#fff;border:1px solid var(--rule);border-radius:2px;padding:7px 9px}
 input[type=number]{font-family:var(--mono)}
 textarea{resize:vertical;min-height:70px;line-height:1.6}
-input:focus,select:focus,textarea:focus{outline:2px solid var(--red);outline-offset:-1px;border-color:var(--red)}
-button.btn{appearance:none;font-family:var(--sans);font-size:13.5px;font-weight:600;background:var(--ink);color:#fff;border:1px solid var(--ink);border-radius:2px;padding:9px 18px;cursor:pointer}
-button.btn:hover{background:#0E1A2C}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--blue-mid);outline-offset:-1px;border-color:var(--blue-mid)}
+button.btn{appearance:none;font-family:var(--sans);font-size:13.5px;font-weight:600;background:var(--blue);color:#fff;border:1px solid var(--blue);border-radius:3px;padding:9px 18px;cursor:pointer;transition:background .15s}
+button.btn:hover{background:#163C6B}
 button.btn.ghost{background:transparent;color:var(--ink);border-color:var(--rule)}
-button.btn.ghost:hover{background:#fff;border-color:var(--ink)}
+button.btn.ghost:hover{background:var(--blue-soft);border-color:var(--blue-mid);color:var(--blue)}
 button.btn.danger{background:var(--red);border-color:var(--red)}
 button.btn.sm{padding:6px 12px;font-size:12.5px}
-button.btn:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+button.btn:focus-visible{outline:2px solid var(--blue-mid);outline-offset:2px}
 .row-actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
 .xbtn{appearance:none;background:none;border:1px solid var(--rule);border-radius:2px;color:var(--ink-faint);font-family:var(--mono);font-size:14px;line-height:1;width:30px;height:30px;cursor:pointer;flex:none}
 .xbtn:hover{color:var(--red);border-color:var(--red)}
@@ -102,7 +111,7 @@ button.btn:focus-visible{outline:2px solid var(--red);outline-offset:2px}
 .rowset{display:flex;flex-direction:column;gap:11px}
 .blk{background:#fff;border:1px solid var(--rule-soft);border-left:3px solid var(--rule);border-radius:2px;padding:12px 13px 13px}
 .blk .bhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:9px}
-.blk .idx{font-family:var(--mono);font-size:12px;color:var(--red);font-weight:600}
+.blk .idx{font-family:var(--mono);font-size:12px;color:var(--blue);font-weight:600}
 .blk .cnt{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--ink);text-align:right}
 .blk .cnt small{font-weight:400;color:var(--ink-faint);font-size:11px}
 
@@ -132,8 +141,8 @@ svg.dia{display:block;margin:0 auto}
 .statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(106px,1fr));gap:1px;background:var(--rule-soft);border:1px solid var(--rule-soft)}
 .stat{background:var(--card);padding:11px 12px 12px}
 .stat .k{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--ink-faint);text-transform:uppercase}
-.stat .v{font-family:var(--mono);font-size:21px;font-weight:600;line-height:1.25;margin-top:1px}
-.stat .v.hi{color:var(--red)}
+.stat .v{font-family:var(--mono);font-size:22px;font-weight:600;line-height:1.25;margin-top:2px;letter-spacing:-.02em}
+.stat .v.hi{color:var(--blue)}
 .stat .d{font-size:11px;color:var(--ink-soft);line-height:1.4}
 
 table{width:100%;border-collapse:collapse;font-size:13.5px}
@@ -148,6 +157,7 @@ tbody tr.totrow:hover{background:#EFF2EC}
 
 .logcard{background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--ink);border-radius:3px;padding:15px 16px;margin-bottom:11px;box-shadow:var(--shadow)}
 .logcard.win{border-left-color:var(--field)}
+.logcard .vs{color:var(--ink)}
 .logcard.loss{border-left-color:var(--red)}
 .logcard .top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
 .logcard .dt{font-family:var(--mono);font-size:12px;color:var(--ink-soft);letter-spacing:.02em}
@@ -196,6 +206,43 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;font-size:11.5px;color
   .g2{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ===== 통계 섹션 구분 ===== */
+.sec-card{border-left:5px solid var(--blue);position:relative;padding-top:0}
+.sec-card.bat{border-left-color:var(--blue)}
+.sec-card.pit{border-left-color:var(--field)}
+.sec-card.def{border-left-color:var(--amber)}
+.sec-card.team{border-left-color:var(--ink-soft)}
+.sec-card.split{border-left-color:var(--sky)}
+.sechead{
+  display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
+  margin:0 -18px 16px;padding:15px 18px 13px;
+  background:var(--card-tint);border-bottom:1px solid var(--rule-soft);
+  border-radius:0;
+}
+.sechead .ttl{font-family:var(--serif);font-size:20px;font-weight:800;letter-spacing:-.01em;line-height:1.2}
+.sec-card.bat .sechead .ttl{color:var(--blue)}
+.sec-card.pit .sechead .ttl{color:var(--field)}
+.sec-card.def .sechead .ttl{color:var(--amber)}
+.sec-card.team .sechead .ttl{color:var(--ink)}
+.sec-card.split .sechead .ttl{color:var(--blue)}
+.sechead .en{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint)}
+.sechead .meta{margin-left:auto;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.statgrid{border-radius:3px;overflow:hidden}
+.stat{transition:background .15s}
+.stat:hover{background:#fff}
+.card{border-radius:4px}
+.logcard{border-radius:4px}
+table thead th{background:var(--card-tint)}
+tbody tr.totrow{background:var(--blue-soft)}
+tbody tr.totrow:hover{background:var(--blue-soft)}
+.chip.off{background:var(--blue);color:#fff}
+.pchip.s{background:var(--blue);color:#fff}
+.pchip.x{background:var(--sky);color:#fff}
+.pad button[data-p="X"]{color:var(--sky);border-color:#BBD6EF}
+.logcard{border-left-color:var(--blue)}
+.filterbar select,.filterbar input{background:#fff}
+
 </style>
 </head>
 <body>
@@ -209,7 +256,6 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;font-size:11.5px;color
       <button data-tab="log" class="on">경기 일지</button>
       <button data-tab="stats">통계</button>
       <button data-tab="train">훈련</button>
-      <button data-tab="growth">성장</button>
       <button data-tab="entry">경기기록</button>
       <button data-tab="data">기초데이터 입력</button>
     </nav>
@@ -305,8 +351,9 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;font-size:11.5px;color
     </div>
     <div id="statbody"></div>
 
-    <div class="card" style="margin-top:26px;border-left:4px solid var(--red)">
-      <h2>기준별 집계 <span class="hint">무엇을 기준으로 나눠 볼지 고르세요</span></h2>
+    <div class="card sec-card split" style="margin-top:30px">
+      <div class="sechead"><span class="ttl">기준별 집계</span><span class="en">Splits</span>
+        <span class="meta">무엇을 기준으로 나눠 볼지 고르세요</span></div>
       <div class="grid g3">
         <div>
           <label for="sp-by">나누는 기준</label>
@@ -346,22 +393,6 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;font-size:11.5px;color
       <div class="row-actions" style="margin-top:12px"><button class="btn" id="save-train">훈련 저장</button></div>
     </div>
     <div id="trainbody"></div>
-  </section>
-
-  <!-- ============ 06 GROWTH ============ -->
-  <section class="panel" id="p-growth">
-    <div class="card" id="growth-form">
-      <h2>신체 · 능력 측정 추가</h2>
-      <div class="grid g4">
-        <div><label for="g-date">측정일</label><input type="date" id="g-date"></div>
-        <div><label for="g-h">신장 (cm)</label><input type="number" id="g-h" step="0.1" min="0"></div>
-        <div><label for="g-w">체중 (kg)</label><input type="number" id="g-w" step="0.1" min="0"></div>
-        <div><label for="g-v">최고구속 (km/h)</label><input type="number" id="g-v" min="0"></div>
-        <div style="grid-column:1/-1"><label for="g-note">메모</label><input id="g-note" placeholder="측정 장소 등"></div>
-      </div>
-      <div class="row-actions" style="margin-top:12px"><button class="btn" id="save-growth">측정 저장</button></div>
-    </div>
-    <div id="growthbody"></div>
   </section>
 
   <!-- ============ 07 DATA ============ -->
@@ -405,7 +436,6 @@ footer{max-width:1180px;margin:0 auto;padding:0 20px 40px;font-size:11.5px;color
         <button class="btn ghost sm" id="csv-pitch">투구 상세 CSV</button>
         <button class="btn ghost sm" id="csv-split">기준별 집계 CSV</button>
         <button class="btn ghost sm" id="csv-train">훈련 CSV</button>
-        <button class="btn ghost sm" id="csv-growth">성장 CSV</button>
       </div>
     </div>
 
@@ -523,7 +553,6 @@ function loadPublished(){
         if($('#p-stats') && $('#p-stats').classList.contains('on')) renderStats();
         if($('#p-stats') && $('#p-stats').classList.contains('on')) renderSplits();
         if($('#p-train') && $('#p-train').classList.contains('on')) renderTrain();
-        if($('#p-growth') && $('#p-growth').classList.contains('on')) renderGrowth();
       }
       markPubState();
     })
@@ -604,7 +633,6 @@ $$('#nav button').forEach(b=>{
     if(b.dataset.tab==='stats'){ renderStats(); renderSplits(); }
     if(b.dataset.tab==='data') renderData();
     if(b.dataset.tab==='train') renderTrain();
-    if(b.dataset.tab==='growth') renderGrowth();
   });
 });
 function goTab(name){ const b=navBtn(name); if(b) b.click(); }
@@ -1046,7 +1074,8 @@ function renderStats(){
   const b=battingAgg(games), p=pitchAgg(games), f=fieldAgg(games), t=teamAgg(games);
   let h='';
 
-  h+='<div class="card"><h2>타격 <span class="hint">'+b.G+'경기 · '+b.PA+'타석 · '+b.P+'구</span></h2><div class="statgrid">'+
+  h+='<div class="card sec-card bat"><div class="sechead"><span class="ttl">타격</span><span class="en">Batting</span>'+
+     '<span class="meta">'+b.G+'경기 · '+b.PA+'타석 · '+b.P+'구</span></div><div class="statgrid">'+
     statCell('AVG 타율', r3(b.AVG), b.H+'안타 / '+b.AB+'타수', true)+
     statCell('OBP 출루율', r3(b.OBP), '볼넷 '+b.BB+' 사구 '+b.HBP)+
     statCell('SLG 장타율', r3(b.SLG), '루타 '+b.TB)+
@@ -1081,7 +1110,8 @@ function renderStats(){
   h+='</div>';
 
   if(p.G){
-    h+='<div class="card"><h2>투구 <span class="hint">'+p.G+'경기 · '+ipText(p.OUT)+'이닝 · 상대 타자 '+p.BF+'명 · '+p.P+'구</span></h2><div class="statgrid">'+
+    h+='<div class="card sec-card pit"><div class="sechead"><span class="ttl">투구</span><span class="en">Pitching</span>'+
+      '<span class="meta">'+p.G+'경기 · '+ipText(p.OUT)+'이닝 · 상대 '+p.BF+'타자 · '+p.P+'구</span></div><div class="statgrid">'+
       statCell('ERA 방어율', r2(p.ERA), p.ER+'자책 / '+ipText(p.OUT)+'이닝', true)+
       statCell('WHIP', r2(p.WHIP), '피안타 '+p.H+' 사사구 '+(p.BB+p.HBP))+
       statCell('스트라이크 비율', pct(p.STRP), p.STRK+' / '+p.P+'구', true)+
@@ -1126,7 +1156,8 @@ function renderStats(){
   }
 
   if(f.PO+f.A+f.E>0 || Object.keys(f.byPos).length){
-    h+='<div class="card"><h2>수비</h2><div class="statgrid">'+
+    h+='<div class="card sec-card def"><div class="sechead"><span class="ttl">수비</span><span class="en">Fielding</span>'+
+      '<span class="meta">'+r1(f.INN)+'이닝</span></div><div class="statgrid">'+
       statCell('수비율 FPCT', r3(f.FPCT), '자살 '+f.PO+' 보살 '+f.A+' 실책 '+f.E, true)+
       statCell('수비 이닝', r1(f.INN), '')+
       statCell('실책', f.E, '')+
@@ -1142,7 +1173,8 @@ function renderStats(){
   }
 
   if(t.G){
-    h+='<div class="card"><h2>팀 성적 <span class="hint">본인 출전 경기 기준</span></h2><div class="statgrid">'+
+    h+='<div class="card sec-card team"><div class="sechead"><span class="ttl">팀 성적</span><span class="en">Team</span>'+
+      '<span class="meta">본인 출전 '+t.G+'경기</span></div><div class="statgrid">'+
       statCell('전적', t.W+'승 '+t.L+'패'+(t.D?' '+t.D+'무':''), t.G+'경기')+
       statCell('승률', r3(t.WPCT), '')+
       statCell('평균 득점', r1(t.RS/t.G), '총 '+t.RS+'점')+
@@ -1354,45 +1386,8 @@ $('#trainbody').addEventListener('click',ev=>{
   if(confirm('이 훈련 기록을 삭제할까요?')){ DB.trainings=DB.trainings.filter(x=>x.id!==b.dataset.delT); persist(); renderTrain(); toast('삭제했습니다'); }
 });
 
-/* ================= 06 성장 ================= */
-if($('#save-growth')){
-  $('#save-growth').addEventListener('click',()=>{
-    const g={id:uid(), date:$('#g-date').value||today(), h:num($('#g-h').value), w:num($('#g-w').value),
-             v:iv($('#g-v').value), note:$('#g-note').value.trim()};
-    DB.growth.push(g); DB.growth.sort((a,b)=>(a.date||'').localeCompare(b.date||''));
-    persist(); toast('측정을 저장했습니다');
-    ['#g-h','#g-w','#g-v','#g-note'].forEach(s=>$(s).value='');
-    renderGrowth();
-  });
-}
-function renderGrowth(){
-  const el=$('#growthbody'), G=DB.growth;
-  if(!G.length){ el.innerHTML='<div class="empty"><b>측정 기록이 없습니다</b>몇 달만 쌓여도 키와 구속이 함께 올라가는 곡선이 보입니다.</div>'; return; }
-  const first=G[0], last=G[G.length-1];
-  const lab=G.map(x=>(x.date||'').slice(2).replace(/-/g,'/'));
-  const d=k=>G.map(x=>x[k]||null);
-  const delta=(k,u)=>{ const a=G.filter(x=>x[k]).map(x=>x[k]); if(a.length<2) return '–'; const df=a[a.length-1]-a[0]; return (df>0?'+':'')+r1(df)+u; };
-  let h='<div class="card"><h2>현재 · 변화</h2><div class="statgrid">'+
-    statCell('신장', last.h?r1(last.h)+'<span style="font-size:12px"> cm</span>':'–', '최초 대비 '+delta('h','cm'), true)+
-    statCell('체중', last.w?r1(last.w)+'<span style="font-size:12px"> kg</span>':'–', '최초 대비 '+delta('w','kg'))+
-    statCell('최고구속', last.v?last.v+'<span style="font-size:12px"> km/h</span>':'–', '최초 대비 '+delta('v','km/h'), true)+
-    statCell('측정 횟수', G.length+'회', esc(first.date)+' 시작')+
-  '</div>';
-  h+='<h3 class="sec">신장 · 체중</h3>'+lineChart([
-    {name:'신장(cm)', data:d('h'), color:'#16263F'},
-    {name:'체중(kg)', data:d('w'), color:'#3D6B4F'}
-  ], {labels:lab, fmt:v=>r1(v)});
-  if(d('v').some(Boolean)) h+='<h3 class="sec">최고구속</h3>'+lineChart([{name:'구속(km/h)', data:d('v'), color:'#C1332B'}], {labels:lab, fmt:v=>Math.round(v)});
-  h+='</div><div class="card"><h2>측정 기록</h2><div class="scroll"><table><thead><tr><th>날짜</th><th>신장</th><th>체중</th><th>구속</th><th>메모</th><th></th></tr></thead><tbody>'+
-    G.slice().reverse().map(x=>'<tr><td class="num">'+esc(x.date)+'</td><td class="num">'+(x.h||'')+'</td><td class="num">'+(x.w||'')+'</td><td class="num">'+(x.v||'')+'</td>'+
-      '<td style="text-align:left">'+esc(x.note||'')+'</td><td>'+(ADMIN?'<button class="xbtn" data-del-g="'+x.id+'">×</button>':'')+'</td></tr>').join('')+
-  '</tbody></table></div></div>';
-  el.innerHTML=h;
-}
-$('#growthbody').addEventListener('click',ev=>{
-  const b=ev.target.closest('[data-del-g]'); if(!b) return;
-  if(confirm('이 측정 기록을 삭제할까요?')){ DB.growth=DB.growth.filter(x=>x.id!==b.dataset.delG); persist(); renderGrowth(); toast('삭제했습니다'); }
-});
+/* 성장 기록: 화면에서는 제거했으나 기존 데이터는 그대로 보존됩니다 */
+function renderGrowth(){}
 
 /* ================= 07 데이터 ================= */
 function download(name,text,mime){
@@ -1497,11 +1492,6 @@ if($('#exp-pub')){
     DB.trainings.forEach(t=>rows.push([t.date,t.type,t.hours||'',t.pitch||'',(t.memo||'').replace(/\n/g,' '),t.vid||'',t.album||'',t.photo||'']));
     download('야구_훈련_'+stamp()+'.csv', csv(rows), 'text/csv;charset=utf-8');
   });
-  $('#csv-growth').addEventListener('click',()=>{
-    const rows=[['측정일','신장(cm)','체중(kg)','최고구속(km/h)','메모']];
-    DB.growth.forEach(x=>rows.push([x.date,x.h||'',x.w||'',x.v||'',x.note||'']));
-    download('야구_성장기록_'+stamp()+'.csv', csv(rows), 'text/csv;charset=utf-8');
-  });
   $('#save-profile').addEventListener('click',()=>{
     DB.player={name:$('#pf-name').value.trim(), team:$('#pf-team').value.trim(), pos:$('#pf-pos').value.trim()};
     persist(); applyPlayer(); toast('선수 정보를 저장했습니다');
@@ -1532,7 +1522,6 @@ function renderData(){
     statCell('상대 타자', bfs+'명','')+
     statCell('기록된 투구', pitches+'구','',true)+
     statCell('훈련', DB.trainings.length+'건','')+
-    statCell('측정', DB.growth.length+'건','')+
     statCell('데이터 크기', size, LS_OK?'브라우저에 저장됨':'저장 실패')+
     statCell('기록 기간', dates.length?dates[0].slice(2)+' ~ '+dates[dates.length-1].slice(2):'–','');
   markPubState();
@@ -1553,10 +1542,9 @@ function applyMode(){
     const b=navBtn(t); if(b) b.remove();
     const p=$('#p-'+t); if(p) p.remove();
   });
-  ['#train-form','#growth-form'].forEach(function(s){ const el=$(s); if(el) el.remove(); });
+  ['#train-form'].forEach(function(s){ const el=$(s); if(el) el.remove(); });
 }
 if($('#t-date')) $('#t-date').value=today();
-if($('#g-date')) $('#g-date').value=today();
 fillForm(null);
 applyMode();
 applyPlayer();
