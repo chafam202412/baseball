@@ -131,6 +131,7 @@ button.btn:focus-visible{outline:2px solid var(--red);outline-offset:2px}
   background:#fff;border:1px solid var(--rule-soft);border-left:3px solid var(--rule);
   border-radius:2px;padding:10px 11px;
 }
+.rrow > div{min-width:0}
 .rrow.pa{grid-template-columns:56px 1.5fr 1fr 62px 62px 56px 56px 30px}
 .rrow.ip{grid-template-columns:56px 62px 62px 56px 56px 56px 56px 56px 56px 30px}
 .rrow.fd{grid-template-columns:1.2fr 66px 56px 56px 56px 30px}
@@ -220,12 +221,15 @@ footer{
 
 @media (max-width:860px){
   .g3,.g4{grid-template-columns:repeat(2,1fr)}
-  .rrow.pa{grid-template-columns:44px 1fr 1fr;row-gap:9px}
+  .rrow.pa{grid-template-columns:repeat(2,1fr);row-gap:10px}
+  .rrow.pa > div:nth-child(2),
+  .rrow.pa > div:nth-child(3){grid-column:1/-1}
   .rrow.pa .idx{grid-column:1/-1;padding-bottom:0}
-  .rrow.ip{grid-template-columns:repeat(3,1fr);row-gap:9px}
+  .rrow.ip{grid-template-columns:repeat(2,1fr);row-gap:10px}
   .rrow.ip .idx{grid-column:1/-1;padding-bottom:0}
-  .rrow.fd{grid-template-columns:repeat(2,1fr);row-gap:9px}
-  .rrow .xbtn{justify-self:end}
+  .rrow.fd{grid-template-columns:repeat(2,1fr);row-gap:10px}
+  .rrow.fd > div:first-child{grid-column:1/-1}
+  .rrow .xbtn{justify-self:end;grid-column:1/-1}
   h1{font-size:24px}
   main{padding:18px 14px 80px}
   header{padding:18px 14px 0}
@@ -322,6 +326,18 @@ footer{
 
     <div class="card">
       <h2>영상 · 사진 · 메모</h2>
+      <details style="margin:-4px 0 14px">
+        <summary style="cursor:pointer;font-size:13px;color:var(--ink-soft);font-weight:500">유튜브에 영상 올리는 법 (눌러서 펼치기)</summary>
+        <ol style="font-size:13.5px;color:var(--ink-soft);line-height:1.8;margin:10px 0 0;padding-left:20px">
+          <li>유튜브 앱 열기 → 아래 가운데 <b>＋</b> → <b>동영상 업로드</b> → 경기 영상 선택</li>
+          <li>제목 입력 (예: 260810 vs OO중 3회 타석)</li>
+          <li><b>공개 범위</b>를 <b style="color:var(--red)">일부공개</b>로 바꾸기 — 검색에 안 뜨고 링크 아는 사람만 봅니다</li>
+          <li>아동용 여부 → <b>아동용 아님</b> 선택</li>
+          <li>업로드 완료 후 그 영상 열기 → <b>공유</b> → <b>링크 복사</b></li>
+          <li>아래 칸에 붙여넣기 → 경기 카드에서 바로 재생됩니다</li>
+        </ol>
+        <p style="font-size:13px;color:var(--red);margin:9px 0 0">비공개(Private)로 올리면 여기서 재생이 안 됩니다. 반드시 일부공개로.</p>
+      </details>
       <div class="grid g2">
         <div><label for="e-vid">유튜브 링크 <span class="muted">— 업로드할 때 '일부공개'로</span></label><input id="e-vid" placeholder="https://youtu.be/..."></div>
         <div><label for="e-vid2">유튜브 링크 2</label><input id="e-vid2" placeholder="https://youtu.be/..."></div>
@@ -375,9 +391,6 @@ footer{
         <div><label for="g-h">신장 (cm)</label><input type="number" id="g-h" step="0.1" min="0"></div>
         <div><label for="g-w">체중 (kg)</label><input type="number" id="g-w" step="0.1" min="0"></div>
         <div><label for="g-v">최고구속 (km/h)</label><input type="number" id="g-v" min="0"></div>
-        <div><label for="g-r">60야드 (초)</label><input type="number" id="g-r" step="0.01" min="0"></div>
-        <div><label for="g-t">원거리 던지기 (m)</label><input type="number" id="g-t" step="0.1" min="0"></div>
-        <div><label for="g-s">스쿼트 (kg)</label><input type="number" id="g-s" step="0.5" min="0"></div>
         <div><label for="g-note">메모</label><input id="g-note" placeholder="측정 장소 등"></div>
       </div>
       <div class="row-actions" style="margin-top:12px"><button class="btn" id="save-growth">측정 저장</button></div>
@@ -391,7 +404,7 @@ footer{
       <h2>선수 정보</h2>
       <div class="grid g3">
         <div><label for="pf-name">이름</label><input id="pf-name" placeholder="예: 김OO"></div>
-        <div><label for="pf-team">소속팀</label><input id="pf-team" placeholder="예: OO중 야구부"></div>
+        <div><label for="pf-team">소속팀 <span class="muted">— 연도를 함께</span></label><input id="pf-team" placeholder="예: OO중 야구부 2026"></div>
         <div><label for="pf-pos">주 포지션</label><input id="pf-pos" placeholder="예: 투수 / 유격수"></div>
       </div>
       <div class="row-actions" style="margin-top:12px"><button class="btn ghost" id="save-profile">선수 정보 저장</button></div>
@@ -1110,10 +1123,10 @@ $('#trainbody').addEventListener('click',ev=>{
 /* ================= 05 성장 ================= */
 $('#save-growth').addEventListener('click',()=>{
   const g={id:uid(), date:$('#g-date').value||today(), h:num($('#g-h').value), w:num($('#g-w').value),
-           v:iv($('#g-v').value), r:num($('#g-r').value), t:num($('#g-t').value), s:num($('#g-s').value), note:$('#g-note').value.trim()};
+           v:iv($('#g-v').value), note:$('#g-note').value.trim()};
   DB.growth.push(g); DB.growth.sort((a,b)=>(a.date||'').localeCompare(b.date||''));
   persist(); toast('측정을 저장했습니다');
-  ['#g-h','#g-w','#g-v','#g-r','#g-t','#g-s','#g-note'].forEach(s=>$(s).value='');
+  ['#g-h','#g-w','#g-v','#g-note'].forEach(s=>$(s).value='');
   renderGrowth();
 });
 function renderGrowth(){
@@ -1132,8 +1145,6 @@ function renderGrowth(){
     statCell('신장', last.h?r1(last.h)+'<span style="font-size:12px"> cm</span>':'–', '최초 대비 '+delta('h','cm'), true)+
     statCell('체중', last.w?r1(last.w)+'<span style="font-size:12px"> kg</span>':'–', '최초 대비 '+delta('w','kg'))+
     statCell('최고구속', last.v?last.v+'<span style="font-size:12px"> km/h</span>':'–', '최초 대비 '+delta('v','km/h'), true)+
-    statCell('60야드', last.r?r2(last.r)+'<span style="font-size:12px"> 초</span>':'–', '최초 대비 '+delta('r','초'))+
-    statCell('원거리 던지기', last.t?r1(last.t)+'<span style="font-size:12px"> m</span>':'–', '')+
     statCell('측정 횟수', G.length+'회', esc(first.date)+' 시작')+
   '</div>';
   h += '<h3 class="sec">신장 · 체중</h3>'+lineChart([
@@ -1143,9 +1154,9 @@ function renderGrowth(){
   if(d('v').some(Boolean)){
     h += '<h3 class="sec">최고구속</h3>'+lineChart([{name:'구속(km/h)', data:d('v'), color:'var(--red)'}], {labels:lab, fmt:v=>Math.round(v)});
   }
-  h += '</div><div class="card"><h2>측정 기록</h2><div class="scroll"><table><thead><tr><th>날짜</th><th>신장</th><th>체중</th><th>구속</th><th>60yd</th><th>원거리</th><th>스쿼트</th><th>메모</th><th></th></tr></thead><tbody>'+
+  h += '</div><div class="card"><h2>측정 기록</h2><div class="scroll"><table><thead><tr><th>날짜</th><th>신장</th><th>체중</th><th>구속</th><th>메모</th><th></th></tr></thead><tbody>'+
     G.slice().reverse().map(x=>'<tr><td class="num">'+esc(x.date)+'</td><td class="num">'+(x.h||'')+'</td><td class="num">'+(x.w||'')+'</td><td class="num">'+(x.v||'')+'</td>'+
-      '<td class="num">'+(x.r||'')+'</td><td class="num">'+(x.t||'')+'</td><td class="num">'+(x.s||'')+'</td><td style="text-align:left">'+esc(x.note||'')+'</td>'+
+      '<td style="text-align:left">'+esc(x.note||'')+'</td>'+
       '<td><button class="xbtn" data-del-g="'+x.id+'">×</button></td></tr>').join('')+
     '</tbody></table></div></div>';
   el.innerHTML=h;
@@ -1240,8 +1251,8 @@ $('#csv-train').addEventListener('click',()=>{
   download('야구_훈련_'+stamp()+'.csv', csv(rows), 'text/csv;charset=utf-8');
 });
 $('#csv-growth').addEventListener('click',()=>{
-  const rows=[['측정일','신장(cm)','체중(kg)','최고구속(km/h)','60야드(초)','원거리던지기(m)','스쿼트(kg)','메모']];
-  DB.growth.forEach(x=>rows.push([x.date,x.h||'',x.w||'',x.v||'',x.r||'',x.t||'',x.s||'',x.note||'']));
+  const rows=[['측정일','신장(cm)','체중(kg)','최고구속(km/h)','메모']];
+  DB.growth.forEach(x=>rows.push([x.date,x.h||'',x.w||'',x.v||'',x.note||'']));
   download('야구_성장기록_'+stamp()+'.csv', csv(rows), 'text/csv;charset=utf-8');
 });
 $('#save-profile').addEventListener('click',()=>{
