@@ -7,6 +7,91 @@
   },
   "games": [
     {
+      "id": "msyie55fi5tr1",
+      "date": "2026-08-18",
+      "type": "연습",
+      "opp": "은평라온리틀",
+      "venue": "공촌",
+      "tour": "연습",
+      "round": "연습",
+      "dec": "",
+      "role": "",
+      "vid": "",
+      "vid2": "",
+      "album": "",
+      "photo": "",
+      "memo": "1타석, 높은 공 건드려서 파울 / 3루 라인선상 강한 파울\n2타석, 바깥쪽 공 헛스윙(2) / 루킹 삼진\n3타석, 바깥쪽 공 헛스윙",
+      "pas": [
+        {
+          "seq": "BFFX",
+          "res": "GO",
+          "run": "none",
+          "rbi": 0,
+          "scored": 0
+        },
+        {
+          "seq": "WWS",
+          "res": "SO_L",
+          "run": "none",
+          "rbi": 0,
+          "scored": 0
+        },
+        {
+          "seq": "BWX",
+          "res": "1B",
+          "run": "risp",
+          "rbi": 2,
+          "scored": 0
+        },
+        {
+          "seq": "FSBFX",
+          "res": "GO",
+          "run": "risp",
+          "rbi": 0,
+          "scored": 0
+        }
+      ],
+      "bfs": [
+        {
+          "seq": "BSSS",
+          "res": "SO_L",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "SWBBBS",
+          "res": "SO_L",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "FWW",
+          "res": "SO_S",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        }
+      ],
+      "fds": [
+        {
+          "pos": "3루수",
+          "inn": 4,
+          "po": 0,
+          "a": 0,
+          "e": 0
+        },
+        {
+          "pos": "유격수",
+          "inn": 2,
+          "po": 0,
+          "a": 0,
+          "e": 0
+        }
+      ]
+    },
+    {
       "id": "msx1babl1a11x",
       "date": "2026-08-17",
       "type": "연습",

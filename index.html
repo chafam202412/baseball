@@ -243,6 +243,15 @@ tbody tr.totrow:hover{background:var(--blue-soft)}
 .logcard{border-left-color:var(--blue)}
 .filterbar select,.filterbar input{background:#fff}
 
+
+.livesum{
+  margin-top:12px;padding:11px 14px;background:var(--blue-soft);border:1px solid #C2D6EC;border-radius:3px;
+  font-family:var(--mono);font-size:12.5px;color:var(--blue);display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;
+}
+.livesum b{font-weight:600;font-size:15px;letter-spacing:-.02em}
+.livesum .lab{font-family:var(--sans);font-size:11px;color:var(--ink-soft);letter-spacing:.06em}
+.livesum:empty{display:none}
+
 </style>
 </head>
 <body>
@@ -294,6 +303,7 @@ tbody tr.totrow:hover{background:var(--blue-soft)}
     <div class="card">
       <h2>타석 기록 <span class="hint">한 구씩 눌러 넣으면 결과가 자동으로 잡힙니다</span></h2>
       <div class="rowset" id="pa-rows"></div>
+      <div class="livesum" id="pa-sum"></div>
       <div style="margin-top:11px"><button class="btn ghost sm" id="add-pa">+ 타석 추가</button></div>
     </div>
 
@@ -304,6 +314,7 @@ tbody tr.totrow:hover{background:var(--blue-soft)}
         <div><label for="e-dec">투수 승패</label><select id="e-dec"><option value="">해당없음</option><option>승</option><option>패</option><option>세이브</option><option>홀드</option></select></div>
       </div>
       <div class="rowset" id="bf-rows"></div>
+      <div class="livesum" id="bf-sum"></div>
       <div style="margin-top:11px"><button class="btn ghost sm" id="add-bf">+ 타자 추가</button></div>
     </div>
 
@@ -704,11 +715,46 @@ function refreshBlock(blk){
     const sel=blk.querySelector('.pa-res')||blk.querySelector('.bf-res');
     if(sel) sel.value=auto;
   }
+  liveSummary();
+}
+function liveSummary(){
+  const ps=$('#pa-sum'), bs=$('#bf-sum');
+  if(ps){
+    let PA=0,AB=0,H=0,RBI=0,P=0,S=0;
+    $$('#pa-rows .blk').forEach(function(el){
+      const r=RMAP[el.querySelector('.pa-res').value]||{};
+      const q=seqStats(el.dataset.seq||'');
+      PA++; AB+=r.ab||0; H+=r.h||0; RBI+=iv(el.querySelector('.pa-rbi').value);
+      P+=q.pitches; S+=q.strikes;
+    });
+    ps.innerHTML = PA ? '<span class="lab">이 경기 타격</span>'+
+      '<span><b>'+AB+'</b>타수 <b>'+H+'</b>안타</span>'+
+      '<span>타율 <b>'+(AB?(H/AB).toFixed(3).replace(/^0\./,'.'):'–')+'</b></span>'+
+      '<span>타점 <b>'+RBI+'</b></span>'+
+      '<span>본 공 <b>'+P+'</b>구</span>' : '';
+  }
+  if(bs){
+    let BF=0,OUT=0,P=0,S=0,H=0,BB=0,K=0,R=0,ER=0;
+    $$('#bf-rows .blk').forEach(function(el){
+      const r=RMAP[el.querySelector('.bf-res').value]||{};
+      const q=seqStats(el.dataset.seq||'');
+      BF++; OUT+=r.out||0; P+=q.pitches; S+=q.strikes;
+      H+=r.hit?1:0; BB+=(r.bb||0)+(r.hbp||0); K+=r.so||0;
+      R+=iv(el.querySelector('.bf-r').value); ER+=iv(el.querySelector('.bf-er').value);
+    });
+    const ip=OUT/3;
+    bs.innerHTML = BF ? '<span class="lab">이 경기 투구</span>'+
+      '<span><b>'+ipText(OUT)+'</b>이닝 <span style="color:var(--ink-soft)">(아웃 '+OUT+'개)</span></span>'+
+      '<span>상대 <b>'+BF+'</b>타자</span>'+
+      '<span><b>'+P+'</b>구 · 스트라이크 <b>'+(P?Math.round(S/P*100):0)+'</b>%</span>'+
+      '<span>피안타 <b>'+H+'</b> 사사구 <b>'+BB+'</b> 삼진 <b>'+K+'</b></span>'+
+      '<span>자책 <b>'+ER+'</b>'+(ip?' · ERA <b>'+(ER*9/ip).toFixed(2)+'</b>':'')+'</span>' : '';
+  }
 }
 function wirePad(container){
   container.addEventListener('click',ev=>{
     const del=ev.target.closest('[data-del]');
-    if(del){ del.closest('.blk').remove(); reindex(); return; }
+    if(del){ del.closest('.blk').remove(); reindex(); liveSummary(); return; }
     const undo=ev.target.closest('[data-undo]');
     if(undo){ const blk=undo.closest('.blk'); blk.dataset.seq=(blk.dataset.seq||'').slice(0,-1); refreshBlock(blk); return; }
     const pb=ev.target.closest('[data-p]');
@@ -717,9 +763,12 @@ function wirePad(container){
 }
 if($('#pa-rows')){
   wirePad($('#pa-rows')); wirePad($('#bf-rows')); wirePad($('#fd-rows'));
-  $('#bf-rows').addEventListener('input',ev=>{ if(ev.target.classList.contains('bf-inn')) reindex(); });
-  $('#add-pa').addEventListener('click',()=>{ $('#pa-rows').insertAdjacentHTML('beforeend',paBlock()); reindex(); });
-  $('#add-bf').addEventListener('click',()=>{ $('#bf-rows').insertAdjacentHTML('beforeend',bfBlock()); reindex(); });
+  $('#bf-rows').addEventListener('input',ev=>{ if(ev.target.classList.contains('bf-inn')) reindex(); liveSummary(); });
+  $('#bf-rows').addEventListener('change',liveSummary);
+  $('#pa-rows').addEventListener('input',liveSummary);
+  $('#pa-rows').addEventListener('change',liveSummary);
+  $('#add-pa').addEventListener('click',()=>{ $('#pa-rows').insertAdjacentHTML('beforeend',paBlock()); reindex(); liveSummary(); });
+  $('#add-bf').addEventListener('click',()=>{ $('#bf-rows').insertAdjacentHTML('beforeend',bfBlock()); reindex(); liveSummary(); });
   $('#add-fd').addEventListener('click',()=>{ $('#fd-rows').insertAdjacentHTML('beforeend',fdBlock()); });
 }
 
@@ -765,6 +814,7 @@ function fillForm(g){
   $('#fd-rows').innerHTML=(g.fds&&g.fds.length?g.fds:[]).map(fdBlock).join('');
   reindex();
   $('#edit-note').textContent = EDIT_ID?'수정 중인 경기입니다. 저장하면 덮어씁니다.':'';
+  liveSummary();
 }
 if($('#save-game')){
   $('#save-game').addEventListener('click',()=>{
