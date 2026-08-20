@@ -252,6 +252,33 @@ tbody tr.totrow:hover{background:var(--blue-soft)}
 .livesum .lab{font-family:var(--sans);font-size:11px;color:var(--ink-soft);letter-spacing:.06em}
 .livesum:empty{display:none}
 
+
+.diffbox{
+  background:var(--amber-soft);border:1px solid #E0C68A;border-radius:3px;
+  padding:12px 14px;font-size:13.5px;color:#5C4300;margin:12px 0 0;line-height:1.7;
+}
+.diffbox b{color:var(--amber)}
+.diffbox.ok{background:var(--field-soft);border-color:#B9D6C9;color:#24503F}
+.diffbox.ok b{color:var(--field)}
+
+
+#syncbar{margin:2px 0 6px;min-height:0}
+.syncchip{
+  display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;
+  padding:4px 10px;border-radius:99px;border:1px solid var(--rule);background:#fff;color:var(--ink-soft);
+  letter-spacing:.03em;cursor:pointer;
+}
+.syncchip .dot{width:7px;height:7px;border-radius:50%;background:var(--ink-faint);flex:none}
+.syncchip.ok{border-color:#B9D6C9;background:var(--field-soft);color:#24503F}
+.syncchip.ok .dot{background:var(--field)}
+.syncchip.pending{border-color:#E0C68A;background:var(--amber-soft);color:#5C4300}
+.syncchip.pending .dot{background:var(--amber);animation:pulse 1.2s infinite}
+.syncchip.err{border-color:#E3BDB9;background:var(--red-soft);color:#7A2620}
+.syncchip.err .dot{background:var(--red)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.cfgrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:520px){.cfgrow{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -260,6 +287,7 @@ tbody tr.totrow:hover{background:var(--blue-soft)}
   <div class="hwrap">
     <div class="eyebrow" id="eyebrow">SCOREBOOK</div>
     <h1 id="title">야구 <em>기록장</em></h1>
+    <div id="syncbar"></div>
     <p class="sub" id="subtitle">경기 하나하나가 쌓여서 시즌이 됩니다.</p>
     <nav id="nav">
       <button data-tab="log" class="on">경기 일지</button>
@@ -418,16 +446,53 @@ tbody tr.totrow:hover{background:var(--blue-soft)}
       <div class="row-actions" style="margin-top:12px"><button class="btn ghost" id="save-profile">선수 정보 저장</button></div>
     </div>
 
+    <div class="card" id="sync-card" style="border-left:5px solid var(--blue)">
+      <h2>기기 연결 <span class="hint">한 번만 설정하면 모든 기기에서 같은 기록을 씁니다</span></h2>
+      <p class="tiny muted" style="margin-top:-4px">
+        GitHub에 직접 저장하도록 연결합니다. 연결하면 <b>저장할 때마다 자동으로 올라가고</b>,
+        다른 기기에서 열면 최신 기록이 바로 보입니다. 파일을 내보내고 업로드하실 필요가 없습니다.
+      </p>
+      <div id="syncstate"></div>
+      <div class="cfgrow" style="margin-top:14px">
+        <div><label for="gh-owner">GitHub 사용자명</label><input id="gh-owner" placeholder="chafam202412" autocomplete="off"></div>
+        <div><label for="gh-repo">저장소 이름</label><input id="gh-repo" placeholder="baseball" autocomplete="off"></div>
+      </div>
+      <div style="margin-top:12px">
+        <label for="gh-token">액세스 토큰 <span class="muted">— 이 기기에만 저장됩니다</span></label>
+        <input id="gh-token" type="password" placeholder="github_pat_..." autocomplete="off">
+      </div>
+      <div class="row-actions" style="margin-top:14px">
+        <button class="btn" id="gh-connect">연결하기</button>
+        <button class="btn ghost" id="gh-sync">지금 동기화</button>
+        <button class="btn ghost" id="gh-disconnect">연결 해제</button>
+      </div>
+      <details style="margin-top:16px">
+        <summary style="cursor:pointer;font-size:13px;color:var(--ink-soft);font-weight:500">토큰 만드는 법 (한 번만)</summary>
+        <ol style="font-size:13.5px;color:var(--ink-soft);line-height:1.85;margin:10px 0 0;padding-left:20px">
+          <li>GitHub 우측 상단 프로필 → <b>Settings</b></li>
+          <li>왼쪽 맨 아래 <b>Developer settings</b></li>
+          <li><b>Personal access tokens</b> → <b>Fine-grained tokens</b> → <b>Generate new token</b></li>
+          <li>Token name: <code>baseball</code> · Expiration: <b>No expiration</b> 또는 1년</li>
+          <li>Repository access → <b>Only select repositories</b> → <b>baseball</b> 선택</li>
+          <li>Permissions → Repository permissions → <b>Contents</b> 를 <b>Read and write</b> 로</li>
+          <li><b>Generate token</b> → 나타난 문자열 복사 → 위 칸에 붙여넣기</li>
+        </ol>
+        <p style="font-size:13px;color:var(--red);margin:10px 0 0">토큰은 <b>이 기기 브라우저에만</b> 저장되고 사이트에는 절대 올라가지 않습니다. 기기를 분실하면 GitHub에서 그 토큰을 삭제(Revoke)하시면 됩니다.</p>
+      </details>
+    </div>
+
     <div class="card" id="publish-card">
-      <h2>발행 <span class="hint">공개 화면에 보이는 내용을 갱신합니다</span></h2>
+      <h2>수동 발행 <span class="hint">기기 연결을 안 쓰실 때만 사용</span></h2>
       <p class="tiny muted" style="margin-top:-4px">
         이 기기의 기록을 <code>data.json</code> 으로 내보낸 뒤 GitHub 저장소에 올리면 방문자 화면이 그 내용으로 바뀝니다.
         올리기 전까지는 아무에게도 보이지 않습니다.
       </p>
+      <div id="pubdiff"></div>
       <div class="row-actions" style="margin-top:14px">
         <button class="btn" id="exp-pub">발행 파일 내보내기</button>
-        <span class="tiny muted" id="pubstate"></span>
+        <button class="btn ghost" id="pull-pub">발행본 가져와 합치기</button>
       </div>
+      <p class="tiny muted" style="margin:10px 0 0" id="pubstate"></p>
       <hr class="rule">
       <p class="tiny muted" style="margin:0">올리는 법 — 저장소 <b>baseball</b> → <b>Add file</b> → <b>Upload files</b> → <b>data.json</b> 끌어다 놓기 → <b>Commit changes</b>. 1~2분 뒤 반영됩니다.</p>
     </div>
@@ -474,11 +539,13 @@ const KEY = 'baseball_archive_v1';
 const ADMIN_KEY = 'baseball_admin';
 
 const QP = new URLSearchParams(location.search);
-let ADMIN = false;
+let ADMIN = false, HAS_TOKEN = false;
 try{
   if(QP.get('admin')==='1') localStorage.setItem(ADMIN_KEY,'1');
   if(QP.get('admin')==='0') localStorage.removeItem(ADMIN_KEY);
-  ADMIN = localStorage.getItem(ADMIN_KEY)==='1';
+  const gh=JSON.parse(localStorage.getItem('baseball_gh')||'null');
+  HAS_TOKEN = !!(gh && gh.token && gh.owner && gh.repo);
+  ADMIN = HAS_TOKEN || localStorage.getItem(ADMIN_KEY)==='1';
 }catch(e){ ADMIN = QP.get('admin')==='1'; }
 
 /* 한 구의 종류 */
@@ -529,9 +596,9 @@ const store = {
   load(){ try{ const raw=localStorage.getItem(KEY); return raw?JSON.parse(raw):null; }catch(e){ LS_OK=false; return MEM; } },
   save(d){ MEM=d; try{ localStorage.setItem(KEY, JSON.stringify(d)); return true; }catch(e){ LS_OK=false; showStoreWarn(); return false; } }
 };
-function blank(){ return {version:2, player:{name:'',team:'',pos:''}, games:[], trainings:[], growth:[]}; }
+function blank(){ return {version:2, player:{name:'',team:'',pos:''}, games:[], trainings:[], growth:[], deleted:[]}; }
 function normalize(d){
-  ['games','trainings','growth'].forEach(k=>{ if(!Array.isArray(d[k])) d[k]=[]; });
+  ['games','trainings','growth','deleted'].forEach(k=>{ if(!Array.isArray(d[k])) d[k]=[]; });
   if(!d.player) d.player={name:'',team:'',pos:''};
   d.games.forEach(g=>{
     if(!Array.isArray(g.pas)) g.pas=[];
@@ -543,35 +610,244 @@ function normalize(d){
   return d;
 }
 let DB = normalize(store.load() || blank());
-function persist(){ if(ADMIN) store.save(DB); }
+function persist(){ if(ADMIN){ store.save(DB); queuePush(); } }
 function showStoreWarn(){
   const el=document.getElementById('storewarn'); if(!el) return;
   el.innerHTML='<div class="warn"><b>브라우저에 저장하지 못했습니다.</b> 이 창을 닫으면 지금 입력한 기록이 사라집니다. <b>데이터 탭에서 JSON 백업을 지금 내려받으세요.</b></div>';
 }
 
 /* 발행본 */
-let PUB_LOADED = false;
+let PUB_LOADED = false, PUB_DATA = null;
 function loadPublished(){
   fetch('data.json?t='+Date.now(), {cache:'no-store'})
     .then(r=> r.ok ? r.json() : null)
     .then(d=>{
       if(!d || !Array.isArray(d.games)) return;
       PUB_LOADED = true;
+      PUB_DATA = d;
       const empty = !DB.games.length && !DB.trainings.length && !DB.growth.length;
+      let changed=false, addedG=0, addedT=0;
       if(!ADMIN || empty){
         DB = normalize(d);
+        changed = true;
+      }else{
+        const gone=new Set(DB.deleted||[]);
+        const gids=new Set(DB.games.map(function(g){return g.id;}));
+        (d.games||[]).forEach(function(g){
+          if(!gids.has(g.id) && !gone.has(g.id)){ DB.games.push(g); addedG++; }
+        });
+        const tids=new Set(DB.trainings.map(function(x){return x.id;}));
+        (d.trainings||[]).forEach(function(x){
+          if(!tids.has(x.id) && !gone.has(x.id)){ DB.trainings.push(x); addedT++; }
+        });
+        if(!DB.player || !DB.player.name) DB.player = d.player || DB.player;
+        if(addedG || addedT){
+          DB = normalize(DB);
+          DB.games.sort(function(a,b){ return (b.date||'').localeCompare(a.date||''); });
+          DB.trainings.sort(function(a,b){ return (b.date||'').localeCompare(a.date||''); });
+          store.save(DB);
+          changed = true;
+        }
+      }
+      if(changed){
         applyPlayer(); refreshDatalists(); renderLog();
-        if($('#p-stats') && $('#p-stats').classList.contains('on')) renderStats();
-        if($('#p-stats') && $('#p-stats').classList.contains('on')) renderSplits();
+        if($('#p-stats') && $('#p-stats').classList.contains('on')){ renderStats(); renderSplits(); }
         if($('#p-train') && $('#p-train').classList.contains('on')) renderTrain();
+        if($('#p-data') && $('#p-data').classList.contains('on')) renderData();
+      }
+      if(addedG || addedT){
+        const bits=[];
+        if(addedG) bits.push('경기 '+addedG+'건');
+        if(addedT) bits.push('훈련 '+addedT+'건');
+        toast('공개본에서 '+bits.join(' · ')+'을 불러왔습니다');
       }
       markPubState();
     })
     .catch(()=>{});
 }
 function markPubState(){
-  const el=document.getElementById('pubstate'); if(!el) return;
-  el.textContent = PUB_LOADED ? '발행된 내용이 있습니다. 이후 변경은 파일을 다시 올려야 반영됩니다.' : '아직 발행하지 않았습니다.';
+  const el=document.getElementById('pubstate');
+  const box=document.getElementById('pubdiff');
+  if(el) el.textContent = PUB_LOADED ? '발행본을 확인했습니다. 이후 변경은 파일을 다시 올려야 반영됩니다.' : '아직 발행하지 않았습니다.';
+  if(!box) return;
+  if(!PUB_DATA){ box.innerHTML=''; return; }
+  const pg=(PUB_DATA.games||[]).length, lg=DB.games.length;
+  const pt=(PUB_DATA.trainings||[]).length, lt=DB.trainings.length;
+  const ids=new Set(DB.games.map(g=>g.id));
+  const onlyPub=(PUB_DATA.games||[]).filter(g=>!ids.has(g.id)).length;
+  const pids=new Set((PUB_DATA.games||[]).map(g=>g.id));
+  const onlyLocal=DB.games.filter(g=>!pids.has(g.id)).length;
+  if(!onlyPub && !onlyLocal && pt===lt){
+    box.innerHTML='<div class="diffbox ok"><b>이 기기와 공개본이 같습니다.</b> 경기 '+lg+'건 · 훈련 '+lt+'건</div>';
+    return;
+  }
+  let msg='<div class="diffbox"><b>이 기기와 공개본이 다릅니다.</b><br>';
+  msg+='이 기기: 경기 '+lg+'건 · 훈련 '+lt+'건 &nbsp;/&nbsp; 공개본: 경기 '+pg+'건 · 훈련 '+pt+'건<br>';
+  if(onlyPub) msg+='공개본에만 있는 경기 <b>'+onlyPub+'건</b> → <b>발행본 가져와 합치기</b>를 누르세요.<br>';
+  if(onlyLocal) msg+='이 기기에만 있는 경기 <b>'+onlyLocal+'건</b> → <b>발행 파일 내보내기</b> 후 올리세요.<br>';
+  msg+='</div>';
+  box.innerHTML=msg;
+}
+
+
+/* ================= GitHub 동기화 ================= */
+const GH_KEY='baseball_gh';
+let GH=null, GH_SHA=null, SYNC='idle', SYNC_MSG='', pushTimer=null;
+function ghLoad(){ try{ GH=JSON.parse(localStorage.getItem(GH_KEY)||'null'); }catch(e){ GH=null; } return GH; }
+function ghStore(c){ GH=c; try{ localStorage.setItem(GH_KEY, JSON.stringify(c)); }catch(e){} }
+function ghClear(){ GH=null; GH_SHA=null; try{ localStorage.removeItem(GH_KEY); }catch(e){} }
+function ghOn(){ return !!(GH && GH.token && GH.owner && GH.repo); }
+
+function b64enc(str){
+  const bytes=new TextEncoder().encode(str);
+  let bin=''; bytes.forEach(b=>{ bin+=String.fromCharCode(b); });
+  return btoa(bin);
+}
+function b64dec(b64){
+  const bin=atob(String(b64).replace(/\s/g,''));
+  const bytes=Uint8Array.from(bin, c=>c.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
+}
+function ghUrl(){ return 'https://api.github.com/repos/'+GH.owner+'/'+GH.repo+'/contents/data.json'; }
+function ghHeaders(){
+  return {'Authorization':'Bearer '+GH.token, 'Accept':'application/vnd.github+json', 'X-GitHub-Api-Version':'2022-11-28'};
+}
+function setSync(state, msg){
+  SYNC=state; SYNC_MSG=msg||'';
+  const bar=document.getElementById('syncbar');
+  if(bar){
+    if(!ghOn() && !ADMIN){ bar.innerHTML=''; }
+    else if(!ghOn()){ bar.innerHTML='<span class="syncchip" id="syncgo"><span class="dot"></span>이 기기에만 저장 중 · 연결하기</span>'; }
+    else{
+      const cls = state==='ok'?'ok':(state==='pending'?'pending':(state==='err'?'err':''));
+      const txt = state==='ok'?'동기화됨':(state==='pending'?'저장 중…':(state==='err'?('동기화 실패 — 다시 시도'):'연결됨'));
+      bar.innerHTML='<span class="syncchip '+cls+'" id="syncgo"><span class="dot"></span>'+txt+(msg?' · '+esc(msg):'')+'</span>';
+    }
+    const go=document.getElementById('syncgo');
+    if(go) go.onclick=function(){
+      if(!ghOn()){ goTab('data'); const c=document.getElementById('gh-token'); if(c) c.focus(); return; }
+      if(SYNC==='err') ghPush(true); else ghPull(true);
+    };
+  }
+  const box=document.getElementById('syncstate');
+  if(box){
+    if(!ghOn()) box.innerHTML='<div class="diffbox">아직 연결되지 않았습니다. 연결하면 기기끼리 자동으로 같아집니다.</div>';
+    else if(state==='err') box.innerHTML='<div class="diffbox"><b>동기화 실패.</b> '+esc(msg||'')+'</div>';
+    else box.innerHTML='<div class="diffbox ok"><b>'+esc(GH.owner+'/'+GH.repo)+' 에 연결됨.</b> 저장하면 자동으로 올라갑니다.</div>';
+  }
+}
+function ghGet(){
+  return fetch(ghUrl()+'?t='+Date.now(), {headers:ghHeaders(), cache:'no-store'})
+    .then(function(r){
+      if(r.status===404) return {json:null, sha:null};
+      if(r.status===401 || r.status===403) throw new Error('토큰이 거부되었습니다. 권한(Contents: Read and write)을 확인하세요.');
+      if(!r.ok) throw new Error('서버 응답 '+r.status);
+      return r.json().then(function(j){ return {json:JSON.parse(b64dec(j.content)), sha:j.sha}; });
+    });
+}
+function ghPull(loud){
+  if(!ghOn()) return Promise.resolve();
+  setSync('pending','불러오는 중');
+  return ghGet().then(function(res){
+    GH_SHA=res.sha;
+    if(res.json && Array.isArray(res.json.games)){
+      DB=normalize(res.json);
+      store.save(DB);
+      applyPlayer(); refreshDatalists(); renderLog(); renderData();
+      if($('#p-stats') && $('#p-stats').classList.contains('on')){ renderStats(); renderSplits(); }
+      if($('#p-train') && $('#p-train').classList.contains('on')) renderTrain();
+      if(loud) toast('최신 기록을 불러왔습니다 · 경기 '+DB.games.length+'건');
+    }
+    setSync('ok','');
+  }).catch(function(e){ setSync('err', e.message); if(loud) alert('불러오지 못했습니다.\n\n'+e.message); });
+}
+function ghPush(loud){
+  if(!ghOn()) return Promise.resolve();
+  setSync('pending','저장 중');
+  const body={ message:'기록 업데이트 '+new Date().toISOString().slice(0,16).replace('T',' '),
+               content:b64enc(JSON.stringify(DB,null,2)) };
+  if(GH_SHA) body.sha=GH_SHA;
+  return fetch(ghUrl(), {method:'PUT', headers:ghHeaders(), body:JSON.stringify(body)})
+    .then(function(r){
+      if(r.status===409 || r.status===422){
+        return ghGet().then(function(res){
+          GH_SHA=res.sha;
+          const b2={message:body.message, content:body.content, sha:GH_SHA};
+          return fetch(ghUrl(), {method:'PUT', headers:ghHeaders(), body:JSON.stringify(b2)});
+        });
+      }
+      return r;
+    })
+    .then(function(r){
+      if(!r.ok) throw new Error('서버 응답 '+r.status);
+      return r.json();
+    })
+    .then(function(j){
+      if(j && j.content) GH_SHA=j.content.sha;
+      setSync('ok','');
+      if(loud) toast('저장했습니다 — 모든 기기에 반영됩니다');
+    })
+    .catch(function(e){ setSync('err', e.message); if(loud) alert('저장하지 못했습니다.\n\n'+e.message); });
+}
+function queuePush(){
+  if(!ghOn()) return;
+  setSync('pending','저장 중');
+  clearTimeout(pushTimer);
+  pushTimer=setTimeout(function(){ ghPush(false); }, 1200);
+}
+
+function wireSyncUI(){
+  const oEl=$('#gh-owner'), rEl=$('#gh-repo'), tEl=$('#gh-token');
+  if(!oEl) return;
+  if(GH){ oEl.value=GH.owner||''; rEl.value=GH.repo||''; tEl.value=GH.token?'••••••••••••':''; }
+  $('#gh-connect').addEventListener('click',function(){
+    const owner=oEl.value.trim(), repo=rEl.value.trim(), tok=tEl.value.trim();
+    if(!owner||!repo){ alert('사용자명과 저장소 이름을 넣어주세요.'); return; }
+    const token=(tok && tok.indexOf('•')<0) ? tok : (GH&&GH.token);
+    if(!token){ alert('토큰을 붙여넣어 주세요.'); return; }
+    ghStore({owner:owner, repo:repo, token:token});
+    tEl.value='••••••••••••';
+    setSync('pending','연결 확인 중');
+    ghGet().then(function(res){
+      GH_SHA=res.sha;
+      if(!res.json){
+        if(confirm('저장소에 아직 기록이 없습니다.\n이 기기의 기록을 올릴까요?')) return ghPush(true);
+        setSync('ok',''); return;
+      }
+      const pg=(res.json.games||[]).length, lg=DB.games.length;
+      const ids=new Set(DB.games.map(g=>g.id));
+      const add=(res.json.games||[]).filter(g=>!ids.has(g.id)).length;
+      const pids=new Set((res.json.games||[]).map(g=>g.id));
+      const keep=DB.games.filter(g=>!pids.has(g.id)).length;
+      if(add||keep){
+        const msg='연결됐습니다.\n\n저장소: 경기 '+pg+'건 / 이 기기: 경기 '+lg+'건\n'+
+                  '저장소에만 있는 경기 '+add+'건, 이 기기에만 있는 경기 '+keep+'건\n\n'+
+                  '[확인] 양쪽을 합쳐서 저장 (권장)\n[취소] 저장소 내용으로 이 기기를 맞추기';
+        if(confirm(msg)){
+          (res.json.games||[]).forEach(function(g){ if(!ids.has(g.id)) DB.games.push(g); });
+          const ti=new Set(DB.trainings.map(x=>x.id));
+          (res.json.trainings||[]).forEach(function(x){ if(!ti.has(x.id)) DB.trainings.push(x); });
+          if(!DB.player||!DB.player.name) DB.player=res.json.player||DB.player;
+          DB=normalize(DB);
+          DB.games.sort(function(a,b){ return (b.date||'').localeCompare(a.date||''); });
+          store.save(DB); applyPlayer(); refreshDatalists(); renderLog(); renderData();
+          return ghPush(true);
+        }
+      }
+      DB=normalize(res.json); store.save(DB);
+      applyPlayer(); refreshDatalists(); renderLog(); renderData();
+      setSync('ok',''); toast('연결됐습니다 · 경기 '+DB.games.length+'건');
+    }).catch(function(e){ setSync('err', e.message); alert('연결하지 못했습니다.\n\n'+e.message+'\n\n사용자명·저장소 이름·토큰 권한을 확인해 주세요.'); });
+  });
+  $('#gh-sync').addEventListener('click',function(){
+    if(!ghOn()){ alert('먼저 연결해 주세요.'); return; }
+    ghPull(true);
+  });
+  $('#gh-disconnect').addEventListener('click',function(){
+    if(!confirm('이 기기의 연결을 해제할까요?\n기록은 이 기기에 그대로 남고, 토큰만 지워집니다.')) return;
+    ghClear(); oEl.value=''; rEl.value=''; tEl.value='';
+    setSync('idle',''); toast('연결을 해제했습니다');
+  });
 }
 
 /* ================= 유틸 ================= */
@@ -1108,6 +1384,7 @@ $('#loglist').addEventListener('click',ev=>{
   if(e){ ev.preventDefault(); const g=DB.games.find(x=>x.id===e.dataset.edit); if(g){ fillForm(g); goTab('entry'); } }
   if(d){ ev.preventDefault();
     if(confirm('이 경기 기록을 삭제할까요? 되돌릴 수 없습니다.')){
+      DB.deleted.push(d.dataset.delGame);
       DB.games=DB.games.filter(x=>x.id!==d.dataset.delGame); persist(); refreshDatalists(); renderLog(); toast('삭제했습니다');
     }
   }
@@ -1433,7 +1710,7 @@ $('#trainbody').addEventListener('click',ev=>{
   }
   const b=ev.target.closest('[data-del-t]'); if(!b) return;
   ev.preventDefault();
-  if(confirm('이 훈련 기록을 삭제할까요?')){ DB.trainings=DB.trainings.filter(x=>x.id!==b.dataset.delT); persist(); renderTrain(); toast('삭제했습니다'); }
+  if(confirm('이 훈련 기록을 삭제할까요?')){ DB.deleted.push(b.dataset.delT); DB.trainings=DB.trainings.filter(x=>x.id!==b.dataset.delT); persist(); renderTrain(); toast('삭제했습니다'); }
 });
 
 /* 성장 기록: 화면에서는 제거했으나 기존 데이터는 그대로 보존됩니다 */
@@ -1457,6 +1734,43 @@ if($('#exp-pub')){
   $('#exp-pub').addEventListener('click',()=>{
     download('data.json', JSON.stringify(DB,null,2));
     toast('data.json 을 내려받았습니다 — GitHub에 올리면 공개됩니다');
+  });
+  $('#pull-pub').addEventListener('click',()=>{
+    const btn=$('#pull-pub'); btn.disabled=true; btn.textContent='가져오는 중…';
+    fetch('data.json?t='+Date.now(), {cache:'no-store'})
+      .then(r=>{ if(!r.ok) throw new Error('발행본을 찾지 못했습니다'); return r.json(); })
+      .then(d=>{
+        if(!d || !Array.isArray(d.games)) throw new Error('형식이 다릅니다');
+        PUB_DATA=d; PUB_LOADED=true;
+        const ids=new Set(DB.games.map(g=>g.id));
+        const add=(d.games||[]).filter(g=>!ids.has(g.id)).length;
+        const pids=new Set((d.games||[]).map(g=>g.id));
+        const keep=DB.games.filter(g=>!pids.has(g.id)).length;
+        const msg='공개본에서 새로 가져올 경기: '+add+'건\n'+
+                  '이 기기에만 있는 경기: '+keep+'건\n\n'+
+                  '[확인] 합치기 — 양쪽을 모두 보존합니다 (권장)\n'+
+                  '[취소] 공개본으로 전부 교체 — 이 기기에만 있는 기록은 사라집니다';
+        if(confirm(msg)){
+          (d.games||[]).forEach(g=>{ if(!ids.has(g.id)) DB.games.push(g); });
+          const ti=new Set(DB.trainings.map(x=>x.id));
+          (d.trainings||[]).forEach(x=>{ if(!ti.has(x.id)) DB.trainings.push(x); });
+          const wi=new Set(DB.growth.map(x=>x.id));
+          (d.growth||[]).forEach(x=>{ if(!wi.has(x.id)) DB.growth.push(x); });
+          if(!DB.player || !DB.player.name) DB.player=d.player||DB.player;
+          DB=normalize(DB);
+        }else{
+          if(keep && !confirm('이 기기에만 있는 '+keep+'건이 삭제됩니다. 정말 교체할까요?')){
+            btn.disabled=false; btn.textContent='발행본 가져와 합치기'; return;
+          }
+          DB=normalize(d);
+        }
+        DB.games.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+        DB.trainings.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+        persist(); applyPlayer(); refreshDatalists(); renderLog(); renderData();
+        toast('가져왔습니다 · 경기 '+DB.games.length+'건');
+      })
+      .catch(e=>{ alert('가져오지 못했습니다.\n\n'+e.message+'\n\n아직 data.json을 올리지 않으셨거나, 인터넷 연결을 확인해 보세요.'); })
+      .then(()=>{ btn.disabled=false; btn.textContent='발행본 가져와 합치기'; });
   });
   $('#exp-json').addEventListener('click',()=>{
     download('야구기록_'+stamp()+'.json', JSON.stringify(DB,null,2));
@@ -1600,8 +1914,14 @@ applyMode();
 applyPlayer();
 refreshDatalists();
 renderLog();
-loadPublished();
+ghLoad();
+wireSyncUI();
+setSync(ghOn()?'idle':'idle','');
+if(ghOn()) ghPull(false); else loadPublished();
 if(ADMIN && !LS_OK) showStoreWarn();
+document.addEventListener('visibilitychange',function(){
+  if(document.visibilityState==='visible' && ghOn() && SYNC!=='pending') ghPull(false);
+});
 </script>
 </body>
 </html>
