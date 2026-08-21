@@ -335,7 +335,7 @@ aside#sidebar{position:sticky;top:16px}
 .sidebox > .sh .e{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint)}
 .sidebox > .sh .more{margin-left:auto;font-size:11.5px;color:var(--ink-soft);cursor:pointer;text-decoration:none}
 .sidebox > .sh .more:hover{color:var(--blue)}
-.sideitem{display:block;padding:12px 15px;border-bottom:1px solid var(--rule-soft);cursor:pointer;text-decoration:none;color:inherit}
+.sideitem{display:block;padding:13px 15px;border-bottom:1px solid var(--rule);cursor:pointer;text-decoration:none;color:inherit;transition:background .15s}
 .sideitem:last-child{border-bottom:0}
 .sideitem:hover{background:var(--blue-soft)}
 .sideitem .tag{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:4px}
@@ -2064,28 +2064,7 @@ function renderSidebar(){
   const el=$('#sidebar'); if(!el) return;
   let h='';
 
-  /* 최근 칼럼 */
-  const posts=(DB.posts||[]).filter(function(p){ return ADMIN || !p.draft; })
-    .slice().sort(function(a,b){ return (b.date||'').localeCompare(a.date||''); });
-  h+='<div class="sidebox"><div class="sh"><span class="t">칼럼</span><span class="e">Columns</span>'+
-     (posts.length?'<a class="more" data-go="posts">전체 '+posts.length+'편 →</a>':'')+'</div>';
-  if(!posts.length){
-    h+='<div style="padding:16px 15px;font-size:13px;color:var(--ink-soft);line-height:1.7">'+
-       (ADMIN?'칼럼 탭에서 첫 글을 써보세요. 야구 메커니즘, 키네틱 체인, 리커버리 같은 주제요.':'준비 중입니다.')+'</div>';
-  }else{
-    posts.slice(0,5).forEach(function(p){
-      const tags=[];
-      if(p.draft) tags.push('<span class="minichip draft">초안</span>');
-      h+='<a class="sideitem" data-post="'+p.id+'">'+
-           '<span class="tag">'+tags.join('')+'<span class="dt">'+esc((p.date||'').slice(2))+'</span></span>'+
-           '<span class="tt">'+esc(p.title||'')+'</span>'+
-           '<span class="ex">'+esc(postExcerpt(p,80))+'</span>'+
-         '</a>';
-    });
-  }
-  h+='</div>';
-
-  /* 한눈에 보는 성적 */
+  /* 1. 한눈에 보는 성적 */
   const gs=DB.games||[];
   if(gs.length){
     const b=battingAgg(gs), p=pitchAgg(gs);
@@ -2107,6 +2086,26 @@ function renderSidebar(){
     }
     h+='</div>';
   }
+
+  /* 2. 최근 칼럼 */
+  const posts=(DB.posts||[]).filter(function(p){ return ADMIN || !p.draft; })
+    .slice().sort(function(a,b){ return (b.date||'').localeCompare(a.date||''); });
+  h+='<div class="sidebox"><div class="sh"><span class="t">칼럼</span><span class="e">Columns</span>'+
+     (posts.length?'<a class="more" data-go="posts">전체글 →</a>':'')+'</div>';
+  if(!posts.length){
+    h+='<div style="padding:16px 15px;font-size:13px;color:var(--ink-soft);line-height:1.7">'+
+       (ADMIN?'칼럼 탭에서 첫 글을 써보세요.':'준비 중입니다.')+'</div>';
+  }else{
+    posts.slice(0,3).forEach(function(p){
+      h+='<a class="sideitem" data-post="'+p.id+'">'+
+           '<span class="tag">'+(p.draft?'<span class="minichip draft">초안</span>':'')+
+             '<span class="dt">'+esc((p.date||'').slice(2))+'</span></span>'+
+           '<span class="tt">'+esc(p.title||'')+'</span>'+
+           '<span class="ex">'+esc(postExcerpt(p,80))+'</span>'+
+         '</a>';
+    });
+  }
+  h+='</div>';
 
   el.innerHTML=h;
 }
