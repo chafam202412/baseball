@@ -555,7 +555,6 @@ aside#sidebar{position:sticky;top:16px}
   <section class="panel" id="p-posts">
     <div class="filterbar" id="po-bar">
       <input type="search" id="po-q" placeholder="제목·내용 검색">
-      <span class="tiny muted" id="po-count"></span>
       <button class="btn sm" id="po-new" style="margin-left:auto">＋ 새 글</button>
     </div>
 
@@ -2113,7 +2112,7 @@ function renderSidebar(){
 }
 
 let PO_PAGE=0;
-const PO_PER=5;
+const PO_PER=7;
 
 function renderPosts(){
   const el=$('#postlist'); if(!el) return;
@@ -2150,7 +2149,6 @@ function renderPosts(){
 
   /* ---- 목록 화면 ---- */
   if(bar) bar.style.display='';
-  const cnt=$('#po-count'); if(cnt) cnt.textContent = list.length ? list.length+'편' : '';
   if(!list.length){
     el.innerHTML='<div class="empty"><b>아직 글이 없습니다</b>'+
       (ADMIN?'생각을 정리해두면 아드님에게도 남습니다.':'준비 중입니다.')+'</div>';
@@ -2404,7 +2402,9 @@ function applyPlayer(){
   $('#eyebrow').textContent=(p.team?p.team.toUpperCase()+' · ':'')+'SCOREBOOK';
   $('#subtitle').textContent=p.pos?p.pos+' · 경기 하나하나가 쌓여서 시즌이 됩니다.':'경기 하나하나가 쌓여서 시즌이 됩니다.';
   document.title=(p.name?p.name+' ':'')+'야구 기록장';
-  $('#foot').textContent=ADMIN?'관리자 모드 · 변경은 데이터 탭에서 발행해야 공개 화면에 반영됩니다':'경기 기록 아카이브';
+  $('#foot').textContent = !ADMIN ? '경기 기록 아카이브'
+    : (ghOn() ? '관리자 모드 · 저장하면 자동으로 반영됩니다'
+              : '관리자 모드 · 변경은 기초데이터 탭에서 발행해야 공개 화면에 반영됩니다');
 }
 function applyMode(){
   if(ADMIN) return;
