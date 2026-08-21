@@ -366,6 +366,32 @@ aside#sidebar{position:sticky;top:16px}
 .sidestat3 .v{font-family:var(--mono);font-size:18px;font-weight:600;color:var(--ink);letter-spacing:-.02em;line-height:1.3}
 .sidestat3 .v.hi{color:var(--blue)}
 
+
+/* 칼럼 목록·읽기 */
+.postcard[data-open]{cursor:pointer;transition:border-color .15s, transform .15s}
+.postcard[data-open]:hover{border-color:#9FB4C8;transform:translateY(-1px)}
+.postmeta .pnum{
+  display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;
+  border-radius:99px;background:var(--ink);color:#fff;font-size:10px;font-weight:600;margin-right:7px;padding:0 5px;
+}
+.postcard.reading{border-left-width:5px;padding:24px 24px 26px}
+.posttitle.big{font-size:26px;line-height:1.35;margin:10px 0 10px}
+@media(max-width:640px){ .posttitle.big{font-size:21px} .postcard.reading{padding:18px 16px 20px} }
+.readtop{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.backbtn{
+  display:inline-block;font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;
+  background:#fff;border:1px solid var(--rule);border-radius:99px;padding:7px 15px;color:var(--ink);
+}
+.backbtn:hover{border-color:var(--blue-mid);color:var(--blue);background:var(--blue-soft)}
+.pager{display:flex;align-items:center;gap:12px;justify-content:center;margin:18px 0 4px}
+.pager a{
+  font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;color:var(--ink);
+  background:var(--card);border:1px solid var(--rule);border-radius:99px;padding:7px 16px;
+}
+.pager a:hover{border-color:var(--blue-mid);color:var(--blue)}
+.pager a.off{opacity:.35;pointer-events:none}
+.pager .pinfo{font-family:var(--mono);font-size:12px;color:var(--ink-soft);letter-spacing:.06em}
+
 </style>
 </head>
 <body>
@@ -527,9 +553,7 @@ aside#sidebar{position:sticky;top:16px}
 
   <!-- ============ POSTS ============ -->
   <section class="panel" id="p-posts">
-    <div class="filterbar">
-      <select id="po-cat"><option value="">전체 분류</option></select>
-      <select id="po-series"><option value="">전체 시리즈</option></select>
+    <div class="filterbar" id="po-bar">
       <input type="search" id="po-q" placeholder="제목·내용 검색">
       <span class="tiny muted" id="po-count"></span>
       <button class="btn sm" id="po-new" style="margin-left:auto">＋ 새 글</button>
@@ -537,12 +561,9 @@ aside#sidebar{position:sticky;top:16px}
 
     <div class="card" id="po-editor" style="display:none;border-left:5px solid var(--blue)">
       <h2 id="po-edit-title">새 글 쓰기 <span class="hint">저장하면 자동으로 올라갑니다</span></h2>
-      <div class="grid g4">
+      <div class="grid g2">
         <div><label for="po-date">날짜</label><input type="date" id="po-date"></div>
-        <div><label for="po-cat-in">분류</label><input id="po-cat-in" placeholder="예: 키네틱 체인" list="dl-cat"><datalist id="dl-cat"></datalist></div>
-        <div><label for="po-series-in">시리즈 <span class="muted">— 연재물이면</span></label><input id="po-series-in" placeholder="예: 투구 메커니즘" list="dl-series"><datalist id="dl-series"></datalist></div>
-        <div><label for="po-no">회차</label><input type="number" id="po-no" min="1" placeholder="1"></div>
-        <div style="grid-column:1/-1"><label for="po-fmt">본문 형식</label>
+        <div><label for="po-fmt">본문 형식</label>
           <select id="po-fmt">
             <option value="md">간단 서식 — ## 소제목, **굵게**, 목록</option>
             <option value="html">HTML 직접 작성 — style·SVG·표 그대로</option>
@@ -1979,17 +2000,7 @@ function postExcerpt(p, n){
 function postCats(){ const s=new Set(); (DB.posts||[]).forEach(p=>{ if(p.cat) s.add(p.cat); }); return Array.from(s).sort(); }
 function postSeries(){ const s=new Set(); (DB.posts||[]).forEach(p=>{ if(p.series) s.add(p.series); }); return Array.from(s).sort(); }
 
-function syncPostSelects(){
-  const cats=postCats(), ser=postSeries();
-  const c=$('#po-cat'); if(c){ const cur=c.value;
-    c.innerHTML='<option value="">전체 분류</option>'+cats.map(v=>'<option value="'+esc(v)+'">'+esc(v)+'</option>').join('');
-    c.value=cats.indexOf(cur)>=0?cur:''; }
-  const t=$('#po-series'); if(t){ const cur=t.value;
-    t.innerHTML='<option value="">전체 시리즈</option>'+ser.map(v=>'<option value="'+esc(v)+'">'+esc(v)+'</option>').join('');
-    t.value=ser.indexOf(cur)>=0?cur:''; }
-  const dc=$('#dl-cat'); if(dc) dc.innerHTML=cats.map(v=>'<option value="'+esc(v)+'"></option>').join('');
-  const ds=$('#dl-series'); if(ds) ds.innerHTML=ser.map(v=>'<option value="'+esc(v)+'"></option>').join('');
-}
+function syncPostSelects(){}
 
 function openEditor(p){
   const box=$('#po-editor'); if(!box) return;
@@ -1997,9 +2008,6 @@ function openEditor(p){
   p = p || {};
   $('#po-edit-title').innerHTML = (PO_EDIT?'글 수정':'새 글 쓰기')+' <span class="hint">저장하면 자동으로 올라갑니다</span>';
   $('#po-date').value=p.date||today();
-  $('#po-cat-in').value=p.cat||'';
-  $('#po-series-in').value=p.series||'';
-  $('#po-no').value=p.no||'';
   $('#po-title').value=p.title||'';
   $('#po-lead').value=p.lead||'';
   $('#po-body').value=p.body||'';
@@ -2027,9 +2035,6 @@ function savePost(draft){
   const p={
     id: PO_EDIT || uid(),
     date: $('#po-date').value||today(),
-    cat: $('#po-cat-in').value.trim(),
-    series: $('#po-series-in').value.trim(),
-    no: iv($('#po-no').value),
     title: title,
     lead: $('#po-lead').value.trim(),
     body: $('#po-body').value,
@@ -2047,17 +2052,14 @@ function savePost(draft){
 
 function visiblePosts(){
   let list=(DB.posts||[]).slice();
-  if(!ADMIN) list=list.filter(p=>!p.draft);
-  const c=$('#po-cat')?$('#po-cat').value:'';
-  const t=$('#po-series')?$('#po-series').value:'';
+  if(!ADMIN) list=list.filter(function(p){ return !p.draft; });
   const q=$('#po-q')?$('#po-q').value.trim().toLowerCase():'';
-  if(c) list=list.filter(p=>p.cat===c);
-  if(t) list=list.filter(p=>p.series===t);
-  if(q) list=list.filter(p=>((p.title||'')+' '+(p.lead||'')+' '+(p.body||'')).toLowerCase().indexOf(q)>=0);
-  if(t){ list.sort(function(a,b){ return (a.no||0)-(b.no||0) || (a.date||'').localeCompare(b.date||''); }); }
+  if(q) list=list.filter(function(p){
+    return ((p.title||'')+' '+(p.lead||'')+' '+(p.body||'')).toLowerCase().indexOf(q)>=0;
+  });
+  list.sort(function(a,b){ return (b.date||'').localeCompare(a.date||''); });
   return list;
 }
-
 
 function renderSidebar(){
   const el=$('#sidebar'); if(!el) return;
@@ -2074,8 +2076,6 @@ function renderSidebar(){
   }else{
     posts.slice(0,5).forEach(function(p){
       const tags=[];
-      if(p.series) tags.push('<span class="minichip series">'+esc(p.series)+(p.no?' '+p.no+'편':'')+'</span>');
-      else if(p.cat) tags.push('<span class="minichip">'+esc(p.cat)+'</span>');
       if(p.draft) tags.push('<span class="minichip draft">초안</span>');
       h+='<a class="sideitem" data-post="'+p.id+'">'+
            '<span class="tag">'+tags.join('')+'<span class="dt">'+esc((p.date||'').slice(2))+'</span></span>'+
@@ -2085,21 +2085,6 @@ function renderSidebar(){
     });
   }
   h+='</div>';
-
-  /* 시리즈 묶음 */
-  const ser={};
-  posts.forEach(function(p){ if(p.series){ (ser[p.series]=ser[p.series]||[]).push(p); } });
-  const sk=Object.keys(ser);
-  if(sk.length){
-    h+='<div class="sidebox"><div class="sh"><span class="t">연재</span><span class="e">Series</span></div>';
-    sk.forEach(function(k){
-      h+='<a class="sideitem" data-series="'+esc(k)+'">'+
-           '<span class="tt">'+esc(k)+'</span>'+
-           '<span class="ex">'+ser[k].length+'편 연재 중</span>'+
-         '</a>';
-    });
-    h+='</div>';
-  }
 
   /* 한눈에 보는 성적 */
   const gs=DB.games||[];
@@ -2127,46 +2112,93 @@ function renderSidebar(){
   el.innerHTML=h;
 }
 
+let PO_PAGE=0;
+const PO_PER=5;
+
 function renderPosts(){
-  syncPostSelects();
   const el=$('#postlist'); if(!el) return;
   const nb=$('#po-new'); if(nb) nb.style.display = ADMIN ? '' : 'none';
+  const bar=$('#po-bar');
   const list=visiblePosts();
+
+  /* ---- 읽기 화면 ---- */
+  if(PO_OPEN){
+    const i=list.findIndex(function(x){ return x.id===PO_OPEN; });
+    const p = i>=0 ? list[i] : (DB.posts||[]).find(function(x){ return x.id===PO_OPEN; });
+    if(!p){ PO_OPEN=null; renderPosts(); return; }
+    if(bar) bar.style.display='none';
+    const prev = i>0 ? list[i-1] : null;
+    const next = (i>=0 && i<list.length-1) ? list[i+1] : null;
+    el.innerHTML =
+      '<div class="readtop"><a class="backbtn" data-back="1">← 목록으로</a>'+
+        (ADMIN?'<a class="backbtn" data-edit-p="'+p.id+'">수정</a>':'')+
+      '</div>'+
+      '<article class="postcard reading'+(p.draft?' draft':'')+'">'+
+        '<div class="postmeta">'+esc(p.date||'')+(p.draft?' <span class="catchip draft">초안</span>':'')+'</div>'+
+        '<h3 class="posttitle big">'+esc(p.title||'')+'</h3>'+
+        (p.lead?'<p class="postlead">'+esc(p.lead)+'</p>':'')+
+        '<div class="postbody'+(p.fmt==='html'?' raw':'')+'">'+renderBody(p)+'</div>'+
+        '<div class="postnav">'+
+          '<a data-back="1">← 목록으로</a>'+
+          (prev?'<a data-open="'+prev.id+'">이전 글</a>':'')+
+          (next?'<a data-open="'+next.id+'">다음 글</a>':'')+
+          '<a data-top="1" style="margin-left:auto">맨 위로 ↑</a>'+
+        '</div>'+
+      '</article>';
+    return;
+  }
+
+  /* ---- 목록 화면 ---- */
+  if(bar) bar.style.display='';
   const cnt=$('#po-count'); if(cnt) cnt.textContent = list.length ? list.length+'편' : '';
   if(!list.length){
     el.innerHTML='<div class="empty"><b>아직 글이 없습니다</b>'+
-      (ADMIN?'야구 메커니즘, 키네틱 체인, 리커버리, 학년별 스킬 — 생각을 정리해두면 아드님에게도 남습니다.':'준비 중입니다.')+'</div>';
+      (ADMIN?'생각을 정리해두면 아드님에게도 남습니다.':'준비 중입니다.')+'</div>';
     return;
   }
-  el.innerHTML=list.map(function(p){
-    const open = PO_OPEN===p.id;
-    const meta=[];
-    if(p.date) meta.push(esc(p.date));
-    if(p.series) meta.push('<span class="catchip series">'+esc(p.series)+(p.no?' '+p.no+'편':'')+'</span>');
-    if(p.cat) meta.push('<span class="catchip">'+esc(p.cat)+'</span>');
-    if(p.draft) meta.push('<span class="catchip draft">초안</span>');
-    return '<article class="postcard'+(p.draft?' draft':'')+'">'+
-      '<div class="postmeta">'+meta.join('')+'</div>'+
+  const pages=Math.max(1, Math.ceil(list.length/PO_PER));
+  if(PO_PAGE>=pages) PO_PAGE=pages-1;
+  if(PO_PAGE<0) PO_PAGE=0;
+  const start=PO_PAGE*PO_PER;
+  const page=list.slice(start, start+PO_PER);
+
+  let h=page.map(function(p, idx){
+    const no=list.length-(start+idx);
+    return '<article class="postcard'+(p.draft?' draft':'')+'" data-open="'+p.id+'">'+
+      '<div class="postmeta"><span class="pnum">'+no+'</span>'+esc(p.date||'')+
+        (p.draft?' <span class="catchip draft">초안</span>':'')+'</div>'+
       '<h3 class="posttitle">'+esc(p.title||'')+'</h3>'+
-      (p.lead?'<p class="postlead">'+esc(p.lead)+'</p>':'')+
-      (open?'<div class="postbody'+(p.fmt==='html'?' raw':'')+'">'+renderBody(p)+'</div>':'')+
-      '<div class="acts">'+
-        '<a data-open="'+p.id+'">'+(open?'접기':'읽기')+'</a>'+
-        (ADMIN?'<a data-edit-p="'+p.id+'">수정</a>':'')+
-      '</div>'+
+      '<p class="postlead">'+esc(postExcerpt(p,110))+'</p>'+
+      '<div class="acts"><a data-open="'+p.id+'">읽기 →</a>'+
+        (ADMIN?'<a data-edit-p="'+p.id+'">수정</a>':'')+'</div>'+
     '</article>';
   }).join('');
+
+  if(pages>1){
+    h+='<div class="pager">'+
+       '<a class="'+(PO_PAGE===0?'off':'')+'" data-page="'+(PO_PAGE-1)+'">← 이전</a>'+
+       '<span class="pinfo">'+(PO_PAGE+1)+' / '+pages+'</span>'+
+       '<a class="'+(PO_PAGE>=pages-1?'off':'')+'" data-page="'+(PO_PAGE+1)+'">다음 →</a>'+
+       '</div>';
+  }
+  el.innerHTML=h;
 }
 
 function wirePosts(){
   const el=$('#postlist'); if(!el) return;
   el.addEventListener('click',function(ev){
-    const o=ev.target.closest('[data-open]');
-    if(o){ PO_OPEN = (PO_OPEN===o.dataset.open)?null:o.dataset.open; renderPosts(); return; }
+    const b=ev.target.closest('[data-back]');
+    if(b){ ev.preventDefault(); PO_OPEN=null; renderPosts(); window.scrollTo({top:0,behavior:'smooth'}); return; }
+    const t=ev.target.closest('[data-top]');
+    if(t){ ev.preventDefault(); window.scrollTo({top:0,behavior:'smooth'}); return; }
+    const pg=ev.target.closest('[data-page]');
+    if(pg){ ev.preventDefault(); PO_PAGE=parseInt(pg.dataset.page,10)||0; renderPosts(); window.scrollTo({top:0,behavior:'smooth'}); return; }
     const e=ev.target.closest('[data-edit-p]');
-    if(e){ const p=(DB.posts||[]).find(x=>x.id===e.dataset.editP); if(p) openEditor(p); }
+    if(e){ ev.preventDefault(); const p=(DB.posts||[]).find(function(x){ return x.id===e.dataset.editP; }); if(p) openEditor(p); return; }
+    const o=ev.target.closest('[data-open]');
+    if(o){ ev.preventDefault(); PO_OPEN=o.dataset.open; renderPosts(); window.scrollTo({top:0,behavior:'smooth'}); }
   });
-  const nb=$('#po-new'); if(nb) nb.addEventListener('click',function(){ openEditor(null); });
+  const nb=$('#po-new'); if(nb) nb.addEventListener('click',function(){ PO_OPEN=null; openEditor(null); });
   const sv=$('#po-save'); if(sv) sv.addEventListener('click',function(){ savePost(false); });
   const dr=$('#po-draft'); if(dr) dr.addEventListener('click',function(){ savePost(true); });
   const cn=$('#po-cancel'); if(cn) cn.addEventListener('click',closeEditor);
@@ -2174,24 +2206,19 @@ function wirePosts(){
     if(!PO_EDIT) return;
     if(!confirm('이 글을 삭제할까요? 되돌릴 수 없습니다.')) return;
     DB.deleted.push(PO_EDIT);
-    DB.posts=(DB.posts||[]).filter(x=>x.id!==PO_EDIT);
-    persist(); closeEditor(); renderPosts(); toast('삭제했습니다');
+    DB.posts=(DB.posts||[]).filter(function(x){ return x.id!==PO_EDIT; });
+    persist(); closeEditor(); PO_OPEN=null; renderPosts(); renderSidebar(); toast('삭제했습니다');
   });
-  ['#po-cat','#po-series'].forEach(function(sel){ const x=$(sel); if(x) x.addEventListener('change',renderPosts); });
-  const q=$('#po-q'); if(q) q.addEventListener('input',renderPosts);
+  const q=$('#po-q'); if(q) q.addEventListener('input',function(){ PO_PAGE=0; PO_OPEN=null; renderPosts(); });
   const fm=$('#po-fmt'); if(fm) fm.addEventListener('change',togglePoHelp);
+
   const sb=$('#sidebar');
   if(sb) sb.addEventListener('click',function(ev){
     const g=ev.target.closest('[data-go]');
     if(g){ goTab(g.dataset.go); return; }
     const p=ev.target.closest('[data-post]');
-    if(p){ PO_OPEN=p.dataset.post; goTab('posts'); renderPosts();
-      setTimeout(function(){ const c=$('#postlist'); if(c) c.scrollIntoView({behavior:'smooth',block:'start'}); },80);
-      return; }
-    const s2=ev.target.closest('[data-series]');
-    if(s2){ goTab('posts'); const sel=$('#po-series'); if(sel){ sel.value=s2.dataset.series; } renderPosts(); }
+    if(p){ PO_OPEN=p.dataset.post; goTab('posts'); renderPosts(); }
   });
-
 }
 
 /* ================= 07 데이터 ================= */
