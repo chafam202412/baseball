@@ -279,6 +279,80 @@ tbody tr.totrow:hover{background:var(--blue-soft)}
 .cfgrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:520px){.cfgrow{grid-template-columns:1fr}}
 
+
+/* ===== 칼럼 ===== */
+.postcard{
+  background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--sky);
+  border-radius:4px;padding:18px 20px 20px;margin-bottom:13px;box-shadow:var(--shadow);
+}
+.postcard.draft{border-left-color:var(--amber);background:#FDFCF8}
+.postmeta{display:flex;gap:9px;align-items:center;flex-wrap:wrap;font-family:var(--mono);font-size:11px;color:var(--ink-faint);letter-spacing:.04em}
+.catchip{
+  display:inline-block;font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.02em;
+  padding:2px 9px;border-radius:99px;background:var(--blue-soft);color:var(--blue);border:1px solid #C2D6EC;
+}
+.catchip.series{background:var(--field-soft);color:var(--field);border-color:#B9D6C9}
+.catchip.draft{background:var(--amber-soft);color:var(--amber);border-color:#E0C68A}
+.posttitle{font-family:var(--serif);font-size:22px;font-weight:800;line-height:1.35;margin:8px 0 6px;letter-spacing:-.01em;color:var(--ink)}
+.postlead{color:var(--ink-soft);font-size:14px;margin:0}
+.postcard .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.postcard .acts a{font-size:12px;text-decoration:none;border:1px solid var(--rule);border-radius:2px;padding:4px 11px;color:var(--ink);background:#fff;cursor:pointer}
+.postcard .acts a:hover{border-color:var(--blue-mid);color:var(--blue)}
+
+.postbody{margin-top:16px;padding-top:16px;border-top:1px solid var(--rule-soft);font-size:15.5px;line-height:1.95;color:var(--ink)}
+.postbody h3{font-family:var(--serif);font-size:19px;font-weight:800;margin:28px 0 10px;color:var(--blue);line-height:1.4}
+.postbody h4{font-size:15.5px;font-weight:700;margin:22px 0 8px;color:var(--ink)}
+.postbody p{margin:0 0 14px}
+.postbody ul,.postbody ol{margin:0 0 14px;padding-left:22px}
+.postbody li{margin-bottom:7px}
+.postbody strong{color:var(--blue);font-weight:600}
+.postbody em{font-style:normal;background:linear-gradient(transparent 62%, var(--blue-soft) 62%)}
+.postbody blockquote{
+  margin:16px 0;padding:12px 16px;background:var(--card-tint);
+  border-left:3px solid var(--sky);border-radius:0 2px 2px 0;color:var(--ink-soft);font-size:14.5px;
+}
+.postbody blockquote p:last-child{margin:0}
+.postbody hr{border:0;border-top:1px solid var(--rule);margin:26px 0}
+.postbody img{max-width:100%;border:1px solid var(--rule);border-radius:3px;margin:8px 0}
+.postbody code{font-family:var(--mono);font-size:.9em;background:var(--card-tint);border:1px solid var(--rule-soft);border-radius:2px;padding:1px 5px}
+.postbody a{color:var(--blue-mid)}
+.postnav{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px;padding-top:14px;border-top:1px solid var(--rule-soft)}
+.postnav a{font-size:12.5px;text-decoration:none;color:var(--blue);border:1px solid var(--rule);border-radius:2px;padding:5px 11px;background:#fff;cursor:pointer}
+.postnav a:hover{border-color:var(--blue-mid)}
+
+
+/* ===== 첫 화면 사이드바 ===== */
+.withside{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:22px;align-items:start}
+@media (max-width:900px){ .withside{grid-template-columns:1fr;gap:16px} }
+aside#sidebar{position:sticky;top:16px}
+@media (max-width:900px){ aside#sidebar{position:static} }
+.sidebox{background:var(--card);border:1px solid var(--rule);border-radius:4px;box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden}
+.sidebox > .sh{
+  display:flex;align-items:baseline;gap:8px;padding:12px 15px 10px;
+  background:var(--card-tint);border-bottom:1px solid var(--rule-soft);
+}
+.sidebox > .sh .t{font-family:var(--serif);font-size:16px;font-weight:800;color:var(--blue);letter-spacing:-.01em}
+.sidebox > .sh .e{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint)}
+.sidebox > .sh .more{margin-left:auto;font-size:11.5px;color:var(--ink-soft);cursor:pointer;text-decoration:none}
+.sidebox > .sh .more:hover{color:var(--blue)}
+.sideitem{display:block;padding:12px 15px;border-bottom:1px solid var(--rule-soft);cursor:pointer;text-decoration:none;color:inherit}
+.sideitem:last-child{border-bottom:0}
+.sideitem:hover{background:var(--blue-soft)}
+.sideitem .tag{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:4px}
+.sideitem .tt{font-weight:600;font-size:14px;line-height:1.45;color:var(--ink);display:block;margin-bottom:3px}
+.sideitem .ex{font-size:12.5px;color:var(--ink-soft);line-height:1.6}
+.sideitem .dt{font-family:var(--mono);font-size:10px;color:var(--ink-faint);letter-spacing:.04em}
+.minichip{font-size:10px;font-weight:600;padding:1px 7px;border-radius:99px;background:var(--blue-soft);color:var(--blue);border:1px solid #C2D6EC}
+.minichip.series{background:var(--field-soft);color:var(--field);border-color:#B9D6C9}
+.minichip.draft{background:var(--amber-soft);color:var(--amber);border-color:#E0C68A}
+.sidestat{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule-soft)}
+.sidestat div{background:var(--card);padding:10px 12px}
+.sidestat .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--ink-faint);text-transform:uppercase}
+.sidestat .v{font-family:var(--mono);font-size:18px;font-weight:600;color:var(--ink);letter-spacing:-.02em}
+.sidestat .v.hi{color:var(--blue)}
+.postbody.raw{font-size:15.5px}
+.postbody.raw > :first-child{margin-top:0}
+
 </style>
 </head>
 <body>
@@ -293,6 +367,7 @@ tbody tr.totrow:hover{background:var(--blue-soft)}
       <button data-tab="log" class="on">경기 일지</button>
       <button data-tab="stats">통계</button>
       <button data-tab="train">훈련</button>
+      <button data-tab="posts">칼럼</button>
       <button data-tab="entry">경기기록</button>
       <button data-tab="data">기초데이터 입력</button>
     </nav>
@@ -311,7 +386,10 @@ tbody tr.totrow:hover{background:var(--blue-soft)}
       <input type="search" id="f-q" placeholder="상대팀·대회·메모 검색">
       <span class="tiny muted" id="f-count"></span>
     </div>
-    <div id="loglist"></div>
+    <div class="withside">
+      <div id="loglist"></div>
+      <aside id="sidebar"></aside>
+    </div>
   </section>
 
   <!-- ============ 02 ENTRY ============ -->
@@ -432,6 +510,71 @@ tbody tr.totrow:hover{background:var(--blue-soft)}
       <div class="row-actions" style="margin-top:12px"><button class="btn" id="save-train">훈련 저장</button></div>
     </div>
     <div id="trainbody"></div>
+  </section>
+
+  <!-- ============ POSTS ============ -->
+  <section class="panel" id="p-posts">
+    <div class="filterbar">
+      <select id="po-cat"><option value="">전체 분류</option></select>
+      <select id="po-series"><option value="">전체 시리즈</option></select>
+      <input type="search" id="po-q" placeholder="제목·내용 검색">
+      <span class="tiny muted" id="po-count"></span>
+      <button class="btn sm" id="po-new" style="margin-left:auto">＋ 새 글</button>
+    </div>
+
+    <div class="card" id="po-editor" style="display:none;border-left:5px solid var(--blue)">
+      <h2 id="po-edit-title">새 글 쓰기 <span class="hint">저장하면 자동으로 올라갑니다</span></h2>
+      <div class="grid g4">
+        <div><label for="po-date">날짜</label><input type="date" id="po-date"></div>
+        <div><label for="po-cat-in">분류</label><input id="po-cat-in" placeholder="예: 키네틱 체인" list="dl-cat"><datalist id="dl-cat"></datalist></div>
+        <div><label for="po-series-in">시리즈 <span class="muted">— 연재물이면</span></label><input id="po-series-in" placeholder="예: 투구 메커니즘" list="dl-series"><datalist id="dl-series"></datalist></div>
+        <div><label for="po-no">회차</label><input type="number" id="po-no" min="1" placeholder="1"></div>
+        <div style="grid-column:1/-1"><label for="po-fmt">본문 형식</label>
+          <select id="po-fmt">
+            <option value="md">간단 서식 — ## 소제목, **굵게**, 목록</option>
+            <option value="html">HTML 직접 작성 — style·SVG·표 그대로</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top:12px"><label for="po-title">제목</label><input id="po-title" placeholder="글 제목"></div>
+      <div style="margin-top:12px"><label for="po-lead">요약 <span class="muted">— 목록에 보일 한두 줄</span></label><input id="po-lead" placeholder="이 글이 무엇을 다루는지"></div>
+      <div style="margin-top:12px">
+        <label for="po-body">본문 <span class="muted">— 아래 서식 도움말 참고</span></label>
+        <textarea id="po-body" style="min-height:280px;font-family:var(--mono);font-size:13.5px;line-height:1.8" placeholder="## 소제목&#10;&#10;본문을 씁니다. **굵게** 강조할 수 있고,&#10;&#10;- 목록도&#10;- 됩니다&#10;&#10;> 인용문&#10;&#10;유튜브 주소를 한 줄에 넣으면 영상이 삽입됩니다."></textarea>
+      </div>
+      <div id="po-htmlhelp" class="diffbox" style="display:none;margin-top:12px">
+        <b>HTML 모드입니다.</b> &lt;h3&gt; &lt;p&gt; &lt;table&gt; &lt;style&gt; &lt;svg&gt; 등을 그대로 쓰실 수 있습니다.
+        블로그용으로 만들어 둔 글도 &lt;body&gt; 안쪽 내용만 복사해 붙여넣으면 됩니다.
+        (&lt;script&gt;와 onclick 같은 실행 코드는 안전을 위해 자동으로 제거됩니다)
+      </div>
+      <details style="margin-top:10px" id="po-mdhelp">
+        <summary style="cursor:pointer;font-size:13px;color:var(--ink-soft);font-weight:500">서식 도움말</summary>
+        <div class="scroll"><table style="margin-top:10px">
+          <thead><tr><th>이렇게 쓰면</th><th>이렇게 보입니다</th></tr></thead>
+          <tbody>
+            <tr><td class="m">## 소제목</td><td>큰 소제목</td></tr>
+            <tr><td class="m">### 작은제목</td><td>작은 소제목</td></tr>
+            <tr><td class="m">**중요한 말**</td><td><b>굵게 (파란색 강조)</b></td></tr>
+            <tr><td class="m">- 항목</td><td>글머리 목록</td></tr>
+            <tr><td class="m">1. 항목</td><td>번호 목록</td></tr>
+            <tr><td class="m">&gt; 인용</td><td>인용 상자</td></tr>
+            <tr><td class="m">---</td><td>구분선</td></tr>
+            <tr><td class="m">[글자](주소)</td><td>링크</td></tr>
+            <tr><td class="m">![](photos/사진.jpg)</td><td>사진 삽입</td></tr>
+            <tr><td class="m">https://youtu.be/…</td><td>영상 삽입 (한 줄에 주소만)</td></tr>
+          </tbody>
+        </table></div>
+      </details>
+      <div class="row-actions" style="margin-top:16px">
+        <button class="btn" id="po-save">저장</button>
+        <button class="btn ghost" id="po-draft">초안으로 저장</button>
+        <button class="btn ghost" id="po-cancel">취소</button>
+        <button class="btn ghost" id="po-del" style="margin-left:auto;color:var(--red);border-color:#E3BDB9">이 글 삭제</button>
+      </div>
+      <p class="tiny muted" style="margin:10px 0 0">초안은 나에게만 보이고 가족·지인 화면에는 나타나지 않습니다.</p>
+    </div>
+
+    <div id="postlist"></div>
   </section>
 
   <!-- ============ 07 DATA ============ -->
@@ -596,9 +739,9 @@ const store = {
   load(){ try{ const raw=localStorage.getItem(KEY); return raw?JSON.parse(raw):null; }catch(e){ LS_OK=false; return MEM; } },
   save(d){ MEM=d; try{ localStorage.setItem(KEY, JSON.stringify(d)); return true; }catch(e){ LS_OK=false; showStoreWarn(); return false; } }
 };
-function blank(){ return {version:2, player:{name:'',team:'',pos:''}, games:[], trainings:[], growth:[], deleted:[]}; }
+function blank(){ return {version:2, player:{name:'',team:'',pos:''}, games:[], trainings:[], growth:[], posts:[], deleted:[]}; }
 function normalize(d){
-  ['games','trainings','growth','deleted'].forEach(k=>{ if(!Array.isArray(d[k])) d[k]=[]; });
+  ['games','trainings','growth','posts','deleted'].forEach(k=>{ if(!Array.isArray(d[k])) d[k]=[]; });
   if(!d.player) d.player={name:'',team:'',pos:''};
   d.games.forEach(g=>{
     if(!Array.isArray(g.pas)) g.pas=[];
@@ -639,6 +782,10 @@ function loadPublished(){
         const tids=new Set(DB.trainings.map(function(x){return x.id;}));
         (d.trainings||[]).forEach(function(x){
           if(!tids.has(x.id) && !gone.has(x.id)){ DB.trainings.push(x); addedT++; }
+        });
+        const oids=new Set((DB.posts||[]).map(function(x){return x.id;}));
+        (d.posts||[]).forEach(function(x){
+          if(!oids.has(x.id) && !gone.has(x.id)){ DB.posts.push(x); addedG++; }
         });
         if(!DB.player || !DB.player.name) DB.player = d.player || DB.player;
         if(addedG || addedT){
@@ -756,6 +903,7 @@ function ghPull(loud){
       applyPlayer(); refreshDatalists(); renderLog(); renderData();
       if($('#p-stats') && $('#p-stats').classList.contains('on')){ renderStats(); renderSplits(); }
       if($('#p-train') && $('#p-train').classList.contains('on')) renderTrain();
+      if($('#p-posts') && $('#p-posts').classList.contains('on')) renderPosts();
       if(loud) toast('최신 기록을 불러왔습니다 · 경기 '+DB.games.length+'건');
     }
     setSync('ok','');
@@ -920,6 +1068,7 @@ $$('#nav button').forEach(b=>{
     if(b.dataset.tab==='stats'){ renderStats(); renderSplits(); }
     if(b.dataset.tab==='data') renderData();
     if(b.dataset.tab==='train') renderTrain();
+    if(b.dataset.tab==='posts') renderPosts();
   });
 });
 function goTab(name){ const b=navBtn(name); if(b) b.click(); }
@@ -1327,6 +1476,7 @@ function gameLine(g){
 }
 function renderLog(){
   syncSelects();
+  setTimeout(renderSidebar,0);
   const type=$('#f-type').value, year=$('#f-year').value, tour=$('#f-tour').value, q=$('#f-q').value.trim().toLowerCase();
   let list=filtered(type,year,tour);
   if(q) list=list.filter(g=>((g.opp||'')+' '+(g.tour||'')+' '+(g.round||'')+' '+(g.memo||'')+' '+(g.venue||'')).toLowerCase().indexOf(q)>=0);
@@ -1716,6 +1866,311 @@ $('#trainbody').addEventListener('click',ev=>{
 /* 성장 기록: 화면에서는 제거했으나 기존 데이터는 그대로 보존됩니다 */
 function renderGrowth(){}
 
+
+/* ================= 칼럼 ================= */
+let PO_EDIT=null, PO_OPEN=null;
+
+function mdRender(src){
+  const esc0=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const lines=String(src||'').replace(/\r\n/g,'\n').split('\n');
+  let out='', list=null, quote=false, para=[];
+  function inline(t){
+    t=esc0(t);
+    t=t.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g,'<img src="$2" alt="$1" loading="lazy">');
+    t=t.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
+    t=t.replace(/`([^`]+)`/g,'<code>$1</code>');
+    t=t.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+    t=t.replace(/(^|[^*])\*([^*\n]+)\*/g,'$1<em>$2</em>');
+    return t;
+  }
+  function flushPara(){ if(para.length){ out+='<p>'+inline(para.join(' '))+'</p>'; para=[]; } }
+  function closeList(){ if(list){ out+='</'+list+'>'; list=null; } }
+  function closeQuote(){ if(quote){ out+='</blockquote>'; quote=false; } }
+  function closeAll(){ flushPara(); closeList(); closeQuote(); }
+
+  lines.forEach(function(raw){
+    const ln=raw.trim();
+    if(!ln){ closeAll(); return; }
+    const yt=ln.match(/^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{6,})/);
+    if(yt && ln.split(/\s+/).length===1){
+      closeAll();
+      out+='<div class="videowrap"><iframe src="https://www.youtube.com/embed/'+esc0(yt[1])+'" title="영상" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen loading="lazy"></iframe></div>';
+      return;
+    }
+    if(/^---+$/.test(ln)){ closeAll(); out+='<hr>'; return; }
+    let m;
+    if((m=ln.match(/^###\s+(.*)$/))){ closeAll(); out+='<h4>'+inline(m[1])+'</h4>'; return; }
+    if((m=ln.match(/^##\s+(.*)$/))){ closeAll(); out+='<h3>'+inline(m[1])+'</h3>'; return; }
+    if((m=ln.match(/^#\s+(.*)$/))){ closeAll(); out+='<h3>'+inline(m[1])+'</h3>'; return; }
+    if((m=ln.match(/^>\s?(.*)$/))){
+      flushPara(); closeList();
+      if(!quote){ out+='<blockquote>'; quote=true; }
+      out+='<p>'+inline(m[1])+'</p>'; return;
+    }
+    closeQuote();
+    if((m=ln.match(/^[-*]\s+(.*)$/))){
+      flushPara();
+      if(list!=='ul'){ closeList(); out+='<ul>'; list='ul'; }
+      out+='<li>'+inline(m[1])+'</li>'; return;
+    }
+    if((m=ln.match(/^\d+[.)]\s+(.*)$/))){
+      flushPara();
+      if(list!=='ol'){ closeList(); out+='<ol>'; list='ol'; }
+      out+='<li>'+inline(m[1])+'</li>'; return;
+    }
+    closeList();
+    para.push(ln);
+  });
+  closeAll();
+  return out;
+}
+
+
+function sanitizeHTML(html){
+  const box=document.createElement('div');
+  box.innerHTML=String(html||'');
+  box.querySelectorAll('script,iframe[src^="javascript"],object,embed,form,meta,link,base').forEach(function(n){
+    if(n.tagName==='IFRAME'){ return; }
+    n.remove();
+  });
+  box.querySelectorAll('*').forEach(function(n){
+    Array.from(n.attributes||[]).forEach(function(a){
+      const nm=a.name.toLowerCase(), v=String(a.value||'').trim().toLowerCase();
+      if(nm.indexOf('on')===0) n.removeAttribute(a.name);
+      if((nm==='href'||nm==='src'||nm==='xlink:href') && v.indexOf('javascript:')===0) n.removeAttribute(a.name);
+    });
+    if(n.tagName==='A'){ n.setAttribute('target','_blank'); n.setAttribute('rel','noopener'); }
+    if(n.tagName==='IFRAME'){
+      const src=String(n.getAttribute('src')||'');
+      if(!/^https:\/\/(www\.)?(youtube\.com|youtube-nocookie\.com)\//.test(src)) n.remove();
+    }
+  });
+  return box.innerHTML;
+}
+function renderBody(p){
+  return (p && p.fmt==='html') ? sanitizeHTML(p.body) : mdRender(p?p.body:'');
+}
+function stripTags(html){
+  const box=document.createElement('div');
+  box.innerHTML=String(html||'');
+  box.querySelectorAll('style,script,svg').forEach(function(n){ n.remove(); });
+  return (box.textContent||'').replace(/\s+/g,' ').trim();
+}
+function postExcerpt(p, n){
+  n=n||90;
+  if(p.lead) return p.lead.length>n ? p.lead.slice(0,n)+'…' : p.lead;
+  const t = (p.fmt==='html') ? stripTags(p.body) : String(p.body||'').replace(/[#>*\-\[\]()`!]/g,' ').replace(/\s+/g,' ').trim();
+  return t.length>n ? t.slice(0,n)+'…' : t;
+}
+
+function postCats(){ const s=new Set(); (DB.posts||[]).forEach(p=>{ if(p.cat) s.add(p.cat); }); return Array.from(s).sort(); }
+function postSeries(){ const s=new Set(); (DB.posts||[]).forEach(p=>{ if(p.series) s.add(p.series); }); return Array.from(s).sort(); }
+
+function syncPostSelects(){
+  const cats=postCats(), ser=postSeries();
+  const c=$('#po-cat'); if(c){ const cur=c.value;
+    c.innerHTML='<option value="">전체 분류</option>'+cats.map(v=>'<option value="'+esc(v)+'">'+esc(v)+'</option>').join('');
+    c.value=cats.indexOf(cur)>=0?cur:''; }
+  const t=$('#po-series'); if(t){ const cur=t.value;
+    t.innerHTML='<option value="">전체 시리즈</option>'+ser.map(v=>'<option value="'+esc(v)+'">'+esc(v)+'</option>').join('');
+    t.value=ser.indexOf(cur)>=0?cur:''; }
+  const dc=$('#dl-cat'); if(dc) dc.innerHTML=cats.map(v=>'<option value="'+esc(v)+'"></option>').join('');
+  const ds=$('#dl-series'); if(ds) ds.innerHTML=ser.map(v=>'<option value="'+esc(v)+'"></option>').join('');
+}
+
+function openEditor(p){
+  const box=$('#po-editor'); if(!box) return;
+  PO_EDIT = p ? p.id : null;
+  p = p || {};
+  $('#po-edit-title').innerHTML = (PO_EDIT?'글 수정':'새 글 쓰기')+' <span class="hint">저장하면 자동으로 올라갑니다</span>';
+  $('#po-date').value=p.date||today();
+  $('#po-cat-in').value=p.cat||'';
+  $('#po-series-in').value=p.series||'';
+  $('#po-no').value=p.no||'';
+  $('#po-title').value=p.title||'';
+  $('#po-lead').value=p.lead||'';
+  $('#po-body').value=p.body||'';
+  if($('#po-fmt')){ $('#po-fmt').value=p.fmt||'md'; togglePoHelp(); }
+  $('#po-del').style.display = PO_EDIT ? '' : 'none';
+  box.style.display='';
+  syncPostSelects();
+  box.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function togglePoHelp(){
+  const html = $('#po-fmt') && $('#po-fmt').value==='html';
+  const hh=$('#po-htmlhelp'), mh=$('#po-mdhelp');
+  if(hh) hh.style.display = html?'':'none';
+  if(mh) mh.style.display = html?'none':'';
+  const ta=$('#po-body');
+  if(ta) ta.placeholder = html
+    ? '<h3>소제목</h3>\n<p>본문을 <strong>이렇게</strong> 씁니다.</p>\n\n<style>\n  .box{background:#F0F4F9;padding:14px;border-radius:4px}\n</style>\n<div class="box">해설 상자</div>'
+    : '## 소제목\n\n본문을 씁니다. **굵게** 강조할 수 있고,\n\n- 목록도\n- 됩니다\n\n> 인용문\n\n유튜브 주소를 한 줄에 넣으면 영상이 삽입됩니다.';
+}
+function closeEditor(){ const b=$('#po-editor'); if(b) b.style.display='none'; PO_EDIT=null; }
+
+function savePost(draft){
+  const title=$('#po-title').value.trim();
+  if(!title){ alert('제목을 넣어주세요.'); return; }
+  const p={
+    id: PO_EDIT || uid(),
+    date: $('#po-date').value||today(),
+    cat: $('#po-cat-in').value.trim(),
+    series: $('#po-series-in').value.trim(),
+    no: iv($('#po-no').value),
+    title: title,
+    lead: $('#po-lead').value.trim(),
+    body: $('#po-body').value,
+    fmt: ($('#po-fmt')?$('#po-fmt').value:'md'),
+    draft: !!draft
+  };
+  if(!Array.isArray(DB.posts)) DB.posts=[];
+  const i=DB.posts.findIndex(x=>x.id===p.id);
+  if(i>=0) DB.posts[i]=p; else DB.posts.push(p);
+  DB.posts.sort(function(a,b){ return (b.date||'').localeCompare(a.date||''); });
+  persist();
+  closeEditor(); renderPosts(); renderSidebar();
+  toast(draft?'초안으로 저장했습니다':'저장했습니다');
+}
+
+function visiblePosts(){
+  let list=(DB.posts||[]).slice();
+  if(!ADMIN) list=list.filter(p=>!p.draft);
+  const c=$('#po-cat')?$('#po-cat').value:'';
+  const t=$('#po-series')?$('#po-series').value:'';
+  const q=$('#po-q')?$('#po-q').value.trim().toLowerCase():'';
+  if(c) list=list.filter(p=>p.cat===c);
+  if(t) list=list.filter(p=>p.series===t);
+  if(q) list=list.filter(p=>((p.title||'')+' '+(p.lead||'')+' '+(p.body||'')).toLowerCase().indexOf(q)>=0);
+  if(t){ list.sort(function(a,b){ return (a.no||0)-(b.no||0) || (a.date||'').localeCompare(b.date||''); }); }
+  return list;
+}
+
+
+function renderSidebar(){
+  const el=$('#sidebar'); if(!el) return;
+  let h='';
+
+  /* 최근 칼럼 */
+  const posts=(DB.posts||[]).filter(function(p){ return ADMIN || !p.draft; })
+    .slice().sort(function(a,b){ return (b.date||'').localeCompare(a.date||''); });
+  h+='<div class="sidebox"><div class="sh"><span class="t">칼럼</span><span class="e">Columns</span>'+
+     (posts.length?'<a class="more" data-go="posts">전체 '+posts.length+'편 →</a>':'')+'</div>';
+  if(!posts.length){
+    h+='<div style="padding:16px 15px;font-size:13px;color:var(--ink-soft);line-height:1.7">'+
+       (ADMIN?'칼럼 탭에서 첫 글을 써보세요. 야구 메커니즘, 키네틱 체인, 리커버리 같은 주제요.':'준비 중입니다.')+'</div>';
+  }else{
+    posts.slice(0,5).forEach(function(p){
+      const tags=[];
+      if(p.series) tags.push('<span class="minichip series">'+esc(p.series)+(p.no?' '+p.no+'편':'')+'</span>');
+      else if(p.cat) tags.push('<span class="minichip">'+esc(p.cat)+'</span>');
+      if(p.draft) tags.push('<span class="minichip draft">초안</span>');
+      h+='<a class="sideitem" data-post="'+p.id+'">'+
+           '<span class="tag">'+tags.join('')+'<span class="dt">'+esc((p.date||'').slice(2))+'</span></span>'+
+           '<span class="tt">'+esc(p.title||'')+'</span>'+
+           '<span class="ex">'+esc(postExcerpt(p,80))+'</span>'+
+         '</a>';
+    });
+  }
+  h+='</div>';
+
+  /* 시리즈 묶음 */
+  const ser={};
+  posts.forEach(function(p){ if(p.series){ (ser[p.series]=ser[p.series]||[]).push(p); } });
+  const sk=Object.keys(ser);
+  if(sk.length){
+    h+='<div class="sidebox"><div class="sh"><span class="t">연재</span><span class="e">Series</span></div>';
+    sk.forEach(function(k){
+      h+='<a class="sideitem" data-series="'+esc(k)+'">'+
+           '<span class="tt">'+esc(k)+'</span>'+
+           '<span class="ex">'+ser[k].length+'편 연재 중</span>'+
+         '</a>';
+    });
+    h+='</div>';
+  }
+
+  /* 한눈에 보는 성적 */
+  const gs=DB.games||[];
+  if(gs.length){
+    const b=battingAgg(gs), p=pitchAgg(gs);
+    h+='<div class="sidebox"><div class="sh"><span class="t">한눈에</span><span class="e">At a glance</span>'+
+       '<a class="more" data-go="stats">통계 →</a></div><div class="sidestat">'+
+       '<div><div class="k">경기</div><div class="v">'+gs.length+'</div></div>'+
+       '<div><div class="k">타율</div><div class="v hi">'+r3(b.AVG)+'</div></div>'+
+       '<div><div class="k">OPS</div><div class="v">'+r3(b.OPS)+'</div></div>'+
+       '<div><div class="k">ERA</div><div class="v hi">'+r2(p.ERA)+'</div></div>'+
+       '</div></div>';
+  }
+
+  el.innerHTML=h;
+}
+
+function renderPosts(){
+  syncPostSelects();
+  const el=$('#postlist'); if(!el) return;
+  const nb=$('#po-new'); if(nb) nb.style.display = ADMIN ? '' : 'none';
+  const list=visiblePosts();
+  const cnt=$('#po-count'); if(cnt) cnt.textContent = list.length ? list.length+'편' : '';
+  if(!list.length){
+    el.innerHTML='<div class="empty"><b>아직 글이 없습니다</b>'+
+      (ADMIN?'야구 메커니즘, 키네틱 체인, 리커버리, 학년별 스킬 — 생각을 정리해두면 아드님에게도 남습니다.':'준비 중입니다.')+'</div>';
+    return;
+  }
+  el.innerHTML=list.map(function(p){
+    const open = PO_OPEN===p.id;
+    const meta=[];
+    if(p.date) meta.push(esc(p.date));
+    if(p.series) meta.push('<span class="catchip series">'+esc(p.series)+(p.no?' '+p.no+'편':'')+'</span>');
+    if(p.cat) meta.push('<span class="catchip">'+esc(p.cat)+'</span>');
+    if(p.draft) meta.push('<span class="catchip draft">초안</span>');
+    return '<article class="postcard'+(p.draft?' draft':'')+'">'+
+      '<div class="postmeta">'+meta.join('')+'</div>'+
+      '<h3 class="posttitle">'+esc(p.title||'')+'</h3>'+
+      (p.lead?'<p class="postlead">'+esc(p.lead)+'</p>':'')+
+      (open?'<div class="postbody'+(p.fmt==='html'?' raw':'')+'">'+renderBody(p)+'</div>':'')+
+      '<div class="acts">'+
+        '<a data-open="'+p.id+'">'+(open?'접기':'읽기')+'</a>'+
+        (ADMIN?'<a data-edit-p="'+p.id+'">수정</a>':'')+
+      '</div>'+
+    '</article>';
+  }).join('');
+}
+
+function wirePosts(){
+  const el=$('#postlist'); if(!el) return;
+  el.addEventListener('click',function(ev){
+    const o=ev.target.closest('[data-open]');
+    if(o){ PO_OPEN = (PO_OPEN===o.dataset.open)?null:o.dataset.open; renderPosts(); return; }
+    const e=ev.target.closest('[data-edit-p]');
+    if(e){ const p=(DB.posts||[]).find(x=>x.id===e.dataset.editP); if(p) openEditor(p); }
+  });
+  const nb=$('#po-new'); if(nb) nb.addEventListener('click',function(){ openEditor(null); });
+  const sv=$('#po-save'); if(sv) sv.addEventListener('click',function(){ savePost(false); });
+  const dr=$('#po-draft'); if(dr) dr.addEventListener('click',function(){ savePost(true); });
+  const cn=$('#po-cancel'); if(cn) cn.addEventListener('click',closeEditor);
+  const dl=$('#po-del'); if(dl) dl.addEventListener('click',function(){
+    if(!PO_EDIT) return;
+    if(!confirm('이 글을 삭제할까요? 되돌릴 수 없습니다.')) return;
+    DB.deleted.push(PO_EDIT);
+    DB.posts=(DB.posts||[]).filter(x=>x.id!==PO_EDIT);
+    persist(); closeEditor(); renderPosts(); toast('삭제했습니다');
+  });
+  ['#po-cat','#po-series'].forEach(function(sel){ const x=$(sel); if(x) x.addEventListener('change',renderPosts); });
+  const q=$('#po-q'); if(q) q.addEventListener('input',renderPosts);
+  const fm=$('#po-fmt'); if(fm) fm.addEventListener('change',togglePoHelp);
+  const sb=$('#sidebar');
+  if(sb) sb.addEventListener('click',function(ev){
+    const g=ev.target.closest('[data-go]');
+    if(g){ goTab(g.dataset.go); return; }
+    const p=ev.target.closest('[data-post]');
+    if(p){ PO_OPEN=p.dataset.post; goTab('posts'); renderPosts();
+      setTimeout(function(){ const c=$('#postlist'); if(c) c.scrollIntoView({behavior:'smooth',block:'start'}); },80);
+      return; }
+    const s2=ev.target.closest('[data-series]');
+    if(s2){ goTab('posts'); const sel=$('#po-series'); if(sel){ sel.value=s2.dataset.series; } renderPosts(); }
+  });
+
+}
+
 /* ================= 07 데이터 ================= */
 function download(name,text,mime){
   const blob=new Blob([text],{type:mime||'application/json;charset=utf-8'});
@@ -1886,6 +2341,7 @@ function renderData(){
     statCell('상대 타자', bfs+'명','')+
     statCell('기록된 투구', pitches+'구','',true)+
     statCell('훈련', DB.trainings.length+'건','')+
+    statCell('칼럼', (DB.posts||[]).length+'편','')+
     statCell('데이터 크기', size, LS_OK?'브라우저에 저장됨':'저장 실패')+
     statCell('기록 기간', dates.length?dates[0].slice(2)+' ~ '+dates[dates.length-1].slice(2):'–','');
   markPubState();
@@ -1916,6 +2372,7 @@ refreshDatalists();
 renderLog();
 ghLoad();
 wireSyncUI();
+wirePosts();
 setSync(ghOn()?'idle':'idle','');
 if(ghOn()) ghPull(false); else loadPublished();
 if(ADMIN && !LS_OK) showStoreWarn();
