@@ -353,6 +353,19 @@ aside#sidebar{position:sticky;top:16px}
 .postbody.raw{font-size:15.5px}
 .postbody.raw > :first-child{margin-top:0}
 
+
+.sideline{border-bottom:1px solid var(--rule-soft)}
+.sideline:last-child{border-bottom:0}
+.sideline .lb{
+  padding:9px 15px 5px;font-family:var(--sans);font-size:12px;font-weight:700;color:var(--ink);
+}
+.sideline .lb span{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);font-weight:400;margin-left:5px}
+.sidestat3{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule-soft);border-top:1px solid var(--rule-soft)}
+.sidestat3 > div{background:var(--card);padding:9px 12px 11px}
+.sidestat3 .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--ink-faint);text-transform:uppercase}
+.sidestat3 .v{font-family:var(--mono);font-size:18px;font-weight:600;color:var(--ink);letter-spacing:-.02em;line-height:1.3}
+.sidestat3 .v.hi{color:var(--blue)}
+
 </style>
 </head>
 <body>
@@ -2093,12 +2106,22 @@ function renderSidebar(){
   if(gs.length){
     const b=battingAgg(gs), p=pitchAgg(gs);
     h+='<div class="sidebox"><div class="sh"><span class="t">한눈에</span><span class="e">At a glance</span>'+
-       '<a class="more" data-go="stats">통계 →</a></div><div class="sidestat">'+
-       '<div><div class="k">경기</div><div class="v">'+gs.length+'</div></div>'+
-       '<div><div class="k">타율</div><div class="v hi">'+r3(b.AVG)+'</div></div>'+
-       '<div><div class="k">OPS</div><div class="v">'+r3(b.OPS)+'</div></div>'+
-       '<div><div class="k">ERA</div><div class="v hi">'+r2(p.ERA)+'</div></div>'+
-       '</div></div>';
+       '<a class="more" data-go="stats">통계 →</a></div>';
+    if(b.PA){
+      h+='<div class="sideline"><div class="lb">타격 <span>Batting</span></div><div class="sidestat3">'+
+         '<div><div class="k">타석</div><div class="v">'+b.PA+'</div></div>'+
+         '<div><div class="k">안타</div><div class="v">'+b.H+'</div></div>'+
+         '<div><div class="k">타율</div><div class="v hi">'+r3(b.AVG)+'</div></div>'+
+         '</div></div>';
+    }
+    if(p.G){
+      h+='<div class="sideline"><div class="lb">투구 <span>Pitching</span></div><div class="sidestat3">'+
+         '<div><div class="k">이닝</div><div class="v">'+ipText(p.OUT)+'</div></div>'+
+         '<div><div class="k">실점</div><div class="v">'+p.R+'</div></div>'+
+         '<div><div class="k">ERA</div><div class="v hi">'+r2(p.ERA)+'</div></div>'+
+         '</div></div>';
+    }
+    h+='</div>';
   }
 
   el.innerHTML=h;
