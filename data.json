@@ -7,6 +7,33 @@
   },
   "games": [
     {
+      "id": "mt9twijv5p99l",
+      "date": "2026-08-26",
+      "type": "정식",
+      "opp": "오산시리틀",
+      "venue": "속초",
+      "tour": "속초시장기",
+      "round": "16강",
+      "dec": "",
+      "role": "",
+      "vid": "",
+      "vid2": "",
+      "album": "",
+      "photo": "",
+      "memo": "",
+      "pas": [
+        {
+          "seq": "BFWX",
+          "res": "2B",
+          "run": "risp",
+          "rbi": 1,
+          "scored": 0
+        }
+      ],
+      "bfs": [],
+      "fds": []
+    },
+    {
       "id": "mt267ckfjbvmi",
       "date": "2026-08-20",
       "type": "연습",
