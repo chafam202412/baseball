@@ -392,6 +392,20 @@ aside#sidebar{position:sticky;top:16px}
 .pager a.off{opacity:.35;pointer-events:none}
 .pager .pinfo{font-family:var(--mono);font-size:12px;color:var(--ink-soft);letter-spacing:.06em}
 
+
+.pcwarn{margin-top:10px;padding:10px 12px;border-radius:3px;border:1px solid var(--rule);background:#fff}
+.pcwarn .pcbar{height:6px;background:var(--rule-soft);border-radius:99px;overflow:hidden;margin-bottom:7px}
+.pcwarn .pcbar span{display:block;height:100%;background:var(--field);border-radius:99px;transition:width .3s}
+.pcwarn.near{border-color:#E0C68A;background:var(--amber-soft)}
+.pcwarn.near .pcbar span{background:var(--amber)}
+.pcwarn.over{border-color:var(--red);background:var(--red-soft)}
+.pcwarn.over .pcbar span{background:var(--red)}
+.pcwarn .pctxt{font-size:13px;color:var(--ink)}
+.restbox{padding:12px 15px;font-size:13.5px;line-height:1.7}
+.restbox .big{font-family:var(--mono);font-size:19px;font-weight:600;color:var(--field)}
+.restbox .big.wait{color:var(--red)}
+.restbox .sm{font-size:12px;color:var(--ink-soft);margin-top:3px}
+
 </style>
 </head>
 <body>
@@ -433,6 +447,7 @@ aside#sidebar{position:sticky;top:16px}
 
   <!-- ============ 02 ENTRY ============ -->
   <section class="panel" id="p-entry">
+    <div id="draftbar"></div>
     <div class="card">
       <h2>경기 정보 <span class="hint">날짜와 상대만 넣어도 저장됩니다</span></h2>
       <div class="grid g4">
@@ -460,6 +475,7 @@ aside#sidebar{position:sticky;top:16px}
       </div>
       <div class="rowset" id="bf-rows"></div>
       <div class="livesum" id="bf-sum"></div>
+      <div id="bf-warn"></div>
       <div style="margin-top:11px"><button class="btn ghost sm" id="add-bf">+ 타자 추가</button></div>
     </div>
 
@@ -620,6 +636,19 @@ aside#sidebar{position:sticky;top:16px}
         <div><label for="pf-pos">주 포지션</label><input id="pf-pos" placeholder="예: 투수 / 유격수"></div>
       </div>
       <div class="row-actions" style="margin-top:12px"><button class="btn ghost" id="save-profile">선수 정보 저장</button></div>
+    </div>
+
+    <div class="card" id="rest-card">
+      <h2>투구수 관리 <span class="hint">입력 중 경고와 휴식일 안내에 쓰입니다</span></h2>
+      <div class="grid g2">
+        <div><label for="rs-limit">한 경기 투구수 상한</label><input type="number" id="rs-limit" min="1" max="200"></div>
+        <div><label for="rs-tiers">휴식일 기준 <span class="muted">— 투구수:휴식일</span></label><input id="rs-tiers" placeholder="20:0, 35:1, 50:2, 65:3, 999:4"></div>
+      </div>
+      <div class="row-actions" style="margin-top:12px"><button class="btn ghost" id="rs-save">기준 저장</button></div>
+      <p class="tiny muted" style="margin:12px 0 0">
+        기본값은 유소년 투구수 가이드라인에서 널리 쓰이는 형태를 참고한 <b>예시</b>입니다.
+        소속 리그·대회 규정이 우선이니, 팀 규정에 맞춰 바꿔 쓰세요. 나이와 성장 단계에 따라 적정치가 다릅니다.
+      </p>
     </div>
 
     <div class="card" id="sync-card" style="border-left:5px solid var(--blue)">
@@ -900,7 +929,7 @@ function setSync(state, msg){
     else if(!ghOn()){ bar.innerHTML='<span class="syncchip" id="syncgo"><span class="dot"></span>이 기기에만 저장 중 · 연결하기</span>'; }
     else{
       const cls = state==='ok'?'ok':(state==='pending'?'pending':(state==='err'?'err':''));
-      const txt = state==='ok'?'동기화됨':(state==='pending'?'저장 중…':(state==='err'?('동기화 실패 — 다시 시도'):'연결됨'));
+      const txt = state==='ok'?'동기화됨':(state==='pending'?'저장 중…':(state==='err'?'아직 안 올라감 — 눌러서 재시도':'연결됨'));
       bar.innerHTML='<span class="syncchip '+cls+'" id="syncgo"><span class="dot"></span>'+txt+(msg?' · '+esc(msg):'')+'</span>';
     }
     const go=document.getElementById('syncgo');
@@ -970,12 +999,30 @@ function ghPush(loud){
     })
     .catch(function(e){ setSync('err', e.message); if(loud) alert('저장하지 못했습니다.\n\n'+e.message); });
 }
+let DIRTY=false, retryTimer=null;
 function queuePush(){
   if(!ghOn()) return;
+  DIRTY=true;
   setSync('pending','저장 중');
   clearTimeout(pushTimer);
-  pushTimer=setTimeout(function(){ ghPush(false); }, 1200);
+  pushTimer=setTimeout(function(){ tryPush(); }, 1200);
 }
+function tryPush(){
+  if(!ghOn() || !DIRTY) return;
+  if(navigator.onLine===false){ setSync('err','인터넷 연결 없음 — 연결되면 자동 저장'); scheduleRetry(); return; }
+  ghPush(false).then(function(){
+    if(SYNC==='ok'){ DIRTY=false; clearTimeout(retryTimer); }
+    else scheduleRetry();
+  });
+}
+function scheduleRetry(){
+  clearTimeout(retryTimer);
+  retryTimer=setTimeout(function(){ tryPush(); }, 20000);
+}
+window.addEventListener('online', function(){ if(DIRTY) tryPush(); });
+window.addEventListener('beforeunload', function(ev){
+  if(DIRTY && ghOn()){ ev.preventDefault(); ev.returnValue=''; return ''; }
+});
 
 function wireSyncUI(){
   const oEl=$('#gh-owner'), rEl=$('#gh-repo'), tEl=$('#gh-token');
@@ -1207,6 +1254,7 @@ function liveSummary(){
       '<span><b>'+P+'</b>구 · 스트라이크 <b>'+(P?Math.round(S/P*100):0)+'</b>%</span>'+
       '<span>피안타 <b>'+H+'</b> 사사구 <b>'+BB+'</b> 삼진 <b>'+K+'</b></span>'+
       '<span>자책 <b>'+ER+'</b>'+(ip?' · ERA <b>'+(ER*9/ip).toFixed(2)+'</b>':'')+'</span>' : '';
+    const pw=$('#bf-warn'); if(pw) pw.innerHTML = BF ? pitchWarnHTML(P) : '';
   }
 }
 function wirePad(container){
@@ -1225,6 +1273,8 @@ if($('#pa-rows')){
   $('#bf-rows').addEventListener('change',liveSummary);
   $('#pa-rows').addEventListener('input',liveSummary);
   $('#pa-rows').addEventListener('change',liveSummary);
+  const ep=$('#p-entry');
+  if(ep){ ep.addEventListener('input',queueDraft); ep.addEventListener('change',queueDraft); ep.addEventListener('click',function(ev){ if(ev.target.closest('[data-p],[data-undo],[data-del]')) queueDraft(); }); }
   $('#add-pa').addEventListener('click',()=>{ $('#pa-rows').insertAdjacentHTML('beforeend',paBlock()); reindex(); liveSummary(); });
   $('#add-bf').addEventListener('click',()=>{ $('#bf-rows').insertAdjacentHTML('beforeend',bfBlock()); reindex(); liveSummary(); });
   $('#add-fd').addEventListener('click',()=>{ $('#fd-rows').insertAdjacentHTML('beforeend',fdBlock()); });
@@ -1283,9 +1333,58 @@ if($('#save-game')){
     DB.games.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
     persist();
     toast(i>=0?'경기를 수정했습니다':'경기를 저장했습니다');
-    fillForm(null); refreshDatalists(); renderLog(); goTab('log');
+    clearDraft(); fillForm(null); refreshDatalists(); renderLog(); goTab('log');
   });
-  $('#reset-game').addEventListener('click',()=>{ fillForm(null); toast('새 경기 입력으로 비웠습니다'); });
+  $('#reset-game').addEventListener('click',()=>{ clearDraft(); fillForm(null); toast('새 경기 입력으로 비웠습니다'); });
+}
+
+
+/* ================= 작성 중 임시저장 ================= */
+const DRAFT_KEY='baseball_entry_draft';
+let draftTimer=null;
+function hasContent(g){
+  if(!g) return false;
+  if(g.opp||g.tour||g.venue||g.memo||g.vid||g.album) return true;
+  const pa=(g.pas||[]).some(function(x){ return x.seq || x.rbi || x.inn; });
+  const bf=(g.bfs||[]).some(function(x){ return x.seq || x.inn || x.r || x.er; });
+  const fd=(g.fds||[]).some(function(x){ return x.inn || x.po || x.a || x.e; });
+  return pa||bf||fd;
+}
+function saveDraft(){
+  if(!ADMIN || !$('#pa-rows')) return;
+  try{
+    const g=readForm();
+    if(hasContent(g)) localStorage.setItem(DRAFT_KEY, JSON.stringify({at:Date.now(), edit:EDIT_ID, g:g}));
+    else localStorage.removeItem(DRAFT_KEY);
+  }catch(e){}
+}
+function queueDraft(){ clearTimeout(draftTimer); draftTimer=setTimeout(saveDraft, 700); }
+function clearDraft(){ try{ localStorage.removeItem(DRAFT_KEY); }catch(e){} const b=$('#draftbar'); if(b) b.innerHTML=''; }
+function offerDraft(){
+  if(!ADMIN) return;
+  let d=null;
+  try{ d=JSON.parse(localStorage.getItem(DRAFT_KEY)||'null'); }catch(e){}
+  if(!d || !d.g) return;
+  const bar=$('#draftbar'); if(!bar) return;
+  const when=new Date(d.at||Date.now());
+  const ago=Math.round((Date.now()-(d.at||Date.now()))/60000);
+  const t=(when.getMonth()+1)+'/'+when.getDate()+' '+String(when.getHours()).padStart(2,'0')+':'+String(when.getMinutes()).padStart(2,'0');
+  bar.innerHTML='<div class="diffbox"><b>작성하다 만 경기가 있습니다.</b> '+esc(t)+
+    (ago<600?' ('+ago+'분 전)':'')+' · '+esc(d.g.opp||'상대 미기재')+
+    '<div class="row-actions" style="margin-top:10px">'+
+      '<button class="btn sm" data-draft="resume">이어서 쓰기</button>'+
+      '<button class="btn ghost sm" data-draft="drop">버리기</button>'+
+    '</div></div>';
+  bar.onclick=function(ev){
+    const b=ev.target.closest('[data-draft]'); if(!b) return;
+    if(b.dataset.draft==='resume'){
+      fillForm(d.g); EDIT_ID=d.edit||null;
+      $('#edit-note').textContent = EDIT_ID?'수정 중인 경기입니다. 저장하면 덮어씁니다.':'';
+      bar.innerHTML=''; toast('이어서 쓰기로 불러왔습니다');
+    }else{
+      if(confirm('작성 중이던 내용을 버릴까요?')) clearDraft();
+    }
+  };
 }
 
 /* ================= 집계 ================= */
@@ -1498,6 +1597,59 @@ function barChart(labels,data,color,fmt){
 }
 function statCell(k,v,d,hi){
   return '<div class="stat"><div class="k">'+esc(k)+'</div><div class="v'+(hi?' hi':'')+'">'+v+'</div>'+(d?'<div class="d">'+esc(d)+'</div>':'')+'</div>';
+}
+
+
+/* ================= 투구수 · 휴식일 ================= */
+const REST_KEY='baseball_rest';
+const REST_DEFAULT={ limit:75, tiers:[[20,0],[35,1],[50,2],[65,3],[999,4]] };
+function restCfg(){
+  try{ const c=JSON.parse(localStorage.getItem(REST_KEY)||'null'); if(c&&c.tiers) return c; }catch(e){}
+  return REST_DEFAULT;
+}
+function restDaysFor(pitches){
+  const c=restCfg();
+  for(let i=0;i<c.tiers.length;i++){ if(pitches<=c.tiers[i][0]) return c.tiers[i][1]; }
+  return c.tiers[c.tiers.length-1][1];
+}
+function addDays(iso, n){
+  const d=new Date(iso+'T00:00:00');
+  d.setDate(d.getDate()+n);
+  return d.toISOString().slice(0,10);
+}
+function daysBetween(a,b){
+  return Math.round((new Date(b+'T00:00:00') - new Date(a+'T00:00:00'))/86400000);
+}
+function lastOuting(){
+  const gs=(DB.games||[]).filter(function(g){ return (g.bfs||[]).length || (g.ips||[]).length; })
+    .slice().sort(function(a,b){ return (b.date||'').localeCompare(a.date||''); });
+  if(!gs.length) return null;
+  const g=gs[0], p=pitchAgg([g]);
+  return {date:g.date, pitches:p.P, opp:g.opp};
+}
+function restStatus(){
+  const lo=lastOuting(); if(!lo || !lo.date) return null;
+  const need=restDaysFor(lo.pitches);
+  const ready=addDays(lo.date, need);
+  const today0=today();
+  const gap=daysBetween(lo.date, today0);
+  const left=daysBetween(today0, ready);
+  return {last:lo, need:need, ready:ready, gap:gap, left:left, ok:left<=0};
+}
+function pitchWarnHTML(total){
+  const c=restCfg();
+  if(!total) return '';
+  const lim=c.limit;
+  const pct2=Math.min(100, Math.round(total/lim*100));
+  let cls='ok', msg='';
+  if(total>=lim){ cls='over'; msg='설정한 상한('+lim+'구)을 넘었습니다'; }
+  else if(total>=lim*0.85){ cls='near'; msg='상한 '+lim+'구에 근접했습니다'; }
+  else { msg='상한 '+lim+'구 기준'; }
+  const need=restDaysFor(total);
+  return '<div class="pcwarn '+cls+'">'+
+    '<div class="pcbar"><span style="width:'+pct2+'%"></span></div>'+
+    '<div class="pctxt"><b>'+total+'구</b> · '+esc(msg)+
+    ' · 이 투구수면 <b>휴식 '+need+'일</b> 권장</div></div>';
 }
 
 /* ================= 01 경기 일지 ================= */
@@ -2087,6 +2239,17 @@ function renderSidebar(){
     h+='</div>';
   }
 
+  /* 1-2. 등판 휴식 */
+  const rs=restStatus();
+  if(rs){
+    h+='<div class="sidebox"><div class="sh"><span class="t">등판 상태</span><span class="e">Rest</span></div>'+
+       '<div class="restbox">'+
+         '<div class="big'+(rs.ok?'':' wait')+'">'+(rs.ok?'등판 가능':'앞으로 '+rs.left+'일 휴식')+'</div>'+
+         '<div class="sm">최근 등판 '+esc(rs.last.date||'')+' · '+rs.last.pitches+'구 · 권장 휴식 '+rs.need+'일</div>'+
+         '<div class="sm">'+(rs.ok?'마지막 등판 후 '+rs.gap+'일 지남':'권장 등판일 '+esc(rs.ready))+'</div>'+
+       '</div></div>';
+  }
+
   /* 2. 최근 칼럼 */
   const posts=(DB.posts||[]).filter(function(p){ return ADMIN || !p.draft; })
     .slice().sort(function(a,b){ return (b.date||'').localeCompare(a.date||''); });
@@ -2358,6 +2521,24 @@ if($('#exp-pub')){
     DB.trainings.forEach(t=>rows.push([t.date,t.type,t.hours||'',t.pitch||'',(t.memo||'').replace(/\n/g,' '),t.vid||'',t.album||'',t.photo||'']));
     download('야구_훈련_'+stamp()+'.csv', csv(rows), 'text/csv;charset=utf-8');
   });
+  (function(){
+    const c=restCfg();
+    if($('#rs-limit')) $('#rs-limit').value=c.limit;
+    if($('#rs-tiers')) $('#rs-tiers').value=c.tiers.map(function(t){ return t[0]+':'+t[1]; }).join(', ');
+  })();
+  $('#rs-save').addEventListener('click',function(){
+    const lim=iv($('#rs-limit').value)||REST_DEFAULT.limit;
+    const raw=$('#rs-tiers').value.split(',').map(function(x){ return x.trim(); }).filter(Boolean);
+    const tiers=[];
+    raw.forEach(function(x){
+      const m=x.split(':');
+      if(m.length===2){ const a=iv(m[0]), b=iv(m[1]); if(a>0) tiers.push([a,b]); }
+    });
+    tiers.sort(function(a,b){ return a[0]-b[0]; });
+    if(!tiers.length){ alert('휴식일 기준 형식을 확인해 주세요. 예: 20:0, 35:1, 50:2'); return; }
+    try{ localStorage.setItem(REST_KEY, JSON.stringify({limit:lim, tiers:tiers})); }catch(e){}
+    renderSidebar(); toast('투구수 기준을 저장했습니다');
+  });
   $('#save-profile').addEventListener('click',()=>{
     DB.player={name:$('#pf-name').value.trim(), team:$('#pf-team').value.trim(), pos:$('#pf-pos').value.trim()};
     persist(); applyPlayer(); toast('선수 정보를 저장했습니다');
@@ -2422,6 +2603,7 @@ renderLog();
 ghLoad();
 wireSyncUI();
 wirePosts();
+offerDraft();
 setSync(ghOn()?'idle':'idle','');
 if(ghOn()) ghPull(false); else loadPublished();
 if(ADMIN && !LS_OK) showStoreWarn();
