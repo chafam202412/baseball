@@ -406,6 +406,17 @@ aside#sidebar{position:sticky;top:16px}
 .restbox .big.wait{color:var(--red)}
 .restbox .sm{font-size:12px;color:var(--ink-soft);margin-top:3px}
 
+
+.linebox{margin:11px 0 0}
+.gline{display:flex;gap:9px;align-items:baseline;padding:7px 0;border-top:1px solid var(--rule-soft)}
+.gline:first-child{border-top:0;padding-top:2px}
+.gline .gl{
+  flex:none;font-size:11px;font-weight:700;letter-spacing:.04em;padding:2px 9px;border-radius:99px;
+  background:var(--blue-soft);color:var(--blue);border:1px solid #C2D6EC;
+}
+.gline.pit .gl{background:var(--field-soft);color:var(--field);border-color:#B9D6C9}
+.gline .gv{font-family:var(--mono);font-size:12.5px;color:var(--ink);line-height:1.75}
+
 </style>
 </head>
 <body>
@@ -1654,10 +1665,23 @@ function pitchWarnHTML(total){
 
 /* ================= 01 경기 일지 ================= */
 function gameLine(g){
-  const b=battingAgg([g]), p=pitchAgg([g]), out=[];
-  if(b.PA) out.push(b.AB+'타수 '+b.H+'안타'+(b.R?' '+b.R+'득점':'')+(b.RBI?' '+b.RBI+'타점':'')+(b.BB?' '+b.BB+'볼넷':'')+(b.P?' · '+b.P+'구 봄':''));
-  if(p.BF||p.P) out.push(ipText(p.OUT)+'이닝 '+p.P+'구 '+p.K+'K '+p.ER+'자책'+(p.STRP!=null?' · 스트라이크 '+pct(p.STRP):''));
-  return out.join('   ·   ');
+  const b=battingAgg([g]), p=pitchAgg([g]);
+  let h='';
+  if(b.PA){
+    const bits=[b.AB+'타수 '+b.H+'안타'];
+    if(b.R) bits.push(b.R+'득점');
+    if(b.RBI) bits.push(b.RBI+'타점');
+    if(b.BB) bits.push(b.BB+'볼넷');
+    if(b.SO) bits.push(b.SO+'삼진');
+    if(b.P) bits.push(b.P+'구 봄');
+    h+='<div class="gline bat"><span class="gl">타석</span><span class="gv">'+esc(bits.join(' · '))+'</span></div>';
+  }
+  if(p.BF||p.P){
+    const bits=[ipText(p.OUT)+'이닝', p.P+'구', p.K+'K', p.ER+'자책'];
+    if(p.STRP!=null) bits.push('스트라이크 '+pct(p.STRP));
+    h+='<div class="gline pit"><span class="gl">투구</span><span class="gv">'+esc(bits.join(' · '))+'</span></div>';
+  }
+  return h;
 }
 function renderLog(){
   syncSelects();
@@ -1701,7 +1725,7 @@ function renderLog(){
         '</div>'+
       '</div>'+
       (dia?'<div class="dline" style="margin-top:8px">'+dia+'</div>':'')+
-      (gameLine(g)?'<p class="linebox">'+esc(gameLine(g))+'</p>':'')+
+      (gameLine(g)?'<div class="linebox">'+gameLine(g)+'</div>':'')+
       det+
       (g.memo?'<div class="memo">'+esc(g.memo)+'</div>':'')+
       (g.photo?'<div style="margin-top:10px"><img src="photos/'+esc(g.photo)+'" alt="" style="max-width:100%;border:1px solid var(--rule);border-radius:2px" loading="lazy"></div>':'')+
