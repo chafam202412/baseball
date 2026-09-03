@@ -7,6 +7,91 @@
   },
   "games": [
     {
+      "id": "mtlbp57a5sza6",
+      "date": "2026-09-03",
+      "type": "정식",
+      "opp": "의정부민락",
+      "venue": "양평",
+      "tour": "양평군수기",
+      "round": "87강",
+      "dec": "",
+      "role": "",
+      "vid": "",
+      "vid2": "",
+      "album": "",
+      "photo": "",
+      "memo": "",
+      "pas": [
+        {
+          "seq": "WX",
+          "res": "1B",
+          "run": "none",
+          "rbi": 0,
+          "scored": 1
+        },
+        {
+          "seq": "BX",
+          "res": "E",
+          "run": "none",
+          "rbi": 0,
+          "scored": 0
+        },
+        {
+          "seq": "BFBFFW",
+          "res": "SO_S",
+          "run": "risp",
+          "rbi": 0,
+          "scored": 0
+        },
+        {
+          "seq": "X",
+          "res": "GO",
+          "run": "risp",
+          "rbi": 1,
+          "scored": 0
+        }
+      ],
+      "bfs": [
+        {
+          "seq": "BSWBW",
+          "res": "SO_S",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "BWWBFW",
+          "res": "SO_S",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "WWBBW",
+          "res": "SO_S",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        }
+      ],
+      "fds": [
+        {
+          "pos": "유격수",
+          "inn": 4,
+          "po": 2,
+          "a": 0,
+          "e": 0
+        },
+        {
+          "pos": "포수",
+          "inn": 1,
+          "po": 0,
+          "a": 0,
+          "e": 0
+        }
+      ]
+    },
+    {
       "id": "mt9twijv5p99l",
       "date": "2026-08-26",
       "type": "정식",
