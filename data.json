@@ -7,6 +7,55 @@
   },
   "games": [
     {
+      "id": "mtmhdpdugxtkh",
+      "date": "2026-09-04",
+      "type": "정식",
+      "opp": "덕양구",
+      "venue": "양평",
+      "tour": "양평군수기",
+      "round": "64강",
+      "dec": "",
+      "role": "",
+      "vid": "",
+      "vid2": "",
+      "album": "",
+      "photo": "",
+      "memo": "",
+      "pas": [
+        {
+          "seq": "SBBX",
+          "res": "1B",
+          "run": "risp",
+          "rbi": 1,
+          "scored": 0
+        },
+        {
+          "seq": "BFFX",
+          "res": "2B",
+          "run": "risp",
+          "rbi": 2,
+          "scored": 1
+        }
+      ],
+      "bfs": [],
+      "fds": [
+        {
+          "pos": "유격수",
+          "inn": 3,
+          "po": 0,
+          "a": 0,
+          "e": 0
+        },
+        {
+          "pos": "포수",
+          "inn": 1,
+          "po": 0,
+          "a": 0,
+          "e": 0
+        }
+      ]
+    },
+    {
       "id": "mtlbp57a5sza6",
       "date": "2026-09-03",
       "type": "정식",
