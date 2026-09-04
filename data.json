@@ -173,7 +173,9 @@
           "res": "2B",
           "run": "risp",
           "rbi": 1,
-          "scored": 0
+          "scored": 0,
+          "dir": "C",
+          "qual": "LD"
         }
       ],
       "bfs": [],
