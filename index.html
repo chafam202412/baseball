@@ -441,6 +441,10 @@ aside#sidebar{position:sticky;top:16px}
   .scroll table{min-width:600px}
 }
 
+
+.sec-card.adv{border-left-color:var(--sky)}
+.sec-card.adv .sechead .ttl{color:var(--blue-mid)}
+
 </style>
 </head>
 <body>
@@ -827,6 +831,24 @@ const SHORT = {'1B':'안타','IFH':'내야','2B':'2루타','3B':'3루타','HR':'
   'SO_S':'삼진','SO_L':'루킹','GO':'땅볼','FO':'뜬공','LO':'직선','PO':'파플','DP':'병살','SF':'희비','SH':'희타',
   'E':'실책','FC':'야선','CI':'방해'};
 
+const DIRS = [
+  {v:'',   t:'—'},
+  {v:'L',  t:'좌'},
+  {v:'LC', t:'좌중'},
+  {v:'C',  t:'중'},
+  {v:'RC', t:'우중'},
+  {v:'R',  t:'우'}
+];
+const DMAP = Object.fromEntries(DIRS.map(d=>[d.v,d]));
+const QUALS = [
+  {v:'',   t:'—'},
+  {v:'GB', t:'땅볼'},
+  {v:'LD', t:'라인드라이브'},
+  {v:'FB', t:'뜬공'},
+  {v:'PU', t:'빗맞은 뜬공'},
+  {v:'BT', t:'번트'}
+];
+const QMAP = Object.fromEntries(QUALS.map(q=>[q.v,q]));
 const RUNNERS = [{v:'none',t:'주자 없음'},{v:'first',t:'1루만'},{v:'risp',t:'득점권 (2·3루)'}];
 const POSITIONS = [{v:'',t:'포지션 선택'},{v:'투수',t:'투수'},{v:'포수',t:'포수'},{v:'1루수',t:'1루수'},{v:'2루수',t:'2루수'},{v:'3루수',t:'3루수'},{v:'유격수',t:'유격수'},{v:'좌익수',t:'좌익수'},{v:'중견수',t:'중견수'},{v:'우익수',t:'우익수'},{v:'지명타자',t:'지명타자'}];
 
@@ -1211,6 +1233,8 @@ function paBlock(d){
       '<div><label>주자 상황</label><select class="pa-run">'+optList(RUNNERS, d.run||'none', true)+'</select></div>'+
       '<div><label>타점</label><input type="number" min="0" class="pa-rbi" value="'+(d.rbi??'')+'"></div>'+
       '<div><label>득점</label><input type="number" min="0" max="1" class="pa-scored" value="'+(d.scored??'')+'"></div>'+
+      '<div><label>타구 방향 <span class="muted">— 친 경우만</span></label><select class="pa-dir">'+optList(DIRS, d.dir||'', true)+'</select></div>'+
+      '<div><label>타구 유형</label><select class="pa-qual">'+optList(QUALS, d.qual||'', true)+'</select></div>'+
     '</div></div>';
 }
 function bfBlock(d){
@@ -1320,7 +1344,9 @@ let EDIT_ID = null;
 function readForm(){
   const pas=$$('#pa-rows .blk').map(r=>({
     seq:r.dataset.seq||'', res:r.querySelector('.pa-res').value, run:r.querySelector('.pa-run').value,
-    rbi:iv(r.querySelector('.pa-rbi').value), scored:iv(r.querySelector('.pa-scored').value)
+    rbi:iv(r.querySelector('.pa-rbi').value), scored:iv(r.querySelector('.pa-scored').value),
+    dir: r.querySelector('.pa-dir') ? r.querySelector('.pa-dir').value : '',
+    qual: r.querySelector('.pa-qual') ? r.querySelector('.pa-qual').value : ''
   }));
   const bfs=$$('#bf-rows .blk').map(r=>({
     seq:r.dataset.seq||'', res:r.querySelector('.bf-res').value, inn:iv(r.querySelector('.bf-inn').value),
@@ -1531,6 +1557,123 @@ function teamAgg(games){
   });
   a.WPCT=(a.W+a.L)?a.W/(a.W+a.L):null;
   return a;
+}
+
+
+/* ================= 심화 지표 ================= */
+function advPitch(games){
+  const a={BF:0, fpsBF:0, fpsOn:0, fpsK:0, fpbBF:0, fpbOn:0, fpbK:0,
+           quick:0, long:0, twoStrikeBF:0, twoStrikeK:0, twoStrikeEsc:0,
+           buckets:{}, maxBallRun:0};
+  games.forEach(function(g){
+    let idx=0;
+    (g.bfs||[]).forEach(function(bf){
+      const q=seqStats(bf.seq), r=RMAP[bf.res]||{};
+      if(!q.pitches && !bf.res) return;
+      a.BF++;
+      const on = (r.hit?1:0)+(r.bb||0)+(r.hbp||0);
+      if(q.first){
+        if(q.first.strike){ a.fpsBF++; a.fpsOn+=on; a.fpsK+=r.so||0; }
+        else { a.fpbBF++; a.fpbOn+=on; a.fpbK+=r.so||0; }
+      }
+      if(q.pitches && q.pitches<=3) a.quick++;
+      if(q.pitches>=6) a.long++;
+      /* 2스트라이크를 잡은 적이 있는가 */
+      let b=0,st=0,reached2=false,run=0;
+      for(let i=0;i<(bf.seq||'').length;i++){
+        const p=PMAP[bf.seq[i]]; if(!p) continue;
+        idx++;
+        const bk=Math.floor((idx-1)/15);
+        const o=a.buckets[bk]||(a.buckets[bk]={P:0,S:0});
+        o.P++; if(p.strike) o.S++;
+        if(p.v==='B'){ run++; if(run>a.maxBallRun) a.maxBallRun=run; b++; }
+        else { run=0; if(p.foul){ if(st<2) st++; } else if(p.strike && !p.end) st++; }
+        if(st>=2) reached2=true;
+      }
+      if(reached2){ a.twoStrikeBF++; if(r.so) a.twoStrikeK++; else if(on) a.twoStrikeEsc++; }
+    });
+  });
+  a.fpsOnRate = a.fpsBF ? a.fpsOn/a.fpsBF : null;
+  a.fpbOnRate = a.fpbBF ? a.fpbOn/a.fpbBF : null;
+  a.fpsKRate  = a.fpsBF ? a.fpsK/a.fpsBF : null;
+  a.fpbKRate  = a.fpbBF ? a.fpbK/a.fpbBF : null;
+  a.quickRate = a.BF ? a.quick/a.BF : null;
+  a.longRate  = a.BF ? a.long/a.BF : null;
+  a.putAway   = a.twoStrikeBF ? a.twoStrikeK/a.twoStrikeBF : null;
+  a.escaped   = a.twoStrikeBF ? a.twoStrikeEsc/a.twoStrikeBF : null;
+  return a;
+}
+function advBat(games){
+  const a={PA:0, fpSwing:0, fpStrike:0, swings:0, whiffs:0, pitches:0, SO:0, BB:0};
+  games.forEach(function(g){
+    (g.pas||[]).forEach(function(pa){
+      const q=seqStats(pa.seq), r=RMAP[pa.res]; if(!r) return;
+      a.PA++;
+      a.swings+=q.swings; a.whiffs+=q.whiffs; a.pitches+=q.pitches;
+      a.SO+=r.so||0; a.BB+=r.bb||0;
+      if(q.first){ if(q.first.swing) a.fpSwing++; if(q.first.strike) a.fpStrike++; }
+    });
+  });
+  a.fpSwingRate = a.PA ? a.fpSwing/a.PA : null;
+  a.contact = a.swings ? (a.swings-a.whiffs)/a.swings : null;
+  a.swingRate = a.pitches ? a.swings/a.pitches : null;
+  a.bbk = a.SO ? a.BB/a.SO : (a.BB?Infinity:null);
+  return a;
+}
+
+
+/* ================= 타구 방향 ================= */
+const SPRAY_PATH={
+  L:  "M170 300 L-6.8 123.2 A250 250 0 0 1 56.5 77.2 Z",
+  LC: "M170 300 L56.5 77.2 A250 250 0 0 1 130.9 53.1 Z",
+  C:  "M170 300 L130.9 53.1 A250 250 0 0 1 209.1 53.1 Z",
+  RC: "M170 300 L209.1 53.1 A250 250 0 0 1 283.5 77.2 Z",
+  R:  "M170 300 L283.5 77.2 A250 250 0 0 1 346.8 123.2 Z"
+};
+const SPRAY_LBL={ L:[81.8,178.6], LC:[123.6,157.3], C:[170,150], RC:[216.4,157.3], R:[258.2,178.6] };
+
+function sprayAgg(games){
+  const a={dirs:{}, quals:{}, total:0, hits:0};
+  ['L','LC','C','RC','R'].forEach(function(k){ a.dirs[k]={n:0,h:0}; });
+  games.forEach(function(g){
+    (g.pas||[]).forEach(function(pa){
+      const r=RMAP[pa.res]; if(!r) return;
+      if(pa.dir && a.dirs[pa.dir]){
+        a.dirs[pa.dir].n++; a.total++;
+        if(r.hit){ a.dirs[pa.dir].h++; a.hits++; }
+      }
+      if(pa.qual){
+        const o=a.quals[pa.qual]||(a.quals[pa.qual]={n:0,h:0});
+        o.n++; if(r.hit) o.h++;
+      }
+    });
+  });
+  const pull=a.dirs.L.n+a.dirs.LC.n, cen=a.dirs.C.n, opp=a.dirs.RC.n+a.dirs.R.n;
+  a.pullRate=a.total?pull/a.total:null;
+  a.cenRate=a.total?cen/a.total:null;
+  a.oppRate=a.total?opp/a.total:null;
+  return a;
+}
+function sprayChart(sa){
+  if(!sa.total) return '';
+  const max=Math.max.apply(null,['L','LC','C','RC','R'].map(function(k){ return sa.dirs[k].n; }))||1;
+  let g='';
+  ['L','LC','C','RC','R'].forEach(function(k){
+    const o=sa.dirs[k], op=0.10+0.72*(o.n/max);
+    g+='<path d="'+SPRAY_PATH[k]+'" fill="#2E6FB7" fill-opacity="'+(o.n?op.toFixed(2):'0.05')+'" stroke="#fff" stroke-width="2"/>';
+  });
+  /* 내야 다이아몬드 */
+  g+='<path d="M170 300 L232 238 L170 176 L108 238 Z" fill="none" stroke="#fff" stroke-width="2.5" opacity=".9"/>';
+  g+='<circle cx="170" cy="238" r="4" fill="#fff" opacity=".9"/>';
+  ['L','LC','C','RC','R'].forEach(function(k){
+    const o=sa.dirs[k], p=SPRAY_LBL[k];
+    const avg=o.n?(o.h/o.n):null;
+    g+='<text x="'+p[0]+'" y="'+p[1]+'" text-anchor="middle" font-size="17" font-weight="700" fill="'+(o.n?'#fff':'#93A0B0')+'">'+o.n+'</text>';
+    if(o.n) g+='<text x="'+p[0]+'" y="'+(p[1]+15)+'" text-anchor="middle" font-size="10" font-family="monospace" fill="#fff" opacity=".9">'+(avg!=null?r3(avg):'')+'</text>';
+    g+='<text x="'+p[0]+'" y="'+(p[1]+32)+'" text-anchor="middle" font-size="11" fill="'+(o.n?'#EAF1F9':'#93A0B0')+'">'+DMAP[k].t+'</text>';
+  });
+  return '<div class="chartbox" style="padding:10px 6px 4px"><svg viewBox="0 0 340 320" style="display:block;width:100%;max-width:360px;height:auto;margin:0 auto" role="img" aria-label="타구 방향 분포">'+g+'</svg>'+
+    '<div class="legend" style="justify-content:center">진할수록 그 방향으로 많이 쳤습니다 · 숫자는 타구 수, 아래는 타율</div></div>';
 }
 
 /* ================= 필터 ================= */
@@ -1824,6 +1967,32 @@ function renderStats(){
         '<td class="num">'+r3(v.AVG)+'</td><td class="num">'+r3(v.OBP)+'</td><td class="num">'+r3(v.OPS)+'</td><td class="num">'+r2(v.PPA)+'</td></tr>';
     }).join('')+'</tbody></table></div>';
 
+  /* ===== 타구 방향 ===== */
+  const sa=sprayAgg(games);
+  if(sa.total){
+    h+='<h3 class="sec">타구 방향 <span class="q">— 당겨 치는지 밀어 치는지</span></h3>';
+    h+='<div class="statgrid" style="margin-bottom:12px">'+
+       statCell('당겨친 비율', pct(sa.pullRate), '좌 + 좌중 '+(sa.dirs.L.n+sa.dirs.LC.n)+'개', true)+
+       statCell('가운데', pct(sa.cenRate), sa.dirs.C.n+'개')+
+       statCell('밀어친 비율', pct(sa.oppRate), '우중 + 우 '+(sa.dirs.RC.n+sa.dirs.R.n)+'개')+
+       statCell('기록된 타구', sa.total+'개', '안타 '+sa.hits+'개')+
+    '</div>';
+    h+=sprayChart(sa);
+    const qk=Object.keys(sa.quals);
+    if(qk.length){
+      const tot=qk.reduce(function(x,k){ return x+sa.quals[k].n; },0);
+      h+='<h3 class="sec">타구 유형</h3>'+
+        '<div class="scrollhint">← 좌우로 밀어서 보기</div><div class="scroll"><table><thead><tr>'+
+        '<th>유형</th><th>타구수</th><th>비율</th><th>안타</th><th>타율</th></tr></thead><tbody>'+
+        qk.sort(function(x,y){ return sa.quals[y].n-sa.quals[x].n; }).map(function(k){
+          const o=sa.quals[k];
+          return '<tr><td>'+esc((QMAP[k]||{}).t||k)+'</td><td class="num">'+o.n+'</td>'+
+            '<td class="num">'+pct(tot?o.n/tot:null)+'</td><td class="num">'+o.h+'</td>'+
+            '<td class="num">'+r3(o.n?o.h/o.n:null)+'</td></tr>';
+        }).join('')+'</tbody></table></div>';
+    }
+  }
+
   const dist={}; games.forEach(g=>(g.pas||[]).forEach(pa=>{ dist[pa.res]=(dist[pa.res]||0)+1; }));
   const dk=Object.keys(dist).sort((a,b)=>dist[b]-dist[a]);
   if(dk.length) h+='<h3 class="sec">타석 결과 분포</h3>'+barChart(dk.map(k=>SHORT[k]||k), dk.map(k=>dist[k]), '#16263F');
@@ -1889,6 +2058,58 @@ function renderStats(){
           return '<tr><td>'+esc(k)+'</td><td class="num">'+o.G+'</td><td class="num">'+r1(o.INN)+'</td><td class="num">'+o.PO+'</td><td class="num">'+o.A+'</td><td class="num">'+o.E+'</td><td class="num">'+r3(ch?(o.PO+o.A)/ch:null)+'</td></tr>';
         }).join('')+'</tbody></table></div>';
     }
+    h+='</div>';
+  }
+
+  /* ===== 심화 지표 ===== */
+  const ab=advBat(games), ap=advPitch(games);
+  if(b.PA>=8 || ap.BF>=8){
+    h+='<div class="card sec-card adv"><div class="sechead"><span class="ttl">심화 지표</span><span class="en">Advanced</span>'+
+       '<span class="meta">표본이 쌓일수록 정확해집니다</span></div>';
+
+    if(ap.BF>=8){
+      const kbb = (p.KRT!=null && p.BBRT!=null) ? p.KRT-p.BBRT : null;
+      h+='<h3 class="sec">투구 <span class="q">— 표본이 적어도 비교적 안정적인 지표들</span></h3><div class="statgrid">'+
+        statCell('K−BB%', pct(kbb), '삼진율 '+pct(p.KRT)+' − 사사구율 '+pct(p.BBRT), true)+
+        statCell('결정구 성공률', pct(ap.putAway), '2스트라이크 '+ap.twoStrikeBF+'타자 중 '+ap.twoStrikeK+'삼진', true)+
+        statCell('2S 놓침', pct(ap.escaped), '2스트라이크 잡고 출루 허용 '+ap.twoStrikeEsc)+
+        statCell('3구 이내 처리', pct(ap.quickRate), ap.quick+' / '+ap.BF+'타자')+
+        statCell('6구 이상 끌림', pct(ap.longRate), ap.long+' / '+ap.BF+'타자')+
+        statCell('최다 연속 볼', ap.maxBallRun+'구', '제구 흔들림의 신호')+
+      '</div>';
+
+      if(ap.fpsBF && ap.fpbBF){
+        h+='<h3 class="sec">초구를 잡았을 때 vs 놓쳤을 때 <span class="q">— 카운트 선점의 효과</span></h3>'+
+          '<div class="scrollhint">← 좌우로 밀어서 보기</div><div class="scroll"><table><thead><tr>'+
+          '<th>초구</th><th>타자</th><th>출루 허용</th><th>출루허용률</th><th>삼진</th><th>삼진율</th></tr></thead><tbody>'+
+          '<tr><td>스트라이크</td><td class="num">'+ap.fpsBF+'</td><td class="num">'+ap.fpsOn+'</td><td class="num">'+pct(ap.fpsOnRate)+'</td><td class="num">'+ap.fpsK+'</td><td class="num">'+pct(ap.fpsKRate)+'</td></tr>'+
+          '<tr><td>볼</td><td class="num">'+ap.fpbBF+'</td><td class="num">'+ap.fpbOn+'</td><td class="num">'+pct(ap.fpbOnRate)+'</td><td class="num">'+ap.fpbK+'</td><td class="num">'+pct(ap.fpbKRate)+'</td></tr>'+
+        '</tbody></table></div>';
+      }
+
+      const bk=Object.keys(ap.buckets).sort(function(x,y){ return x-y; });
+      if(bk.length>1){
+        const lab=bk.map(function(k){ const a0=k*15+1; return a0+'~'+(a0+14)+'구'; });
+        const dat=bk.map(function(k){ const o=ap.buckets[k]; return o.P? Math.round(o.S/o.P*1000)/10 : null; });
+        h+='<h3 class="sec">투구수 구간별 스트라이크 비율 <span class="q">— 몇 구째부터 제구가 흔들리는지</span></h3>'+
+           lineChart([{name:'스트라이크%', data:dat, color:'#3F6B4A'}], {labels:lab, fmt:function(v){ return Math.round(v)+'%'; }});
+      }
+    }
+
+    if(b.PA>=8){
+      h+='<h3 class="sec">타격</h3><div class="statgrid">'+
+        statCell('컨택률', pct(ab.contact), '스윙 '+ab.swings+'번 중 '+(ab.swings-ab.whiffs)+'번 맞힘', true)+
+        statCell('스윙률', pct(ab.swingRate), '본 공 '+ab.pitches+'구 기준')+
+        statCell('초구 스윙률', pct(ab.fpSwingRate), ab.fpSwing+' / '+ab.PA+'타석')+
+        statCell('BB/K', ab.bbk===Infinity?'∞':r2(ab.bbk), '볼넷 '+ab.BB+' 삼진 '+ab.SO, true)+
+        statCell('2S 이후 타율', r3(b.TWO), b.twoH+' / '+b.twoAB+'타수')+
+        statCell('유리한 카운트', r3(b.AHEAD), b.aheadH+' / '+b.aheadAB+'타수')+
+      '</div>';
+    }
+
+    h+='<p class="tiny muted" style="margin:16px 0 0;line-height:1.7">'+
+       '이 지표들은 <b>비율</b>이라 몇 경기만으로도 방향은 읽히지만, 20타석·50타자 정도는 쌓여야 믿을 만해집니다. '+
+       '지금은 참고 수준으로 보시고 <b>추세</b>를 보세요.</p>';
     h+='</div>';
   }
 
@@ -2542,11 +2763,12 @@ if($('#exp-pub')){
     download('야구_경기요약_'+stamp()+'.csv', csv(rows), 'text/csv;charset=utf-8');
   });
   $('#csv-pa').addEventListener('click',()=>{
-    const rows=[['날짜','구분','대회','상대','타석순번','득점','결과','주자상황','득점권','타점','투구수','시퀀스','한글시퀀스','최종카운트','승부시카운트']];
+    const rows=[['날짜','구분','대회','상대','타석순번','득점','결과','주자상황','득점권','타점','타구방향','타구유형','투구수','시퀀스','한글시퀀스','최종카운트','승부시카운트']];
     DB.games.forEach(g=>(g.pas||[]).forEach(function(pa,i){
       const q=seqStats(pa.seq);
       const rn=(RUNNERS.filter(r=>r.v===pa.run)[0]||{}).t||'';
       rows.push([g.date,g.type,g.tour,g.opp,i+1,pa.scored||'',(RMAP[pa.res]||{}).t||pa.res,rn,pa.run==='risp'?'Y':'N',pa.rbi||'',
+        (DMAP[pa.dir]||{}).t||'',(QMAP[pa.qual]||{}).t||'',
         q.pitches,pa.seq||'',seqText(pa.seq),countLabel(pa.seq),q.bAt+'-'+q.sAt]);
     }));
     download('야구_타석상세_'+stamp()+'.csv', csv(rows), 'text/csv;charset=utf-8');
