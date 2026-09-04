@@ -80,28 +80,36 @@
           "res": "1B",
           "run": "none",
           "rbi": 0,
-          "scored": 1
+          "scored": 1,
+          "dir": "C",
+          "qual": "GB"
         },
         {
           "seq": "BX",
           "res": "E",
           "run": "none",
           "rbi": 0,
-          "scored": 0
+          "scored": 0,
+          "dir": "RC",
+          "qual": "FB"
         },
         {
           "seq": "BFBFFW",
           "res": "SO_S",
           "run": "risp",
           "rbi": 0,
-          "scored": 0
+          "scored": 0,
+          "dir": "",
+          "qual": ""
         },
         {
           "seq": "X",
           "res": "GO",
           "run": "risp",
           "rbi": 1,
-          "scored": 0
+          "scored": 0,
+          "dir": "RC",
+          "qual": "GB"
         }
       ],
       "bfs": [
