@@ -27,14 +27,18 @@
           "res": "1B",
           "run": "risp",
           "rbi": 1,
-          "scored": 0
+          "scored": 0,
+          "dir": "C",
+          "qual": "LD"
         },
         {
           "seq": "BFFX",
           "res": "2B",
           "run": "risp",
           "rbi": 2,
-          "scored": 1
+          "scored": 1,
+          "dir": "LC",
+          "qual": "LD"
         }
       ],
       "bfs": [],
