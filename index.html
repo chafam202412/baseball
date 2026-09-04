@@ -417,6 +417,30 @@ aside#sidebar{position:sticky;top:16px}
 .gline.pit .gl{background:var(--field-soft);color:var(--field);border-color:#B9D6C9}
 .gline .gv{font-family:var(--mono);font-size:12.5px;color:var(--ink);line-height:1.75}
 
+
+/* ===== 표 가독성 (모바일) ===== */
+.scroll{position:relative}
+.scroll table{min-width:560px}
+.scroll th:first-child,.scroll td:first-child{
+  white-space:nowrap;position:sticky;left:0;z-index:1;
+  background:var(--card);
+  box-shadow:1px 0 0 var(--rule-soft);
+}
+.scroll thead th:first-child{background:var(--card-tint);z-index:2}
+.scroll tbody tr.totrow td:first-child{background:var(--blue-soft)}
+.scroll tbody tr:hover td:first-child{background:#fff}
+.scroll td,.scroll th{white-space:nowrap}
+.scrollhint{
+  font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);letter-spacing:.06em;
+  text-align:right;padding:0 2px 5px;display:none;
+}
+@media (max-width:760px){
+  .scrollhint{display:block}
+  .scroll th,.scroll td{padding:8px 9px;font-size:12.5px}
+  .scroll th{font-size:10.5px}
+  .scroll table{min-width:600px}
+}
+
 </style>
 </head>
 <body>
@@ -1591,14 +1615,24 @@ function lineChart(series,opts){
 function barChart(labels,data,color,fmt){
   const W=760,H=200,L=44,R=16,T=14,B=32;
   if(!data.length||!data.some(v=>v)) return '<div class="empty" style="padding:26px">데이터가 모이면 그래프가 나타납니다</div>';
-  const max=Math.max.apply(null,data)*1.15||1;
+  const raw=Math.max.apply(null,data)||1;
+  const allInt=data.every(function(v){ return Math.abs(v-Math.round(v))<1e-9; });
+  let max, ticks;
+  if(allInt && raw<=6){
+    max=raw; ticks=[];
+    for(let i=0;i<=raw;i++) ticks.push(i);
+  }else{
+    max=raw*1.15;
+    ticks=[0,max/3,max*2/3,max];
+  }
+  if(!(max>0)) max=1;
   const bw=(W-L-R)/data.length;
   let g='';
-  for(let k=0;k<=3;k++){
-    const v=max*k/3, y=T+(H-T-B)*(1-k/3);
+  ticks.forEach(function(v){
+    const y=T+(H-T-B)*(1-v/max);
     g+='<line x1="'+L+'" y1="'+y+'" x2="'+(W-R)+'" y2="'+y+'" stroke="var(--rule-soft)"/>'+
-       '<text x="'+(L-8)+'" y="'+(y+4)+'" text-anchor="end" font-size="10" font-family="monospace" fill="#93A0B0">'+(fmt?fmt(v):Math.round(v))+'</text>';
-  }
+       '<text x="'+(L-8)+'" y="'+(y+4)+'" text-anchor="end" font-size="10" font-family="monospace" fill="#93A0B0">'+(fmt?fmt(v):(allInt?v:Math.round(v)))+'</text>';
+  });
   data.forEach((v,i)=>{
     const h=(H-T-B)*(v/max), x=L+i*bw+bw*0.18, y=H-B-h;
     g+='<rect x="'+x+'" y="'+y+'" width="'+(bw*0.64)+'" height="'+Math.max(h,0)+'" fill="'+color+'" opacity=".85"><title>'+esc(labels[i])+' · '+(fmt?fmt(v):v)+'</title></rect>';
@@ -1783,7 +1817,7 @@ function renderStats(){
   const rispA=battingAgg(games,pa=>pa.run==='risp');
   const firstA=battingAgg(games,pa=>pa.run==='first');
   const noneA=battingAgg(games,pa=>pa.run==='none');
-  h+='<h3 class="sec">주자 상황별</h3><div class="scroll"><table><thead><tr><th>상황</th><th>타석</th><th>타수</th><th>안타</th><th>타점</th><th>타율</th><th>출루율</th><th>OPS</th><th>P/PA</th></tr></thead><tbody>'+
+  h+='<h3 class="sec">주자 상황별</h3><div class="scrollhint">← 좌우로 밀어서 보기</div><div class="scroll"><table><thead><tr><th>상황</th><th>타석</th><th>타수</th><th>안타</th><th>타점</th><th>타율</th><th>출루율</th><th>OPS</th><th>P/PA</th></tr></thead><tbody>'+
     [['득점권 (2·3루)',rispA],['1루만',firstA],['주자 없음',noneA]].map(function(x){
       const n=x[0], v=x[1];
       return '<tr><td>'+n+'</td><td class="num">'+v.PA+'</td><td class="num">'+v.AB+'</td><td class="num">'+v.H+'</td><td class="num">'+v.RBI+'</td>'+
@@ -1823,7 +1857,7 @@ function renderStats(){
     }));
     const ik=Object.keys(byInn).sort((a,b)=>a-b);
     if(ik.length){
-      h+='<h3 class="sec">이닝별 <span class="q">— 몇 회부터 제구가 흔들리는지</span></h3><div class="scroll"><table><thead><tr>'+
+      h+='<h3 class="sec">이닝별 <span class="q">— 몇 회부터 제구가 흔들리는지</span></h3><div class="scrollhint">← 좌우로 밀어서 보기</div><div class="scroll"><table><thead><tr>'+
         '<th>이닝</th><th>상대타자</th><th>투구수</th><th>스트라이크%</th><th>피안타</th><th>사사구</th><th>탈삼진</th><th>자책</th></tr></thead><tbody>'+
         ik.map(function(k){ const o=byInn[k];
           return '<tr><td>'+k+'회</td><td class="num">'+o.BF+'</td><td class="num">'+o.P+'</td>'+
@@ -1850,7 +1884,7 @@ function renderStats(){
     '</div>';
     const pk=Object.keys(f.byPos);
     if(pk.length){
-      h+='<h3 class="sec">포지션별</h3><div class="scroll"><table><thead><tr><th>포지션</th><th>경기</th><th>이닝</th><th>자살</th><th>보살</th><th>실책</th><th>수비율</th></tr></thead><tbody>'+
+      h+='<h3 class="sec">포지션별</h3><div class="scrollhint">← 좌우로 밀어서 보기</div><div class="scroll"><table><thead><tr><th>포지션</th><th>경기</th><th>이닝</th><th>자살</th><th>보살</th><th>실책</th><th>수비율</th></tr></thead><tbody>'+
         pk.map(function(k){ const o=f.byPos[k], ch=o.PO+o.A+o.E;
           return '<tr><td>'+esc(k)+'</td><td class="num">'+o.G+'</td><td class="num">'+r1(o.INN)+'</td><td class="num">'+o.PO+'</td><td class="num">'+o.A+'</td><td class="num">'+o.E+'</td><td class="num">'+r3(ch?(o.PO+o.A)/ch:null)+'</td></tr>';
         }).join('')+'</tbody></table></div>';
@@ -1912,7 +1946,7 @@ function renderSplits(){
   const totB=battingAgg(games), totP=pitchAgg(games), totT=teamAgg(games);
   let h='';
 
-  h+='<div class="card"><h2>'+esc(grp.label)+'별 타격</h2><div class="scroll"><table><thead><tr>'+
+  h+='<div class="card"><h2>'+esc(grp.label)+'별 타격</h2><div class="scrollhint">← 좌우로 밀어서 보기</div><div class="scroll"><table><thead><tr>'+
     '<th>'+esc(grp.label)+'</th><th>경기</th><th>타석</th><th>타수</th><th>안타</th><th>2B</th><th>3B</th><th>HR</th><th>득점</th><th>타점</th><th>볼넷</th><th>삼진</th>'+
     '<th>타율</th><th>출루율</th><th>장타율</th><th>OPS</th><th>득점권</th><th>P/PA</th></tr></thead><tbody>'+
     rows.filter(r=>r.b.PA).map(function(r){
@@ -1930,7 +1964,7 @@ function renderSplits(){
   '</tbody></table></div></div>';
 
   if(totP.G){
-    h+='<div class="card"><h2>'+esc(grp.label)+'별 투구</h2><div class="scroll"><table><thead><tr>'+
+    h+='<div class="card"><h2>'+esc(grp.label)+'별 투구</h2><div class="scrollhint">← 좌우로 밀어서 보기</div><div class="scroll"><table><thead><tr>'+
       '<th>'+esc(grp.label)+'</th><th>등판</th><th>이닝</th><th>투구수</th><th>피안타</th><th>사사구</th><th>탈삼진</th><th>실점</th><th>자책</th>'+
       '<th>ERA</th><th>WHIP</th><th>K/9</th><th>BB/9</th><th>스트%</th><th>초구스트%</th></tr></thead><tbody>'+
       rows.filter(r=>r.p.G).map(function(r){
@@ -1949,7 +1983,7 @@ function renderSplits(){
   }
 
   if(totT.G){
-    h+='<div class="card"><h2>'+esc(grp.label)+'별 팀 성적</h2><div class="scroll"><table><thead><tr>'+
+    h+='<div class="card"><h2>'+esc(grp.label)+'별 팀 성적</h2><div class="scrollhint">← 좌우로 밀어서 보기</div><div class="scroll"><table><thead><tr>'+
       '<th>'+esc(grp.label)+'</th><th>경기</th><th>승</th><th>패</th><th>무</th><th>승률</th><th>득점</th><th>실점</th><th>마진</th></tr></thead><tbody>'+
       rows.filter(r=>r.t.G).map(function(r){
         return '<tr><td>'+esc(r.k)+'</td><td class="num">'+r.t.G+'</td><td class="num">'+r.t.W+'</td><td class="num">'+r.t.L+'</td><td class="num">'+r.t.D+'</td>'+
