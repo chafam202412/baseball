@@ -496,6 +496,8 @@ aside#sidebar{position:sticky;top:16px}
         <div><label for="e-venue">구장</label><input id="e-venue" placeholder="목동구장" list="dl-venue"><datalist id="dl-venue"></datalist></div>
         <div><label for="e-tour">대회명 <span class="muted">— 집계 기준</span></label><input id="e-tour" placeholder="OO기 전국대회" list="dl-tour"><datalist id="dl-tour"></datalist></div>
         <div><label for="e-round">라운드</label><input id="e-round" placeholder="16강"></div>
+        <div><label for="e-sb">도루 성공</label><input type="number" id="e-sb" min="0" placeholder="0"></div>
+        <div><label for="e-cs">도루 실패</label><input type="number" id="e-cs" min="0" placeholder="0"></div>
       </div>
     </div>
 
@@ -1362,6 +1364,7 @@ function readForm(){
     type: $('#e-type').value,
     opp: $('#e-opp').value.trim(), venue: $('#e-venue').value.trim(),
     tour: $('#e-tour').value.trim(), round: $('#e-round').value.trim(),
+    sb: iv($('#e-sb').value), cs: iv($('#e-cs').value),
     dec: $('#e-dec').value, role: $('#e-role').value,
     vid: $('#e-vid').value.trim(), vid2: $('#e-vid2').value.trim(),
     album: $('#e-album').value.trim(), photo: $('#e-photo').value.trim(),
@@ -1375,6 +1378,7 @@ function fillForm(g){
   $('#e-date').value=g.date||today();
   $('#e-type').value=g.type||'정식';
   ['opp','venue','tour','round','memo'].forEach(k=>{ $('#e-'+k).value=g[k]||''; });
+  $('#e-sb').value=g.sb||''; $('#e-cs').value=g.cs||'';
   $('#e-dec').value=g.dec||''; $('#e-role').value=g.role||'';
   $('#e-vid').value=g.vid||''; $('#e-vid2').value=g.vid2||'';
   $('#e-album').value=g.album||''; $('#e-photo').value=g.photo||'';
@@ -1453,7 +1457,7 @@ function battingAgg(games, filter){
   const a={G:0,PA:0,AB:0,H:0,B1:0,B2:0,B3:0,HR:0,BB:0,HBP:0,SO:0,SF:0,SH:0,R:0,RBI:0,TB:0,
            P:0,STRK:0,SWING:0,WHIFF:0,FOUL:0,FPS:0,
            rispAB:0,rispH:0,rispRBI:0,emptyAB:0,emptyH:0,
-           twoAB:0,twoH:0,aheadAB:0,aheadH:0};
+           twoAB:0,twoH:0,aheadAB:0,aheadH:0,SB:0,CS:0};
   games.forEach(g=>{
     let used=false;
     (g.pas||[]).forEach(pa=>{
@@ -1474,7 +1478,7 @@ function battingAgg(games, filter){
         if(q.bAt>q.sAt){ a.aheadAB+=r.ab||0; a.aheadH+=r.h||0; }
       }
     });
-    if(used) a.G++;
+    if(used){ a.G++; a.SB+=g.sb||0; a.CS+=g.cs||0; }
   });
   a.AVG=a.AB?a.H/a.AB:null;
   const den=a.AB+a.BB+a.HBP+a.SF;
@@ -1492,6 +1496,7 @@ function battingAgg(games, filter){
   a.EMPT=a.emptyAB?a.emptyH/a.emptyAB:null;
   a.TWO=a.twoAB?a.twoH/a.twoAB:null;
   a.AHEAD=a.aheadAB?a.aheadH/a.aheadAB:null;
+  a.SBR=(a.SB+a.CS)?a.SB/(a.SB+a.CS):null;
   return a;
 }
 function pitchAgg(games){
@@ -1850,6 +1855,7 @@ function gameLine(g){
     if(b.RBI) bits.push(b.RBI+'타점');
     if(b.BB) bits.push(b.BB+'볼넷');
     if(b.SO) bits.push(b.SO+'삼진');
+    if(b.SB||b.CS) bits.push('도루 '+b.SB+(b.CS?'/'+(b.SB+b.CS):''));
     if(b.P) bits.push(b.P+'구 봄');
     h+='<div class="gline bat"><span class="gl">타석</span><span class="gv">'+esc(bits.join(' · '))+'</span></div>';
   }
@@ -1955,6 +1961,7 @@ function renderStats(){
     statCell('삼진율', pct(b.KR), b.SO+'삼진')+
     statCell('볼넷율', pct(b.BBR), b.BB+'볼넷')+
     statCell('ISO 순장타력', r3(b.ISO), '2루타 '+b.B2+' 3루타 '+b.B3+' 홈런 '+b.HR)+
+    statCell('도루 성공률', pct(b.SBR), b.SB+'성공 '+b.CS+'실패')+
   '</div>';
 
   const rispA=battingAgg(games,pa=>pa.run==='risp');
@@ -2748,11 +2755,11 @@ if($('#exp-pub')){
     rd.readAsText(f);
   });
   $('#csv-game').addEventListener('click',()=>{
-    const rows=[['날짜','구분','대회','라운드','상대','구장','타석','타수','안타','득점','타점','볼넷','삼진','타율','출루율','장타율','OPS','득점권타율','P/PA','투구이닝','투구수','스트라이크%','초구스트%','피안타','사사구','탈삼진','실점','자책','ERA','WHIP','메모']];
+    const rows=[['날짜','구분','대회','라운드','상대','구장','타석','타수','안타','득점','타점','볼넷','삼진','도루','도루실패','타율','출루율','장타율','OPS','득점권타율','P/PA','투구이닝','투구수','스트라이크%','초구스트%','피안타','사사구','탈삼진','실점','자책','ERA','WHIP','메모']];
     DB.games.forEach(function(g){
       const b=battingAgg([g]), p=pitchAgg([g]), rr=battingAgg([g],pa=>pa.run==='risp');
       rows.push([g.date,g.type,g.tour,g.round,g.opp,g.venue,
-        b.PA,b.AB,b.H,b.R,b.RBI,b.BB,b.SO,
+        b.PA,b.AB,b.H,b.R,b.RBI,b.BB,b.SO,b.SB,b.CS,
         b.AVG!=null?b.AVG.toFixed(3):'', b.OBP!=null?b.OBP.toFixed(3):'', b.SLG!=null?b.SLG.toFixed(3):'',
         b.OPS!=null?b.OPS.toFixed(3):'', rr.AVG!=null?rr.AVG.toFixed(3):'', b.PPA!=null?b.PPA.toFixed(2):'',
         p.OUT?ipText(p.OUT):'', p.P||'', p.STRP!=null?(p.STRP*100).toFixed(1):'', p.FPSP!=null?(p.FPSP*100).toFixed(1):'',
