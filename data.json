@@ -7,6 +7,111 @@
   },
   "games": [
     {
+      "id": "mto6c8qswfr15",
+      "date": "2026-09-05",
+      "type": "정식",
+      "opp": "동대문구",
+      "venue": "양평",
+      "tour": "26양평군수기",
+      "round": "32강",
+      "dec": "",
+      "role": "",
+      "vid": "",
+      "vid2": "",
+      "album": "",
+      "photo": "",
+      "memo": "",
+      "pas": [
+        {
+          "seq": "BX",
+          "res": "SH",
+          "run": "first",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "",
+          "qual": ""
+        },
+        {
+          "seq": "X",
+          "res": "1B",
+          "run": "none",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "L",
+          "qual": "LD"
+        },
+        {
+          "seq": "X",
+          "res": "1B",
+          "run": "risp",
+          "rbi": 1,
+          "scored": 0,
+          "dir": "LC",
+          "qual": "LD"
+        }
+      ],
+      "bfs": [
+        {
+          "seq": "BBBSWX",
+          "res": "1B",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "SFX",
+          "res": "DP",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "BSWW",
+          "res": "SO_S",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "BX",
+          "res": "GO",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "WBBWW",
+          "res": "SO_S",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "BSBX",
+          "res": "GO",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        }
+      ],
+      "fds": [
+        {
+          "pos": "유격수",
+          "inn": 3,
+          "po": 0,
+          "a": 0,
+          "e": 1
+        },
+        {
+          "pos": "포수",
+          "inn": 1,
+          "po": 0,
+          "a": 0,
+          "e": 0
+        }
+      ]
+    },
+    {
       "id": "mtmhdpdugxtkh",
       "date": "2026-09-04",
       "type": "정식",
