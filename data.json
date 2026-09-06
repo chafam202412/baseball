@@ -7,6 +7,85 @@
   },
   "games": [
     {
+      "id": "mtp7ua4bjwc72",
+      "date": "2026-09-06",
+      "type": "정식",
+      "opp": "남양주북부",
+      "venue": "양평",
+      "tour": "26양평군수기",
+      "round": "16강",
+      "sb": 1,
+      "cs": 0,
+      "dec": "",
+      "role": "마무리",
+      "vid": "",
+      "vid2": "",
+      "album": "",
+      "photo": "",
+      "memo": "",
+      "pas": [
+        {
+          "seq": "SX",
+          "res": "IFH",
+          "run": "risp",
+          "rbi": 1,
+          "scored": 1,
+          "dir": "L",
+          "qual": "GB"
+        },
+        {
+          "seq": "BX",
+          "res": "1B",
+          "run": "first",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "C",
+          "qual": "LD"
+        },
+        {
+          "seq": "FX",
+          "res": "2B",
+          "run": "risp",
+          "rbi": 1,
+          "scored": 1,
+          "dir": "LC",
+          "qual": "LD"
+        }
+      ],
+      "bfs": [
+        {
+          "seq": "FBSS",
+          "res": "SO_L",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "WBWBW",
+          "res": "SO_S",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "SWX",
+          "res": "GO",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        }
+      ],
+      "fds": [
+        {
+          "pos": "유격수",
+          "inn": 3,
+          "po": 1,
+          "a": 0,
+          "e": 0
+        }
+      ]
+    },
+    {
       "id": "mto6c8qswfr15",
       "date": "2026-09-05",
       "type": "정식",
