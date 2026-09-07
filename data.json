@@ -86,6 +86,92 @@
       ]
     },
     {
+      "id": "mtqo35rbjofl5",
+      "date": "2026-09-06",
+      "type": "정식",
+      "opp": "연수구청",
+      "venue": "양평",
+      "tour": "26양평군수기",
+      "round": "8강",
+      "sb": 0,
+      "cs": 0,
+      "dec": "",
+      "role": "",
+      "vid": "",
+      "vid2": "",
+      "album": "",
+      "photo": "",
+      "memo": "",
+      "pas": [
+        {
+          "seq": "FBBX",
+          "res": "1B",
+          "run": "risp",
+          "rbi": 1,
+          "scored": 0,
+          "dir": "LC",
+          "qual": "LD"
+        },
+        {
+          "seq": "BBX",
+          "res": "FC",
+          "run": "risp",
+          "rbi": 1,
+          "scored": 0,
+          "dir": "RC",
+          "qual": "GB"
+        },
+        {
+          "seq": "BBSX",
+          "res": "FO",
+          "run": "none",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "RC",
+          "qual": "FB"
+        }
+      ],
+      "bfs": [
+        {
+          "seq": "BX",
+          "res": "HR",
+          "inn": 0,
+          "r": 3,
+          "er": 1
+        },
+        {
+          "seq": "BBWBB",
+          "res": "BB",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        }
+      ],
+      "fds": [
+        {
+          "pos": "유격수",
+          "inn": 2,
+          "po": 0,
+          "a": 0,
+          "e": 0
+        },
+        {
+          "pos": "포수",
+          "inn": 1,
+          "po": 0,
+          "a": 0,
+          "e": 0
+        },
+        {
+          "pos": "유격수",
+          "inn": 2,
+          "po": 1,
+          "a": 1,
+          "e": 0
+        }
+      ]
+    },
+    {
       "id": "mto6c8qswfr15",
       "date": "2026-09-05",
       "type": "정식",
