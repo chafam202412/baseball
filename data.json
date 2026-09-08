@@ -7,6 +7,70 @@
   },
   "games": [
     {
+      "id": "mts17l3kfztf5",
+      "date": "2026-09-08",
+      "type": "정식",
+      "opp": "미추홀구",
+      "venue": "양평",
+      "tour": "26양평군수기",
+      "round": "4강",
+      "sb": 0,
+      "cs": 0,
+      "dec": "",
+      "role": "",
+      "vid": "",
+      "vid2": "",
+      "album": "",
+      "photo": "",
+      "memo": "",
+      "pas": [
+        {
+          "seq": "BSX",
+          "res": "SH",
+          "run": "first",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "RC",
+          "qual": "GB"
+        },
+        {
+          "seq": "WBSFFS",
+          "res": "SO_L",
+          "run": "none",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "",
+          "qual": ""
+        },
+        {
+          "seq": "FSFFBX",
+          "res": "1B",
+          "run": "risp",
+          "rbi": 1,
+          "scored": 0,
+          "dir": "LC",
+          "qual": "GB"
+        }
+      ],
+      "bfs": [],
+      "fds": [
+        {
+          "pos": "유격수",
+          "inn": 3,
+          "po": 1,
+          "a": 1,
+          "e": 0
+        },
+        {
+          "pos": "포수",
+          "inn": 1,
+          "po": 0,
+          "a": 0,
+          "e": 0
+        }
+      ]
+    },
+    {
       "id": "mtqo35rbjofl5",
       "date": "2026-09-07",
       "type": "정식",
