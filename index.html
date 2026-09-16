@@ -680,7 +680,7 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
   <h3 class="sub">연도별 1순위 지명 순서</h3>
   <p class="meta">전년도(정확히는 직전 시즌) 순위의 역순입니다.</p>
   <div class="scroll">
-  <table class="ord">
+  <table class="ord left">
     <thead><tr><th>드래프트</th><th>기준 시즌</th><th>지명 순서 (1번 → 10번)</th></tr></thead>
     <tbody>
       <tr><td><b>2023</b></td><td>2021</td><td>한화 · KIA · 롯데 · NC · SSG · 키움 · LG · 삼성 · 두산 · KT</td></tr>
@@ -702,9 +702,14 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
   <span class="chap">1장</span>
   <h2>드래프트 보드</h2>
   <div class="prose">
-    <p>구단별·연도별로 1~3라운드 지명자를 배치했습니다. 파란 표시는 투수, 초록 표시는 야수입니다. <span class="kw">★</span>는 트레이드로 받아온 다른 구단 지명권으로 뽑은 선수입니다. 학교를 고르면 그 학교 출신이 강조됩니다.</p>
+    <p>파란 표시는 투수, 초록 표시는 야수입니다. <span class="kw">★</span>는 트레이드로 받아온 다른 구단 지명권으로 뽑은 선수입니다. 학교를 고르면 그 학교 출신이 강조됩니다.</p>
+    <p class="meta">세로축을 <b>지명 순위</b>로 볼지 <b>구단</b>으로 볼지 고를 수 있습니다. 순위별 보기에서는 실제 호명된 순서대로 위에서 아래로 읽힙니다.</p>
   </div>
   <div class="controls">
+    <div class="seg" role="group" aria-label="보기 방식">
+      <button type="button" data-view="slot" aria-pressed="true">순위별</button>
+      <button type="button" data-view="team" aria-pressed="false">구단별</button>
+    </div>
     <div class="seg" role="group" aria-label="포지션 필터">
       <button type="button" data-pos="all" aria-pressed="true">전체</button>
       <button type="button" data-pos="p" aria-pressed="false">투수</button>
@@ -3453,7 +3458,7 @@ const D=[
 [2023,"NC",1,"신영우","투","경남고"],[2023,"NC",2,"박한결","외","경북고"],[2023,"NC",3,"신용석","포","마산고"],
 [2024,"NC",1,"김휘건","투","휘문고"],[2024,"NC",2,"임상현","투","대구상원고"],[2024,"NC",3,"김민균","투","경기고"],
 [2025,"NC",1,null,"","키움에 양도"],[2025,"NC",2,"김태훈","투","소래고"],[2025,"NC",3,null,"","키움에 양도"],
-[2026,"NC",1,"신재인","내","유신고"],[2026,"NC",2,"이희성","투","원주고"],[2026,"NC",3,"김요엘","투","휘문고"],[2026,"NC",3,"최요한","투","용인시야구단"],
+[2026,"NC",1,"신재인","내","유신고"],[2026,"NC",2,"이희성","투","원주고"],[2026,"NC",3,"김요엘","투","휘문고"],[2026,"NC",3,"최요한","투","용인시야구단",1],
 
 [2023,"KIA",1,"윤영철","투","충암고"],[2023,"KIA",2,null,"","키움에 양도"],[2023,"KIA",3,"정해원","내","휘문고"],
 [2024,"KIA",1,"조대현","투","강릉고"],[2024,"KIA",2,null,"","키움에 양도"],[2024,"KIA",3,"이상준","포","경기고"],
@@ -3481,36 +3486,111 @@ const D=[
 [2026,"LG",1,"양우진","투","경기항공고"],[2026,"LG",2,"박준성","투","인천고"],[2026,"LG",3,"우명현","투","부산고"]
 ].map(r=>({y:r[0],t:r[1],r:r[2],n:r[3],pos:r[4],s:r[5],via:!!r[6]}));
 
+const ORDER={
+ 2023:["한화","KIA","롯데","NC","SSG","키움","LG","삼성","두산","KT"],
+ 2024:["한화","두산","롯데","삼성","NC","KIA","KT","LG","키움","SSG"],
+ 2025:["키움","한화","삼성","롯데","KIA","두산","NC","SSG","KT","LG"],
+ 2026:["키움","NC","한화","롯데","SSG","KT","두산","LG","삼성","KIA"]
+};
+/* 연도·라운드별로 1~10순위 슬롯에 지명자를 배치 */
+function slotsOf(y,rd){
+  const traded={};
+  D.forEach(d=>{ if(d.y===y&&d.r===rd&&!d.n){ const m=/(\S+)에 양도/.exec(d.s||''); if(m) traded[d.t]=m[1]; } });
+  const own={}, acq={};
+  D.forEach(d=>{ if(d.y===y&&d.r===rd&&d.n){ (d.via?acq:own)[d.t]=((d.via?acq:own)[d.t]||[]).concat([d]); } });
+  const used={};
+  return ORDER[y].map((orig,i)=>{
+    const holder=traded[orig]||orig;
+    let p=null;
+    if(traded[orig]){
+      const lst=acq[holder]||[], k=used[holder]||0;
+      if(k<lst.length){ p=lst[k]; used[holder]=k+1; }
+    }else{
+      const lst=own[holder]||[];
+      p=lst[0]||null;
+    }
+    return {slot:i+1, orig:orig, holder:holder, pick:p, traded:!!traded[orig]};
+  });
+}
 const picks=D.filter(d=>d.n);
 const isP=d=>d.pos==="투";
 
 /* hero dots: per year, sorted by round then pitcher first */
 const dots=document.getElementById("dots");
 YEARS.forEach(y=>{
-  const arr=picks.filter(d=>d.y===y).sort((a,b)=>a.r-b.r);
   const lab=document.createElement("span");lab.className="yr";lab.textContent=y;
   const row=document.createElement("div");row.className="dotrow";
-  arr.forEach(d=>{const i=document.createElement("span");i.className="dot"+(isP(d)?"":" f");i.title=`${d.r}R ${d.t} ${d.n}`;row.appendChild(i)});
+  [1,2,3].forEach(rd=>{
+    slotsOf(y,rd).forEach(sl=>{
+      if(!sl.pick) return;
+      const i=document.createElement("span");
+      i.className="dot"+(isP(sl.pick)?"":" f");
+      i.title=`${rd}R ${sl.slot}순위 · ${sl.holder} ${sl.pick.n}`;
+      row.appendChild(i);
+    });
+    if(rd<3){ const g=document.createElement("span"); g.className="dgap"; row.appendChild(g); }
+  });
   dots.appendChild(lab);dots.appendChild(row);
 });
 
 /* board */
 const board=document.getElementById("board");
-let html="<thead><tr><th>구단</th>"+YEARS.map(y=>`<th>${y}</th>`).join("")+"</tr></thead><tbody>";
-TEAMS.forEach(t=>{
-  html+=`<tr><td class="team">${t}</td>`;
-  YEARS.forEach(y=>{
-    html+="<td>";
-    D.filter(d=>d.t===t&&d.y===y).forEach(d=>{
-      if(!d.n){html+=`<div class="pick x"><span class="rd">${d.r}R</span><span class="nm">${d.s}</span></div>`;return;}
-      const cls=isP(d)?"p":"f";
-      html+=`<div class="pick ${cls}" data-s="${d.s}"><span class="rd">${d.r}R</span><span><span class="nm">${d.n}</span>${d.via?'<span class="tag" title="트레이드로 받은 지명권">★</span>':''} <span class="sc">${d.pos}${d.s?" · "+d.s:""}</span></span></div>`;
+
+function pickHTML(d, holder){
+  if(!d) return '<div class="pick x"><span class="rd">–</span><span class="nm">지명 없음</span></div>';
+  const cls=isP(d)?"p":"f";
+  const badge = holder ? `<span class="tm">${holder}</span>` : `<span class="rd">${d.r}R</span>`;
+  return `<div class="pick ${cls}" data-s="${d.s}">${badge}<span><span class="nm">${d.n}</span>${d.via?'<span class="tag" title="트레이드로 받은 지명권">★</span>':''} <span class="sc">${d.pos}${d.s?" · "+d.s:""}</span></span></div>`;
+}
+
+function buildTeamView(){
+  let h="<thead><tr><th>구단</th>"+YEARS.map(y=>`<th>${y}</th>`).join("")+"</tr></thead><tbody>";
+  TEAMS.forEach(t=>{
+    h+=`<tr><td class="team">${t}</td>`;
+    YEARS.forEach(y=>{
+      h+="<td>";
+      D.filter(d=>d.t===t&&d.y===y).forEach(d=>{
+        if(!d.n){h+=`<div class="pick x"><span class="rd">${d.r}R</span><span class="nm">${d.s}</span></div>`;return;}
+        h+=pickHTML(d,null);
+      });
+      h+="</td>";
     });
-    html+="</td>";
+    h+="</tr>";
   });
-  html+="</tr>";
-});
-board.innerHTML=html+"</tbody>";
+  return h+"</tbody>";
+}
+
+function buildSlotView(){
+  let h='<thead><tr><th>순위</th>'+YEARS.map(y=>`<th>${y}</th>`).join("")+"</tr></thead><tbody>";
+  for(let i=1;i<=10;i++){
+    h+=`<tr><td class="team slot">${i}<span>순위</span></td>`;
+    YEARS.forEach(y=>{
+      h+="<td>";
+      [1,2,3].forEach(rd=>{
+        const sl=slotsOf(y,rd)[i-1];
+        if(!sl) return;
+        const d=sl.pick;
+        if(!d){ h+='<div class="pick x"><span class="rd">'+rd+'R</span><span class="nm">지명 없음</span></div>'; return; }
+        const cls=isP(d)?"p":"f";
+        h+=`<div class="pick ${cls}" data-s="${d.s}">`+
+           `<span class="rd">${rd}R</span>`+
+           `<span><span class="tm2${sl.traded?' tr':''}">${sl.holder}</span> <span class="nm">${d.n}</span>`+
+           `${sl.traded?'<span class="tag" title="'+sl.orig+' 지명권을 받아 행사">★</span>':''}`+
+           ` <span class="sc">${d.pos}${d.s?" · "+d.s:""}</span></span></div>`;
+      });
+      h+="</td>";
+    });
+    h+="</tr>";
+  }
+  return h+"</tbody>";
+}
+
+let VIEW="slot";
+function drawBoard(){
+  board.innerHTML = VIEW==="slot" ? buildSlotView() : buildTeamView();
+  board.classList.toggle("slotview", VIEW==="slot");
+  applyFilter();
+}
 
 let posF="all",schF="";
 function applyFilter(){
@@ -3524,10 +3604,15 @@ function applyFilter(){
     el.classList.toggle("hit",!!schF&&!x&&el.dataset.s===schF);
   });
 }
-document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{
-  document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-pressed","false"));
+document.querySelectorAll('.seg [data-pos]').forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll('.seg [data-pos]').forEach(x=>x.setAttribute("aria-pressed","false"));
   b.setAttribute("aria-pressed","true");posF=b.dataset.pos;applyFilter();
 }));
+document.querySelectorAll('.seg [data-view]').forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll('.seg [data-view]').forEach(x=>x.setAttribute("aria-pressed","false"));
+  b.setAttribute("aria-pressed","true");VIEW=b.dataset.view;drawBoard();
+}));
+drawBoard();
 const schoolCount={};
 picks.forEach(d=>{if(d.s)schoolCount[d.s]=(schoolCount[d.s]||0)+1});
 const sel=document.getElementById("schoolSel");
