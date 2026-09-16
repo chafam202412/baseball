@@ -580,24 +580,7 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
 
 
 
-/* 드래프트 패널: 기록장 전역 스타일 차단 */
-.kd th,.kd td{text-align:left}
-.kd table{min-width:0}
-.kd .scroll th:first-child,.kd .scroll td:first-child{position:static;box-shadow:none;background:transparent;white-space:inherit}
-.kd .scroll th,.kd .scroll td{white-space:inherit}
-.kd .scroll thead th{background:var(--soft)}
-.kd table.ord th{background:var(--soft)}
-.kd .board th{background:var(--soft)}
-.kd select{width:auto}
-.kd .scrollhint{display:none}
-.kd tbody tr:hover{background:transparent}
 
-/* 기록장 탭 안에 넣을 때의 조정 */
-.kd{background:transparent;font-size:16px}
-.kd .wrap{max-width:100%;padding:0}
-.kd header{padding:4px 0 22px}
-.kd h1{font-size:clamp(21px,3.4vw,27px)}
-#p-draft{margin-top:-4px}
 
 </style>
 </head>
@@ -924,9 +907,89 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
 
 <section>
   <span class="chap">7장</span>
+  <h2>고등학교 그리고 중학교</h2>
+  <div class="prose">
+    <p>앞 장에서 고교를 봤으니 한 단계 더 거슬러 올라가 보겠습니다. 다만 <b>중학교 이력은 1라운드 40명에 대해서만</b> 정리돼 있고, 그중에서도 <span class="kw">33명만 확인</span>됩니다. 2026년 지명자 상당수는 아직 공개된 자료가 없습니다.</p>
+  </div>
+
+  <div class="twocol">
+    <div class="tc">
+      <div class="tch">고등학교 <span>1~3라운드 120명</span></div>
+      <ol class="rank">
+        <li><b>서울고</b><i>8</i></li>
+        <li><b>장충고</b><i>8</i></li>
+        <li><b>휘문고</b><i>8</i></li>
+        <li><b>전주고</b><i>7</i></li>
+        <li><b>경남고</b><i>6</i></li>
+        <li><b>인천고</b><i>6</i></li>
+        <li><b>북일고</b><i>5</i></li>
+        <li><b>세광고</b><i>5</i></li>
+      </ol>
+      <p class="tcm">상위 8개교가 53명 · 전체의 44%</p>
+    </div>
+    <div class="tc">
+      <div class="tch">중학교 <span>1라운드 33명</span></div>
+      <ol class="rank">
+        <li><b>자양중</b><i>2</i></li>
+        <li><b>충암중</b><i>2</i></li>
+        <li><b>온양중</b><i>2</i></li>
+        <li><b>협성경복중</b><i>2</i></li>
+        <li><b>신월중</b><i>2</i></li>
+        <li><b>잠신중</b><i>2</i></li>
+        <li class="etc"><b>나머지 21개교</b><i>각 1</i></li>
+      </ol>
+      <p class="tcm">최다가 2명 · 27개교로 흩어짐</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>여기서 가장 중요한 숫자</b>
+    고교는 상위 8개교에 44%가 몰리는데, <span class="kw">중학교는 최다 배출이 2명</span>입니다. 33명이 27개 학교에서 나왔습니다. <b>특정 중학교로 몰리는 경향이 사실상 없다</b>는 뜻입니다.
+  </div>
+
+  <h3 class="sub">중학교 → 고등학교, 대부분 갈아탑니다</h3>
+
+  <figure class="wide">
+    <svg viewBox="0 0 620 130" role="img" aria-label="확인된 33명 중 같은 재단 고교로 진학한 경우는 3명, 다른 학교로 옮긴 경우가 30명">
+      <rect x="20" y="24" width="150" height="58" rx="5" fill="var(--card-tint)" stroke="var(--rule)"/>
+      <text x="95" y="48" text-anchor="middle" font-size="13" font-weight="700" fill="#12253F">중학교</text>
+      <text x="95" y="68" text-anchor="middle" font-size="12" fill="#546679">27개교 · 33명</text>
+
+      <path d="M170 45 L300 38" stroke="#2F6B57" stroke-width="3" fill="none"/>
+      <path d="M170 62 L300 86" stroke="#9FB8D2" stroke-width="10" fill="none" opacity=".75"/>
+
+      <rect x="300" y="18" width="150" height="40" rx="5" fill="#E7F0EB" stroke="#B9D6C9"/>
+      <text x="375" y="36" text-anchor="middle" font-size="12.5" font-weight="700" fill="#2F6B57">같은 재단 고교로</text>
+      <text x="375" y="52" text-anchor="middle" font-size="12" fill="#2F6B57">3명 · 9%</text>
+
+      <rect x="300" y="68" width="150" height="40" rx="5" fill="#E3ECF7" stroke="#C2D6EC"/>
+      <text x="375" y="86" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1D4E89">다른 학교로</text>
+      <text x="375" y="102" text-anchor="middle" font-size="12" fill="#1D4E89">30명 · 91%</text>
+
+      <text x="470" y="46" font-size="12" fill="#546679">충암중→충암고</text>
+      <text x="470" y="62" font-size="12" fill="#546679">휘문중→휘문고</text>
+      <text x="470" y="78" font-size="12" fill="#546679">경남중→경남고</text>
+      <text x="470" y="96" font-size="11" fill="#93A0B0">— 같은 재단 3건 전부</text>
+    </svg>
+  </figure>
+
+  <div class="prose">
+    <p>확인된 33명 중 <span class="kw">같은 재단의 고교로 올라간 경우는 3명</span>뿐입니다. 나머지 30명은 전혀 다른 학교로 옮겼습니다. 거주지와 무관하게 고교를 고르는 일이 흔하다는 뜻이고, 실제로 지방 중학교에서 서울 고교로, 혹은 그 반대로 이동한 사례가 여럿입니다.</p>
+    <p>초등학교까지 내려가면 또 하나가 보입니다. 확인된 33명 중 <span class="kw">14명이 리틀야구단 경력</span>을 함께 갖고 있습니다. 학교 야구부가 아니라 지역 리틀야구단에서 시작한 경우가 40% 이상이라는 뜻입니다.</p>
+  </div>
+
+  <div class="note">
+    <b>읽는 법</b>
+    "어느 중학교를 가야 하나"라는 질문에 이 데이터가 주는 답은 <b>"그 질문의 무게가 생각보다 가볍다"</b>입니다. 중학교는 흩어져 있고, 같은 재단으로 올라가는 비율도 낮습니다. 다만 표본이 33명뿐이라 <b>단정할 수는 없습니다.</b> 경향으로만 보시길 권합니다.
+  </div>
+</section>
+
+<section>
+  <span class="chap">8장</span>
   <h2>1라운드 40명은 어떤 길을 걸어왔나</h2>
   <div class="prose">
-    <p>1라운드 지명자의 초등학교·중학교·고등학교 경력입니다(KBO 공식 기록실 기준). 초록 글씨는 학교 야구부가 아닌 <span class="kw">리틀야구단</span> 출신 표기입니다. 40명 중 13명이 리틀야구 출신으로 기록돼 있고, 중학교는 자양중·충암중·잠신중·신월중이 각 2명씩입니다.</p>
+    <p>1라운드 지명자 40명의 초등학교·중학교·고등학교 경력입니다(KBO 공식 기록실 기준). 초록 글씨는 학교 야구부가 아닌 <span class="kw">리틀야구단</span> 출신 표기입니다.</p>
+    <p class="meta">2026년 지명자는 공개된 학교 이력이 아직 채워지지 않아 <b>중학교·초등학교 항목에 빈칸(–)이 많습니다.</b> 자료가 공개되는 대로 채울 예정이며, 앞 장의 중학교 집계도 확인된 33명만을 대상으로 했습니다.</p>
   </div>
   <div class="scroll"><table class="route" id="route"></table></div>
   <div class="note">
@@ -936,7 +999,7 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
 </section>
 
 <section>
-  <span class="chap">8장</span>
+  <span class="chap">9장</span>
   <h2>학부모 시선으로 이 표를 읽는 법</h2>
   <div class="prose">
     <p>아이가 야구를 하는 집이라면 이 숫자들이 다르게 보일 겁니다. 다만 <b>과하게 읽으면 오히려 해롭습니다.</b> 네 가지만 짚어두겠습니다.</p>
