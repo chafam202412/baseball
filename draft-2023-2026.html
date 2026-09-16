@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>드래프트 현황 | KBO 신인 드래프트 1~3라운드 (2023~2026)</title>
+<style>
+.kd{--ink:#1b2230;--muted:#646c7a;--line:#e2e5eb;--soft:#f4f6f9;--red:#d0342c;--pitch:#1D4E89;--field:#2e7d5b;--pass:#b9bec8;
+  font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;
+  color:var(--ink);background:#fff;line-height:1.9;font-size:16.5px;-webkit-text-size-adjust:100%;margin:0}
+.kd *{box-sizing:border-box}
+.kd .bar{height:6px;background:var(--red)}
+.kd .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.kd .prose{max-width:720px}
+.kd a{color:var(--pitch)}
+.kd .kw{color:var(--red);font-weight:700}
+.kd header{padding:48px 0 28px;border-bottom:1px solid var(--line)}
+.kd .sitenav{display:flex;gap:4px;font-size:14.5px}
+.kd .sitenav a{text-decoration:none;color:var(--muted);padding:4px 12px;border-radius:999px;border:1px solid var(--line)}
+.kd .sitenav a[aria-current="page"]{background:var(--pitch);color:#fff;border-color:var(--pitch);font-weight:700}
+.kd .sitenav a:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.kd .back{font-size:14px;color:var(--muted);text-decoration:none}
+.kd .back:hover{text-decoration:underline}
+.kd h1{font-size:clamp(28px,4.4vw,42px);line-height:1.3;letter-spacing:-.02em;margin:14px 0 12px;font-weight:800}
+.kd .lede{color:#3a4252;margin:0 0 22px;max-width:680px}
+.kd .meta{font-size:14px;color:var(--muted)}
+.kd .dots{display:grid;grid-template-columns:44px 1fr;gap:6px 10px;align-items:center;margin:26px 0 8px;max-width:640px}
+.kd .dots .yr{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.kd .dotrow{display:grid;grid-template-columns:repeat(30,1fr);gap:3px}
+.kd .dot{aspect-ratio:1;border-radius:50%;background:var(--pitch)}
+.kd .dot.f{background:var(--field)}
+.kd .legend{display:flex;gap:18px;font-size:13.5px;color:var(--muted);flex-wrap:wrap}
+.kd .legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:0}
+.kd section{padding:44px 0;border-bottom:1px solid var(--line)}
+.kd .chap{display:inline-block;font-size:13px;font-weight:700;color:#fff;background:var(--ink);padding:2px 10px;border-radius:3px}
+.kd h2{font-size:clamp(22px,3vw,28px);line-height:1.4;margin:10px 0 14px;letter-spacing:-.01em}
+.kd h3{font-size:18px;margin:28px 0 6px}
+.kd p{margin:0 0 14px}
+.kd .note{background:var(--soft);border-left:4px solid var(--red);padding:14px 18px;margin:20px 0;font-size:15.5px;max-width:720px}
+.kd .note b{display:block;margin-bottom:2px}
+/* board */
+.kd .controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:18px 0 14px}
+.kd .seg button{font:inherit;font-size:14px;border:1px solid var(--line);background:#fff;color:var(--ink);padding:5px 14px;cursor:pointer}
+.kd .seg button:first-child{border-radius:6px 0 0 6px}
+.kd .seg button:last-child{border-radius:0 6px 6px 0}
+.kd .seg button+button{margin-left:-1px}
+.kd .seg button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.kd select{font:inherit;font-size:14px;padding:5px 10px;border:1px solid var(--line);border-radius:6px;background:#fff}
+.kd button:focus-visible,.kd select:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.kd .scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+.kd table.board{border-collapse:collapse;width:100%;min-width:880px;font-size:14px;line-height:1.5}
+.kd .board th{background:var(--soft);font-weight:700;text-align:left;padding:10px;border-bottom:1px solid var(--line);position:sticky;top:0}
+.kd .board td{vertical-align:top;padding:8px;border-bottom:1px solid var(--line);border-left:1px solid var(--line)}
+.kd .board td.team{border-left:0;font-weight:800;white-space:nowrap;padding-left:12px;width:62px}
+.kd .pick{display:grid;grid-template-columns:22px 1fr;gap:6px;padding:3px 4px;border-radius:4px;transition:opacity .15s}
+.kd .pick+.pick{margin-top:2px}
+.kd .rd{font-size:11px;font-weight:700;color:#fff;border-radius:3px;text-align:center;height:18px;line-height:18px;margin-top:2px}
+.kd .pick.p .rd{background:var(--pitch)}
+.kd .pick.f .rd{background:var(--field)}
+.kd .pick.x .rd{background:var(--pass)}
+.kd .pick .nm{font-weight:700}
+.kd .pick .sc{color:var(--muted);font-size:12.5px}
+.kd .pick.x .nm{font-weight:400;color:var(--muted)}
+.kd .tag{font-size:11px;color:var(--red);font-weight:700;margin-left:3px}
+.kd .pick.dim{opacity:.18}
+.kd .pick.hit{background:#fdecea}
+/* charts */
+.kd .grid2{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:10px}
+.kd figure{margin:0}
+.kd figcaption{font-size:14px;color:var(--muted);margin-top:6px;line-height:1.6}
+.kd svg text{font-family:inherit}
+/* teams */
+.kd .teams{list-style:none;margin:10px 0 0;padding:0}
+.kd .teams li{display:grid;grid-template-columns:70px 170px 1fr;gap:18px;padding:16px 0;border-top:1px solid var(--line);align-items:start}
+.kd .teams li:first-child{border-top:0}
+.kd .teams .tn{font-weight:800;font-size:18px}
+.kd .split{display:flex;height:12px;border-radius:6px;overflow:hidden;margin-top:9px;background:var(--soft)}
+.kd .split span{display:block;height:100%}
+.kd .splitlbl{font-size:12.5px;color:var(--muted);margin-top:4px;font-variant-numeric:tabular-nums}
+.kd .teams p{margin:0;font-size:15.5px}
+/* routes table */
+.kd table.route{border-collapse:collapse;width:100%;min-width:760px;font-size:14px;line-height:1.55}
+.kd .route th,.kd .route td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.kd .route th{background:var(--soft)}
+.kd .route td:first-child{font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
+.kd .route .little{color:var(--field);font-size:12.5px}
+.kd footer{padding:32px 0 60px;font-size:14px;color:var(--muted);line-height:1.8}
+@media (max-width:760px){
+  .kd .grid2{grid-template-columns:1fr}
+  .kd .teams li{grid-template-columns:1fr;gap:4px}
+  .kd .dotrow{gap:2px}
+}
+@media (prefers-reduced-motion:reduce){.kd .pick{transition:none}}
+
+/* ===== 추가 장 스타일 ===== */
+.kd h3.sub{font-size:17.5px;font-weight:700;margin:32px 0 10px}
+.kd .rules{display:grid;gap:14px;margin:22px 0 8px;max-width:820px}
+.kd .rule{display:flex;gap:14px;align-items:flex-start;background:var(--soft);border-radius:6px;padding:16px 18px}
+.kd .rn{font-family:ui-monospace,Menlo,monospace;font-size:13px;font-weight:700;color:#fff;background:var(--pitch);border-radius:4px;padding:3px 8px;flex:none;margin-top:3px}
+.kd .rb b{display:block;font-size:16px;margin-bottom:3px}
+.kd .rb p{margin:0;font-size:15.5px;color:#39414f}
+.kd table.ord{border-collapse:collapse;width:100%;min-width:560px;font-size:14.5px}
+.kd table.ord th{background:var(--soft);text-align:left;padding:10px 12px;border-bottom:2px solid var(--line);white-space:nowrap}
+.kd table.ord td{padding:10px 12px;border-bottom:1px solid var(--line)}
+.kd table.ord td.kw2{color:var(--red);font-weight:700}
+.kd figure.wide{margin:22px 0;max-width:820px}
+.kd figure.wide svg{display:block;width:100%;height:auto}
+.kd .stack{display:flex;flex-direction:column;gap:7px}
+.kd .srow{display:grid;grid-template-columns:62px 1fr 48px;gap:10px;align-items:center}
+.kd .sname{font-size:14px;font-weight:700;text-align:right}
+.kd .sbar{height:20px;background:#8fa9c6;border-radius:3px;display:block}
+.kd .snum{font-family:ui-monospace,Menlo,monospace;font-size:13px;color:var(--muted)}
+.kd .regions{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;margin:20px 0;max-width:820px}
+.kd .reg{background:#fff;padding:14px 12px 16px;text-align:center}
+.kd .rv{font-family:ui-monospace,Menlo,monospace;font-size:26px;font-weight:700;color:var(--pitch);line-height:1.2}
+.kd .rv span{font-size:14px;color:var(--muted)}
+.kd .rl{font-size:14px;font-weight:700;margin-top:2px}
+.kd .rm{font-size:12px;color:var(--muted);margin-top:2px}
+.kd .reads{display:grid;gap:14px;margin:22px 0;max-width:820px}
+.kd .read{border-left:3px solid var(--line);padding:2px 0 2px 16px}
+.kd .rq{font-weight:700;font-size:16px;margin-bottom:4px}
+.kd .read p{margin:0;font-size:15.5px;color:#39414f}
+@media(max-width:700px){
+  .kd .regions{grid-template-columns:repeat(3,1fr)}
+  .kd .rule{flex-direction:column;gap:8px}
+}
+
+</style>
+</head>
+<body class="kd">
+<div class="bar"></div>
+<div class="wrap">
+
+<header>
+  <nav class="sitenav" aria-label="사이트 메뉴"><a href="index.html">야구 기록장</a><a href="draft-2023-2026.html" aria-current="page">드래프트 현황</a></nav>
+  <h1>KBO 신인 드래프트,<br>4년치 상위 지명 120명을 펼쳐보면</h1>
+  <p class="lede">연고지 우선지명이 사라진 <span class="kw">전면 드래프트(2023~)</span> 이후 네 번의 드래프트에서 1~3라운드에 뽑힌 선수 전원을 모았습니다. 누가 먼저 뽑히는지, 구단마다 어떤 선수를 선호하는지, 지명권이 어떻게 오가는지, 어느 학교에서 나오는지까지 숫자로 정리했습니다.</p>
+  <div class="note" style="margin-top:0">
+    <b>왜 2023년부터인가요?</b>
+    2022년까지는 구단이 연고 지역 고교 선수를 먼저 데려가는 <span class="kw">1차 지명</span>이 있어서, 같은 "1라운드"라도 해마다 의미가 달랐습니다. <span class="kw">2023 드래프트부터 1차 지명이 폐지</span>되고 전 구단이 같은 규칙으로 뽑기 시작했습니다. 같은 규칙끼리 모아야 비교가 되기에 여기서부터 정리했습니다.
+    <span style="display:block;margin-top:6px;font-size:14px;color:var(--muted)">연도는 입단 연도 기준입니다. 2023 드래프트는 2022년 9월에 열렸습니다. 제도의 자세한 내용은 0장에 정리했습니다.</span>
+  </div>
+  <div class="dots" id="dots" aria-label="연도별 1~3라운드 지명자 포지션 분포"></div>
+  <div class="legend"><span><i style="background:var(--pitch)"></i>투수</span><span><i style="background:var(--field)"></i>야수(포수·내야·외야)</span><span>점 하나 = 지명 1명, 왼쪽부터 1·2·3라운드</span></div>
+  <p class="meta" style="margin-top:14px">2026년 9월 기준 · 2027 드래프트는 9월 21일 예정</p>
+</header>
+
+<section>
+  <span class="chap">0장</span>
+  <h2>먼저, 드래프트는 어떻게 굴러가나</h2>
+  <div class="prose">
+    <p>표를 읽기 전에 규칙을 알면 숫자가 달리 보입니다. 현재 제도의 뼈대는 네 가지입니다.</p>
+  </div>
+
+  <div class="rules">
+    <div class="rule">
+      <div class="rn">01</div>
+      <div class="rb">
+        <b>전면 드래프트</b>
+        <p>2023년 지명부터 <span class="kw">1차 지명이 폐지</span>되고 모든 구단이 전국의 선수를 대상으로 같은 규칙으로 뽑습니다. 2013년 이후 10년 만의 복귀였습니다. 그전까지는 연고지 선수를 먼저 찍는 1차 지명이 있어서, 같은 "1라운드"라도 해마다 뜻이 달랐습니다.</p>
+      </div>
+    </div>
+    <div class="rule">
+      <div class="rn">02</div>
+      <div class="rb">
+        <b>순번은 전년도 성적의 역순</b>
+        <p>꼴찌가 1번을 가져갑니다. 그리고 <span class="kw">모든 라운드가 같은 순서</span>로 돕니다. 2·4·6라운드에서 순서를 뒤집던 방식(이른바 ㄹ자)은 2017년에 없어졌습니다. 그래서 하위권 팀은 1라운드뿐 아니라 2·3라운드에서도 계속 먼저 고릅니다.</p>
+      </div>
+    </div>
+    <div class="rule">
+      <div class="rn">03</div>
+      <div class="rb">
+        <b>11라운드까지</b>
+        <p>1차 지명이 사라지면서 라운드가 10개에서 11개로 늘었습니다. 한 구단이 최대 11명을 뽑고, 지명권 거래로 더 많이 뽑는 팀도 생깁니다. 이 페이지는 그중 <span class="kw">1~3라운드</span>만 다룹니다.</p>
+      </div>
+    </div>
+    <div class="rule">
+      <div class="rn">04</div>
+      <div class="rb">
+        <b>얼리 드래프트</b>
+        <p>2023년부터 4년제(3년제 포함) 대학 <span class="kw">2학년도 지원</span>할 수 있습니다. 고교 졸업 때 지명을 못 받아도 대학에서 2년 만에 다시 기회를 잡을 수 있다는 뜻입니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="sub">연도별 1순위 지명 순서</h3>
+  <p class="meta">전년도(정확히는 직전 시즌) 순위의 역순입니다.</p>
+  <div class="scroll">
+  <table class="ord">
+    <thead><tr><th>드래프트</th><th>기준 시즌</th><th>지명 순서 (1번 → 10번)</th></tr></thead>
+    <tbody>
+      <tr><td><b>2023</b></td><td>2021</td><td>한화 · KIA · 롯데 · NC · SSG · 키움 · LG · 삼성 · 두산 · KT</td></tr>
+      <tr><td><b>2024</b></td><td>2022</td><td>한화 · 두산 · 롯데 · 삼성 · NC · KIA · KT · LG · 키움 · SSG</td></tr>
+      <tr><td><b>2025</b></td><td>2023</td><td>키움 · 한화 · 삼성 · 롯데 · KIA · 두산 · NC · SSG · KT · LG</td></tr>
+      <tr><td><b>2026</b></td><td>2024</td><td>키움 · NC · 한화 · 롯데 · SSG · KT · 두산 · LG · 삼성 · KIA</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="meta" style="margin-top:8px">2026년 순서는 2024시즌 최종 순위(KIA·삼성·LG·두산·KT·SSG·롯데·한화·NC·키움)를 뒤집은 것입니다.</p>
+
+  <div class="note">
+    <b>연도는 입단 연도 기준입니다</b>
+    드래프트는 그 전해 9월에 열립니다. 예를 들어 "2026 드래프트"는 2025년 9월에 치러졌고, 지명된 선수는 2026시즌부터 뜁니다.
+  </div>
+</section>
+
+<section>
+  <span class="chap">1장</span>
+  <h2>드래프트 보드</h2>
+  <div class="prose">
+    <p>구단별·연도별로 1~3라운드 지명자를 배치했습니다. 파란 표시는 투수, 초록 표시는 야수입니다. <span class="kw">★</span>는 트레이드로 받아온 다른 구단 지명권으로 뽑은 선수입니다. 학교를 고르면 그 학교 출신이 강조됩니다.</p>
+  </div>
+  <div class="controls">
+    <div class="seg" role="group" aria-label="포지션 필터">
+      <button type="button" data-pos="all" aria-pressed="true">전체</button>
+      <button type="button" data-pos="p" aria-pressed="false">투수</button>
+      <button type="button" data-pos="f" aria-pressed="false">야수</button>
+    </div>
+    <label><span style="position:absolute;left:-9999px">출신 학교</span>
+      <select id="schoolSel"><option value="">출신 학교 강조 (선택)</option></select>
+    </label>
+  </div>
+  <div class="scroll"><table class="board" id="board"></table></div>
+</section>
+
+<section>
+  <span class="chap">2장</span>
+  <h2>숫자로 본 최근 드래프트의 특징</h2>
+  <div class="grid2">
+    <figure><div id="chartYear"></div><figcaption>연도별 1~3라운드 투수 비율. 2026년 1라운드에서 야수가 4명으로 늘었습니다.</figcaption></figure>
+    <figure><div id="chartSchool"></div><figcaption>1~3라운드 배출 고교 상위권 (4년 합계)</figcaption></figure>
+  </div>
+
+  <div class="prose">
+    <h3>1. 상위 라운드는 여전히 투수 중심</h3>
+    <p>4년간 1~3라운드 120명 중 <span class="kw">75명(약 63%)이 투수</span>입니다. 2024년 1라운드는 10명 중 9명이 투수였습니다. 구단들이 가장 먼저 찾는 것은 빠른 공을 던지는 고졸 투수입니다.</p>
+
+    <h3>2. 2026년, 야수 반등의 조짐</h3>
+    <p>2026년 1라운드에서는 신재인·오재원·김주오·박한결까지 <span class="kw">야수 4명</span>이 뽑혔습니다. 투수 유망주를 어느 정도 모은 구단들이 유격수·중견수 같은 센터라인 야수로 눈을 돌린 결과로 보입니다.</p>
+
+    <h3>3. 고졸이 압도, 대졸은 즉시전력 투수만</h3>
+    <p>2024년 전체 지명 110명 중 고졸이 79명이었고, 2025년에는 대학 선수가 16명만 뽑혔습니다. 1~3라운드 대졸은 4년 동안 <span class="kw">6명</span>(김유성·정현수·박준용·손용준·박정민·서준오)뿐이며, 대부분 바로 쓸 수 있는 투수였습니다.</p>
+
+    <h3>4. 서울권 명문고 쏠림</h3>
+    <p>120명 중 약 44명(37%)이 서울 소재 고교 출신입니다. <span class="kw">서울고·장충고·휘문고가 각 8명</span>으로 가장 많고, 지방에서는 전주고(7명)·인천고(6명)·경남고(6명)가 꾸준합니다.</p>
+
+    <h3>5. 지명권이 트레이드 화폐가 됐다</h3>
+    <p>키움은 베테랑을 내주고 받은 지명권으로 3년 연속 1라운드에서 2명씩 뽑았습니다. 반대로 LG(최원태), KIA(주효상·조상우), NC(김휘집), 한화(손아섭)는 당장의 전력을 위해 상위 지명권을 넘겼습니다.</p>
+
+    <h3>6. 인성 검증 강화</h3>
+    <p>2026 드래프트부터 모든 신청자는 학교폭력 관련 서약서와 중·고교 생활기록부를 제출해야 합니다.</p>
+  </div>
+
+  <div class="note">
+    <b>1순위를 하위권 팀이 가져가는 구조</b>
+    전년도 순위의 역순으로 모든 라운드를 뽑기 때문에 최하위 팀이 매년 최대어를 먼저 가져갑니다. 최근 전체 1순위를 한화(2023·2024)와 키움(2025·2026)이 나눠 가진 이유입니다.
+  </div>
+</section>
+
+<section>
+  <span class="chap">3장</span>
+  <h2>라운드가 내려갈수록 야수가 늘어난다</h2>
+  <div class="prose">
+    <p>120명을 라운드별로 갈라 보면 뚜렷한 기울기가 나옵니다. <span class="kw">1라운드는 넷 중 셋이 투수</span>인데, 3라운드로 내려오면 절반 아래로 떨어집니다. 대신 내야수가 다섯 배로 늘어납니다.</p>
+  </div>
+
+  <figure class="wide">
+    <svg viewBox="0 0 620 180" role="img" aria-label="라운드별 포지션 구성. 1라운드 투수 30명, 2라운드 26명, 3라운드 19명">
+      <text x="66" y="32" text-anchor="end" font-size="14" font-weight="700" fill="#1b2230">1라운드</text>
+      <rect x="74" y="10" width="357" height="34" fill="#1D4E89"/><text x="252" y="32" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">투수 30</text>
+      <rect x="431" y="10" width="36" height="34" fill="#2e7d5b"/><text x="449" y="32" text-anchor="middle" font-size="11" fill="#fff">3</text>
+      <rect x="467" y="10" width="60" height="34" fill="#5aa47f"/><text x="497" y="32" text-anchor="middle" font-size="11" fill="#fff">5</text>
+      <rect x="526" y="10" width="24" height="34" fill="#a3cbb6"/><text x="538" y="32" text-anchor="middle" font-size="11" fill="#1b2230">2</text>
+      <text x="560" y="32" font-size="12" fill="#646c7a">75%</text>
+
+      <text x="66" y="82" text-anchor="end" font-size="14" font-weight="700" fill="#1b2230">2라운드</text>
+      <rect x="74" y="60" width="309" height="34" fill="#1D4E89"/><text x="228" y="82" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">투수 26</text>
+      <rect x="383" y="60" width="12" height="34" fill="#2e7d5b"/>
+      <rect x="395" y="60" width="107" height="34" fill="#5aa47f"/><text x="448" y="82" text-anchor="middle" font-size="11" fill="#fff">내야 9</text>
+      <rect x="502" y="60" width="48" height="34" fill="#a3cbb6"/><text x="526" y="82" text-anchor="middle" font-size="11" fill="#1b2230">4</text>
+      <text x="560" y="82" font-size="12" fill="#646c7a">65%</text>
+
+      <text x="66" y="132" text-anchor="end" font-size="14" font-weight="700" fill="#1b2230">3라운드</text>
+      <rect x="74" y="110" width="226" height="34" fill="#1D4E89"/><text x="187" y="132" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">투수 19</text>
+      <rect x="300" y="110" width="48" height="34" fill="#2e7d5b"/><text x="324" y="132" text-anchor="middle" font-size="11" fill="#fff">포 4</text>
+      <rect x="348" y="110" width="155" height="34" fill="#5aa47f"/><text x="425" y="132" text-anchor="middle" font-size="12" fill="#fff">내야 13</text>
+      <rect x="502" y="110" width="48" height="34" fill="#a3cbb6"/><text x="526" y="132" text-anchor="middle" font-size="11" fill="#1b2230">4</text>
+      <text x="560" y="132" font-size="12" fill="#646c7a">48%</text>
+
+      <line x1="74" y1="156" x2="550" y2="156" stroke="#e2e5eb"/>
+      <text x="74" y="172" font-size="11" fill="#b9bec8">포지션 구성 · 막대 길이는 인원 비율</text>
+    </svg>
+    <div class="legend">
+      <span><i style="background:#1D4E89"></i>투수</span>
+      <span><i style="background:#2e7d5b"></i>포수</span>
+      <span><i style="background:#5aa47f"></i>내야수</span>
+      <span><i style="background:#a3cbb6"></i>외야수</span>
+    </div>
+  </figure>
+
+  <div class="prose">
+    <p>4년 합계로는 <span class="kw">투수 75명, 내야수 27명, 외야수 10명, 포수 8명</span>입니다. 상위 지명의 60% 이상이 투수라는 뜻인데, 야구에서 투수가 차지하는 비중을 생각하면 놀랄 일은 아닙니다. 다만 <b>1라운드에서 유독 투수로 쏠린다</b>는 점은 짚어둘 만합니다. 구단들이 가장 먼저 부르는 이름은 대체로 공을 던지는 선수입니다.</p>
+    <p>포수가 3라운드에 몰리는 것도 눈에 띕니다. 1라운드 포수는 4년간 3명뿐입니다. 포수는 완성되는 데 시간이 오래 걸려 즉시 전력으로 보기 어렵고, 고교 시절 기록만으로 판단하기가 특히 까다로운 자리라는 통설과 맞닿아 있습니다.</p>
+  </div>
+</section>
+
+<section>
+  <span class="chap">4장</span>
+  <h2>지명권은 사고팔린다 — 키움이라는 예외</h2>
+  <div class="prose">
+    <p>드래프트에서 각 구단은 라운드마다 한 장씩 지명권을 갖습니다. 그런데 <span class="kw">이 지명권은 트레이드 대상</span>입니다. 선수를 내주고 다음 해 지명권을 받아올 수 있습니다.</p>
+    <p>4년간 1~3라운드에서 손바뀜이 일어난 지명권은 10장입니다. 그리고 그중 <span class="kw">8장을 키움이 가져갔습니다.</span></p>
+  </div>
+
+  <figure class="wide">
+    <div class="stack">
+      <div class="srow"><span class="sname">키움</span><span class="sbar" style="width:100%;background:#1D4E89"></span><span class="snum">20명</span></div>
+      <div class="srow"><span class="sname">삼성</span><span class="sbar" style="width:60%"></span><span class="snum">12명</span></div>
+      <div class="srow"><span class="sname">KT</span><span class="sbar" style="width:60%"></span><span class="snum">12명</span></div>
+      <div class="srow"><span class="sname">두산</span><span class="sbar" style="width:60%"></span><span class="snum">12명</span></div>
+      <div class="srow"><span class="sname">롯데</span><span class="sbar" style="width:55%"></span><span class="snum">11명</span></div>
+      <div class="srow"><span class="sname">NC</span><span class="sbar" style="width:55%"></span><span class="snum">11명</span></div>
+      <div class="srow"><span class="sname">한화</span><span class="sbar" style="width:55%"></span><span class="snum">11명</span></div>
+      <div class="srow"><span class="sname">SSG</span><span class="sbar" style="width:55%"></span><span class="snum">11명</span></div>
+      <div class="srow"><span class="sname">LG</span><span class="sbar" style="width:55%"></span><span class="snum">11명</span></div>
+      <div class="srow"><span class="sname">KIA</span><span class="sbar" style="width:45%;background:#c0553f"></span><span class="snum">9명</span></div>
+    </div>
+    <p class="meta" style="margin-top:10px">4년간 1~3라운드 지명 인원. 기본은 12명(3라운드 × 4년)입니다.</p>
+  </figure>
+
+  <div class="prose">
+    <p>기본값은 한 팀당 12명입니다. 키움은 <b>20명</b>을 뽑았고, KIA는 <b>9명</b>에 그쳤습니다. 키움은 2024·2025·2026 세 해 연속으로 <span class="kw">1라운드에서만 두 명씩</span> 지명했습니다.</p>
+  </div>
+
+  <h3 class="sub">손바뀜이 일어난 지명권 10장</h3>
+  <div class="scroll">
+  <table class="ord">
+    <thead><tr><th>드래프트</th><th>원래 구단</th><th>라운드</th><th>행사한 구단</th></tr></thead>
+    <tbody>
+      <tr><td>2023</td><td>KIA</td><td>2R</td><td class="kw2">키움</td></tr>
+      <tr><td>2023</td><td>롯데</td><td>3R</td><td>삼성</td></tr>
+      <tr><td>2024</td><td>LG</td><td>1R</td><td class="kw2">키움</td></tr>
+      <tr><td>2024</td><td>KIA</td><td>2R</td><td class="kw2">키움</td></tr>
+      <tr><td>2024</td><td>삼성</td><td>3R</td><td class="kw2">키움</td></tr>
+      <tr><td>2025</td><td>NC</td><td>1R</td><td class="kw2">키움</td></tr>
+      <tr><td>2025</td><td>NC</td><td>3R</td><td class="kw2">키움</td></tr>
+      <tr><td>2025</td><td>SSG</td><td>3R</td><td class="kw2">키움</td></tr>
+      <tr><td>2026</td><td>KIA</td><td>1R</td><td class="kw2">키움</td></tr>
+      <tr><td>2026</td><td>한화</td><td>3R</td><td>NC</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="note">
+    <b>왜 이런 일이 벌어지나</b>
+    주축 선수를 내주는 쪽은 당장의 전력을 포기하는 대신 미래의 지명권을 받습니다. 받는 쪽은 그 반대고요. 키움이 받아온 지명권 중에는 2023년 최원태를 LG로 보내며 받은 2024년 1라운드 지명권처럼 널리 알려진 사례가 있습니다. 개별 거래의 내용은 구단마다 사정이 달라 여기서는 결과만 정리했습니다.
+  </div>
+
+  <div class="prose">
+    <p>이 표가 말해주는 건 단순합니다. <b>드래프트 순번은 성적으로 정해지지만, 지명권의 개수는 구단의 선택으로 달라진다</b>는 것. 순위표만 보고 "어느 팀이 유망주를 많이 모았나"를 판단할 수 없는 이유입니다.</p>
+  </div>
+</section>
+
+<section>
+  <span class="chap">5장</span>
+  <h2>구단별로 어떤 선수를 뽑았나</h2>
+  <div class="prose"><p>1~3라운드 지명자의 투수·야수 비율과 지명 흐름을 바탕으로 정리한 개인적인 분석입니다.</p></div>
+  <ul class="teams" id="teams"></ul>
+  <div class="note">
+    <b>한 줄 요약</b>
+    리빌딩 팀(키움·한화·롯데)은 지명권을 모아 투수부터 쌓았고, 성적을 노리는 팀(KIA·LG·NC)은 지명권을 선수와 바꿨습니다. 투수를 어느 정도 채운 팀(한화·두산·NC)은 2025~2026년부터 센터라인 야수로 방향을 틀고 있습니다.
+  </div>
+</section>
+
+<section>
+  <span class="chap">6장</span>
+  <h2>어느 학교에서 나오나</h2>
+  <div class="prose">
+    <p>120명의 출신교를 세어보면 상위권이 뚜렷하게 갈립니다. 4년간 상위 라운드 지명자를 가장 많이 낸 곳은 <span class="kw">서울고·장충고·휘문고</span>로 각각 8명입니다.</p>
+  </div>
+
+  <figure class="wide">
+    <div class="stack">
+      <div class="srow"><span class="sname">서울고</span><span class="sbar" style="width:100%;background:#1D4E89"></span><span class="snum">8</span></div>
+      <div class="srow"><span class="sname">장충고</span><span class="sbar" style="width:100%;background:#1D4E89"></span><span class="snum">8</span></div>
+      <div class="srow"><span class="sname">휘문고</span><span class="sbar" style="width:100%;background:#1D4E89"></span><span class="snum">8</span></div>
+      <div class="srow"><span class="sname">전주고</span><span class="sbar" style="width:88%"></span><span class="snum">7</span></div>
+      <div class="srow"><span class="sname">경남고</span><span class="sbar" style="width:75%"></span><span class="snum">6</span></div>
+      <div class="srow"><span class="sname">인천고</span><span class="sbar" style="width:75%"></span><span class="snum">6</span></div>
+      <div class="srow"><span class="sname">북일고</span><span class="sbar" style="width:63%"></span><span class="snum">5</span></div>
+      <div class="srow"><span class="sname">세광고</span><span class="sbar" style="width:63%"></span><span class="snum">5</span></div>
+      <div class="srow"><span class="sname">유신고</span><span class="sbar" style="width:50%"></span><span class="snum">4</span></div>
+      <div class="srow"><span class="sname">충암고</span><span class="sbar" style="width:50%"></span><span class="snum">4</span></div>
+      <div class="srow"><span class="sname">대구고</span><span class="sbar" style="width:50%"></span><span class="snum">4</span></div>
+    </div>
+    <p class="meta" style="margin-top:10px">4명 이상 배출한 학교 · 1~3라운드 기준</p>
+  </figure>
+
+  <h3 class="sub">지역으로 묶으면</h3>
+  <div class="regions">
+    <div class="reg"><div class="rv">56<span>%</span></div><div class="rl">수도권</div><div class="rm">66명 · 서울·경기·인천</div></div>
+    <div class="reg"><div class="rv">20<span>%</span></div><div class="rl">영남</div><div class="rm">24명</div></div>
+    <div class="reg"><div class="rv">10<span>%</span></div><div class="rl">충청</div><div class="rm">12명</div></div>
+    <div class="reg"><div class="rv">9<span>%</span></div><div class="rl">호남</div><div class="rm">11명</div></div>
+    <div class="reg"><div class="rv">4<span>%</span></div><div class="rl">강원·제주</div><div class="rm">5명</div></div>
+  </div>
+
+  <div class="prose">
+    <p>절반 이상이 수도권입니다. 다만 이 숫자를 <b>"수도권 학교가 선수를 잘 키운다"</b>로 바로 읽으면 곤란합니다. 애초에 <span class="kw">고교 야구부 자체가 수도권에 많습니다.</span> 팀 수가 많으면 지명자도 많이 나오는 게 자연스럽습니다. 학교당 배출 인원으로 따지면 이야기가 달라질 수 있는데, 그건 전체 야구부 수를 같이 놓고 봐야 답이 나옵니다.</p>
+    <p>한 가지 더. 4년간 상위 3라운드 지명자 120명 중 <span class="kw">대학 출신은 5명</span>뿐입니다. 상위 지명은 사실상 고졸 선수의 자리라는 뜻입니다. 얼리 드래프트가 생겼어도 이 구도는 아직 크게 바뀌지 않았습니다.</p>
+  </div>
+</section>
+
+<section>
+  <span class="chap">7장</span>
+  <h2>1라운드 40명은 어떤 길을 걸어왔나</h2>
+  <div class="prose">
+    <p>1라운드 지명자의 초등학교·중학교·고등학교 경력입니다(KBO 공식 기록실 기준). 초록 글씨는 학교 야구부가 아닌 <span class="kw">리틀야구단</span> 출신 표기입니다. 40명 중 13명이 리틀야구 출신으로 기록돼 있고, 중학교는 자양중·충암중·잠신중·신월중이 각 2명씩입니다.</p>
+  </div>
+  <div class="scroll"><table class="route" id="route"></table></div>
+  <div class="note">
+    <b>늦게 시작해도 1라운드에 간 사례</b>
+    신영우(2023 NC 1R)는 부모님 반대로 중학교 1학년이 되어서야 엘리트야구를 시작했습니다. 리틀야구단과 중학교에서 내야수와 투수를 병행하다 고교에서 투수에 전념했습니다.
+  </div>
+</section>
+
+<section>
+  <span class="chap">8장</span>
+  <h2>학부모 시선으로 이 표를 읽는 법</h2>
+  <div class="prose">
+    <p>아이가 야구를 하는 집이라면 이 숫자들이 다르게 보일 겁니다. 다만 <b>과하게 읽으면 오히려 해롭습니다.</b> 네 가지만 짚어두겠습니다.</p>
+  </div>
+
+  <div class="reads">
+    <div class="read">
+      <div class="rq">1라운드 75%가 투수라던데, 투수를 시켜야 하나</div>
+      <p>거꾸로입니다. 상위 지명이 투수에 쏠린다는 건 <b>투수 경쟁이 가장 치열하다</b>는 뜻이기도 합니다. 그리고 이 표에 오른 120명은 한 해 1,000명 넘는 지원자 중 극히 일부입니다. 포지션 선택은 지명 확률이 아니라 아이의 몸과 성향에서 나와야 합니다.</p>
+    </div>
+    <div class="read">
+      <div class="rq">수도권 학교로 보내야 유리한가</div>
+      <p>수도권 비중 56%는 야구부 숫자의 반영이 큽니다. 다만 <b>노출 기회</b>라는 현실적 요인은 분명히 있습니다. 전국 대회 출전 빈도, 스카우트가 보러 오는 빈도는 학교마다 다릅니다. 진학을 고민하실 때는 학교 이름보다 <b>그 팀에서 아이가 실제로 경기에 나갈 수 있는가</b>를 먼저 보시길 권합니다. 벤치에 앉아 있으면 어느 학교든 보이지 않습니다.</p>
+    </div>
+    <div class="read">
+      <div class="rq">3라운드 안에 못 들면 끝인가</div>
+      <p>전혀 아닙니다. 드래프트는 11라운드까지 있고, 지명을 못 받아도 대학을 거쳐 <b>얼리 드래프트</b>로 다시 도전할 수 있습니다. 이 페이지가 1~3라운드만 다루는 건 데이터를 다루기 편해서지, 그 바깥이 의미 없어서가 아닙니다.</p>
+    </div>
+    <div class="read">
+      <div class="rq">그럼 이 표는 뭐에 쓰나</div>
+      <p><b>지형을 아는 데 씁니다.</b> 어떤 구단이 어떤 유형을 선호하는지, 어느 학교가 꾸준히 배출하는지, 제도가 어떻게 바뀌었는지. 아이의 진로를 결정하는 자료가 아니라, 어른이 상황을 이해하는 배경 지식입니다.</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>한 가지만 덧붙이면</b>
+    중학생 단계에서 프로 지명을 목표로 훈련량을 늘리는 것은 대체로 역효과가 납니다. 이 표의 120명은 결과이지 경로가 아닙니다. 지금 단계에서 중요한 건 <span class="kw">다치지 않고 야구를 계속하는 것</span>, 그리고 몸이 자라는 속도에 맞춰 기술을 쌓는 것입니다.
+  </div>
+</section>
+
+<footer>
+  <p>자료: KBO 공식 기록실 선수 프로필, 엑스포츠뉴스·국제뉴스·CBC뉴스 등 드래프트 당일 지명 결과 보도, 위키백과·나무위키 드래프트 문서를 교차 확인해 정리했습니다. 2026년 2라운드 일부 선수는 기사마다 포지션 표기가 달라 추가 보도로 확인했습니다. 홍민규·박정훈(2025 3R)의 출신교와 2026년 1라운드 일부 선수의 초·중학교는 확인하지 못해 비워 두었습니다.</p>
+  <p>포지션은 지명 당시 기준입니다. 2026년 9월 작성.</p>
+</footer>
+</div>
+
+<script>
+(function(){
+const TEAMS=["한화","키움","롯데","삼성","NC","KIA","두산","SSG","KT","LG"];
+const YEARS=[2023,2024,2025,2026];
+// [year, team, round, name, pos(투/포/내/외 or '' for pass), school, via(트레이드 지명권)]
+const D=[
+[2023,"한화",1,"김서현","투","서울고"],[2023,"한화",2,"문현빈","내","북일고"],[2023,"한화",3,"이민준","내","장충고"],
+[2024,"한화",1,"황준서","투","장충고"],[2024,"한화",2,"조동욱","투","장충고"],[2024,"한화",3,"정안석","내","휘문고"],
+[2025,"한화",1,"정우주","투","전주고"],[2025,"한화",2,"권민규","투","세광고"],[2025,"한화",3,"한지윤","포","경기상고"],
+[2026,"한화",1,"오재원","외","유신고"],[2026,"한화",2,"강건우","투","북일고"],[2026,"한화",3,null,"","NC에 양도"],
+
+[2023,"키움",1,"김건희","포","원주고"],[2023,"키움",2,"김동헌","포","충암고",1],[2023,"키움",2,"오상원","투","선린인터넷고"],[2023,"키움",3,"박윤성","투","경남고"],
+[2024,"키움",1,"전준표","투","서울고",1],[2024,"키움",1,"김윤하","투","장충고"],[2024,"키움",2,"이재상","내","성남고",1],[2024,"키움",2,"손현기","투","전주고"],[2024,"키움",3,"이우현","투","비봉고",1],[2024,"키움",3,"김연주","투","세광고"],
+[2025,"키움",1,"정현우","투","덕수고"],[2025,"키움",1,"김서준","투","충훈고",1],[2025,"키움",2,"염승원","내","휘문고"],[2025,"키움",3,"어준서","내","경기고"],[2025,"키움",3,"여동욱","내","대구상원고",1],[2025,"키움",3,"박정훈","투","",1],
+[2026,"키움",1,"박준현","투","북일고"],[2026,"키움",1,"박한결","내","전주고",1],[2026,"키움",2,"김지석","내","인천고"],[2026,"키움",3,"박지성","투","서울고"],
+
+[2023,"롯데",1,"김민석","내","휘문고"],[2023,"롯데",2,"이진하","투","장충고"],[2023,"롯데",3,null,"","삼성에 양도"],
+[2024,"롯데",1,"전미르","투","경북고"],[2024,"롯데",2,"정현수","투","송원대"],[2024,"롯데",3,"이호준","내","대구상원고"],
+[2025,"롯데",1,"김태현","투","광주제일고"],[2025,"롯데",2,"박세현","투","배명고"],[2025,"롯데",3,"김현우","투","야탑고"],
+[2026,"롯데",1,"신동건","투","동산고"],[2026,"롯데",2,"박정민","투","한일장신대"],[2026,"롯데",3,"이서준","내","부산고"],
+
+[2023,"삼성",1,"이호성","투","인천고"],[2023,"삼성",2,"박권후","투","전주고"],[2023,"삼성",3,"서현원","투","세광고",1],[2023,"삼성",3,"김재상","내","경기상고"],
+[2024,"삼성",1,"육선엽","투","장충고"],[2024,"삼성",2,"박준용","투","수성대"],[2024,"삼성",3,null,"","키움에 양도"],
+[2025,"삼성",1,"배찬승","투","대구고"],[2025,"삼성",2,"심재훈","내","유신고"],[2025,"삼성",3,"차승준","내","마산용마고"],
+[2026,"삼성",1,"이호범","투","서울고"],[2026,"삼성",2,"김상호","투","서울컨벤션고"],[2026,"삼성",3,"장찬희","투","경남고"],
+
+[2023,"NC",1,"신영우","투","경남고"],[2023,"NC",2,"박한결","외","경북고"],[2023,"NC",3,"신용석","포","마산고"],
+[2024,"NC",1,"김휘건","투","휘문고"],[2024,"NC",2,"임상현","투","대구상원고"],[2024,"NC",3,"김민균","투","경기고"],
+[2025,"NC",1,null,"","키움에 양도"],[2025,"NC",2,"김태훈","투","소래고"],[2025,"NC",3,null,"","키움에 양도"],
+[2026,"NC",1,"신재인","내","유신고"],[2026,"NC",2,"이희성","투","원주고"],[2026,"NC",3,"김요엘","투","휘문고"],[2026,"NC",3,"최요한","투","용인시야구단"],
+
+[2023,"KIA",1,"윤영철","투","충암고"],[2023,"KIA",2,null,"","키움에 양도"],[2023,"KIA",3,"정해원","내","휘문고"],
+[2024,"KIA",1,"조대현","투","강릉고"],[2024,"KIA",2,null,"","키움에 양도"],[2024,"KIA",3,"이상준","포","경기고"],
+[2025,"KIA",1,"김태형","투","덕수고"],[2025,"KIA",2,"이호민","투","전주고"],[2025,"KIA",3,"박재현","외","인천고"],
+[2026,"KIA",1,null,"","키움에 양도"],[2026,"KIA",2,"김현수","투","광남고"],[2026,"KIA",3,"김민규","외","휘문고"],
+
+[2023,"두산",1,"최준호","투","북일고"],[2023,"두산",2,"김유성","투","고려대"],[2023,"두산",3,"장우진","투","북일고"],
+[2024,"두산",1,"김택연","투","인천고"],[2024,"두산",2,"여동건","내","서울고"],[2024,"두산",3,"임종성","내","경북고"],
+[2025,"두산",1,"박준순","내","덕수고"],[2025,"두산",2,"최민석","투","서울고"],[2025,"두산",3,"홍민규","투",""],
+[2026,"두산",1,"김주오","외","마산용마고"],[2026,"두산",2,"최주형","내","마산고"],[2026,"두산",3,"서준오","투","한양대"],
+
+[2023,"SSG",1,"이로운","투","대구고"],[2023,"SSG",2,"송영진","투","대전고"],[2023,"SSG",3,"김정민","외","경남고"],
+[2024,"SSG",1,"박지환","내","세광고"],[2024,"SSG",2,"이승민","외","휘문고"],[2024,"SSG",3,"박기호","투","청주고"],
+[2025,"SSG",1,"이율예","포","강릉고"],[2025,"SSG",2,"신지환","투","성남고"],[2025,"SSG",3,null,"","키움에 양도"],
+[2026,"SSG",1,"김민준","투","대구고"],[2026,"SSG",2,"김요셉","투","세광고"],[2026,"SSG",3,"장재율","외","광남고BC"],
+
+[2023,"KT",1,"김정운","투","대구고"],[2023,"KT",2,"정준영","외","장충고"],[2023,"KT",3,"손민석","내","경남고"],
+[2024,"KT",1,"원상현","투","부산고"],[2024,"KT",2,"육청명","투","강릉고"],[2024,"KT",3,"김민성","투","선린인터넷고"],
+[2025,"KT",1,"김동현","투","서울고"],[2025,"KT",2,"박건우","투","충암고"],[2025,"KT",3,"김재원","투","장충고"],
+[2026,"KT",1,"박지훈","투","전주고"],[2026,"KT",2,"이강민","내","유신고"],[2026,"KT",3,"김건휘","내","충암고"],
+
+[2023,"LG",1,"김범석","포","경남고"],[2023,"LG",2,"김동규","투","성남고"],[2023,"LG",3,"박명근","투","라온고"],
+[2024,"LG",1,null,"","키움에 양도"],[2024,"LG",2,"김현종","외","인천고"],[2024,"LG",3,"손용준","내","동원과기대"],
+[2025,"LG",1,"김영우","투","서울고"],[2025,"LG",2,"추세현","내","경기상고"],[2025,"LG",3,"이한림","포","전주고"],
+[2026,"LG",1,"양우진","투","경기항공고"],[2026,"LG",2,"박준성","투","인천고"],[2026,"LG",3,"우명현","투","부산고"]
+].map(r=>({y:r[0],t:r[1],r:r[2],n:r[3],pos:r[4],s:r[5],via:!!r[6]}));
+
+const picks=D.filter(d=>d.n);
+const isP=d=>d.pos==="투";
+
+/* hero dots: per year, sorted by round then pitcher first */
+const dots=document.getElementById("dots");
+YEARS.forEach(y=>{
+  const arr=picks.filter(d=>d.y===y).sort((a,b)=>a.r-b.r);
+  const lab=document.createElement("span");lab.className="yr";lab.textContent=y;
+  const row=document.createElement("div");row.className="dotrow";
+  arr.forEach(d=>{const i=document.createElement("span");i.className="dot"+(isP(d)?"":" f");i.title=`${d.r}R ${d.t} ${d.n}`;row.appendChild(i)});
+  dots.appendChild(lab);dots.appendChild(row);
+});
+
+/* board */
+const board=document.getElementById("board");
+let html="<thead><tr><th>구단</th>"+YEARS.map(y=>`<th>${y}</th>`).join("")+"</tr></thead><tbody>";
+TEAMS.forEach(t=>{
+  html+=`<tr><td class="team">${t}</td>`;
+  YEARS.forEach(y=>{
+    html+="<td>";
+    D.filter(d=>d.t===t&&d.y===y).forEach(d=>{
+      if(!d.n){html+=`<div class="pick x"><span class="rd">${d.r}R</span><span class="nm">${d.s}</span></div>`;return;}
+      const cls=isP(d)?"p":"f";
+      html+=`<div class="pick ${cls}" data-s="${d.s}"><span class="rd">${d.r}R</span><span><span class="nm">${d.n}</span>${d.via?'<span class="tag" title="트레이드로 받은 지명권">★</span>':''} <span class="sc">${d.pos}${d.s?" · "+d.s:""}</span></span></div>`;
+    });
+    html+="</td>";
+  });
+  html+="</tr>";
+});
+board.innerHTML=html+"</tbody>";
+
+let posF="all",schF="";
+function applyFilter(){
+  board.querySelectorAll(".pick").forEach(el=>{
+    const x=el.classList.contains("x");
+    let dim=false;
+    if(posF==="p"&&!el.classList.contains("p"))dim=true;
+    if(posF==="f"&&!el.classList.contains("f"))dim=true;
+    if(schF&&(x||el.dataset.s!==schF))dim=true;
+    el.classList.toggle("dim",dim);
+    el.classList.toggle("hit",!!schF&&!x&&el.dataset.s===schF);
+  });
+}
+document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-pressed","false"));
+  b.setAttribute("aria-pressed","true");posF=b.dataset.pos;applyFilter();
+}));
+const schoolCount={};
+picks.forEach(d=>{if(d.s)schoolCount[d.s]=(schoolCount[d.s]||0)+1});
+const sel=document.getElementById("schoolSel");
+Object.entries(schoolCount).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],"ko")).forEach(([s,c])=>{
+  const o=document.createElement("option");o.value=s;o.textContent=`${s} (${c}명)`;sel.appendChild(o);
+});
+sel.addEventListener("change",()=>{schF=sel.value;applyFilter()});
+
+/* chart: pitcher share by year & round (stacked columns) */
+(function(){
+  const W=460,H=260,pad={l:34,r:10,t:18,b:40};
+  const cw=(W-pad.l-pad.r)/YEARS.length;
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="연도별 투수·야수 지명 수">`;
+  for(let v=0;v<=30;v+=10){const yy=pad.t+(H-pad.t-pad.b)*(1-v/30);
+    s+=`<line x1="${pad.l}" x2="${W-pad.r}" y1="${yy}" y2="${yy}" stroke="#e2e5eb"/><text x="${pad.l-6}" y="${yy+4}" font-size="11" text-anchor="end" fill="#646c7a">${v}</text>`;}
+  YEARS.forEach((y,i)=>{
+    const arr=picks.filter(d=>d.y===y);const p=arr.filter(isP).length,f=arr.length-p;
+    const bw=cw*.52,x=pad.l+i*cw+(cw-bw)/2,sc=(H-pad.t-pad.b)/30;
+    const hp=p*sc,hf=f*sc,base=H-pad.b;
+    s+=`<rect x="${x}" y="${base-hp}" width="${bw}" height="${hp}" fill="#1D4E89"/>`;
+    s+=`<rect x="${x}" y="${base-hp-hf}" width="${bw}" height="${hf}" fill="#2e7d5b"/>`;
+    s+=`<text x="${x+bw/2}" y="${base-hp/2+4}" font-size="12" fill="#fff" text-anchor="middle" font-weight="700">${p}</text>`;
+    s+=`<text x="${x+bw/2}" y="${base-hp-hf/2+4}" font-size="12" fill="#fff" text-anchor="middle" font-weight="700">${f}</text>`;
+    s+=`<text x="${x+bw/2}" y="${H-pad.b+18}" font-size="12.5" text-anchor="middle" fill="#1b2230">${y}</text>`;
+    s+=`<text x="${x+bw/2}" y="${H-pad.b+34}" font-size="11" text-anchor="middle" fill="#d0342c" font-weight="700">투수 ${Math.round(p/arr.length*100)}%</text>`;
+  });
+  document.getElementById("chartYear").innerHTML=s+"</svg>";
+})();
+
+/* chart: top schools (horizontal bars, high schools only) */
+(function(){
+  const top=Object.entries(schoolCount).filter(([s])=>/고$/.test(s)).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const W=460,rowH=22,H=top.length*rowH+10,lw=86,max=top[0][1];
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="1~3라운드 배출 고교 상위 10곳">`;
+  top.forEach(([name,c],i)=>{
+    const y=i*rowH+4,bw=(W-lw-40)*c/max;
+    s+=`<text x="${lw-8}" y="${y+14}" font-size="12.5" text-anchor="end" fill="#1b2230">${name}</text>`;
+    s+=`<rect x="${lw}" y="${y+3}" width="${bw}" height="14" rx="2" fill="${i<3?'#d0342c':'#9aa3b2'}"/>`;
+    s+=`<text x="${lw+bw+6}" y="${y+14}" font-size="12" fill="#1b2230" font-weight="700">${c}</text>`;
+  });
+  document.getElementById("chartSchool").innerHTML=s+"</svg>";
+})();
+
+/* teams */
+const TEXT={
+"한화":"3년 연속 1라운드에서 강속구 투수(김서현·황준서·정우주)를 모아 <span class='kw'>투수 왕국</span>의 기반을 만들었습니다. 2026년에는 방향을 바꿔 중견수 오재원을 3순위로 지명했고, 손아섭 영입에 3라운드 지명권을 쓰며 성적 모드로 전환했습니다.",
+"키움":"베테랑을 내주고 지명권을 모으는 <span class='kw'>리빌딩 모델</span>. 4년간 1~3라운드에서만 20명을 뽑았습니다. 2024년에는 투수에 집중했고, 2025~2026년에는 염승원·어준서·여동욱·박한결 등 유격수형 내야수를 대거 채웠습니다.",
+"롯데":"체격 좋은 고졸 투수에 <span class='kw'>대졸 즉시전력 투수</span>(정현수·박정민)를 섞는 조합입니다. 1~3라운드 11명 중 8명이 투수이고, 야수는 김민석·이호준·이서준 정도입니다.",
+"삼성":"지명한 해의 1라운드는 <span class='kw'>4년 모두 투수</span>, 2026년에는 1~3라운드를 전부 투수로 채웠습니다. 대구 출신 배찬승을 1라운드에 뽑는 등 지역 출신 선호도 보입니다.",
+"NC":"기본은 투수 위주지만 2026년 모두의 예상을 깨고 내야수 신재인을 2순위로 지명했습니다. 김휘집 영입 때는 1·3라운드 지명권을 내주고, 손아섭을 보낼 때는 3라운드 지명권을 받아오는 등 <span class='kw'>지명권 거래가 가장 활발</span>한 팀입니다.",
+"KIA":"1라운드를 행사한 해에는 모두 투수를 뽑았습니다. 대신 박동원·주효상·조상우 트레이드로 지명권을 가장 많이 내준 <span class='kw'>윈나우형</span> 구단이라 4년간 상위 지명자가 9명으로 가장 적습니다.",
+"두산":"2024년부터 <span class='kw'>내야 보강</span>이 뚜렷합니다. 2025년 박준순은 구단이 16년 만에 1라운드에서 뽑은 내야수였고, 2026년에도 1·2라운드를 야수(김주오·최주형)로 채웠습니다.",
+"SSG":"선수단 고령화 때문에 <span class='kw'>즉시전력감</span>을 선호합니다. 1라운드에서 내야수 박지환, 포수 이율예를 뽑는 등 야수 비중이 높은 편이고, 투수도 완성도 높은 유형을 택했습니다.",
+"KT":"10개 구단 중 <span class='kw'>투수 편중이 가장 심한</span> 팀입니다. 2024~2025년 1~3라운드 6명이 전원 투수였고, 김정운처럼 사이드암 계보도 이어갑니다. 2026년에야 2~3라운드에서 내야수를 보강했습니다.",
+"LG":"부상 등으로 순번이 밀린 <span class='kw'>상위 자원을 줍는</span> 스타일입니다. 수술 이력이 있던 김영우, 팔꿈치 피로골절로 2순위 후보에서 8순위까지 밀린 양우진이 대표적입니다. 우승 경쟁 중이던 2024년에는 최원태 영입에 1라운드 지명권을 썼습니다."
+};
+const ul=document.getElementById("teams");
+TEAMS.forEach(t=>{
+  const a=picks.filter(d=>d.t===t),p=a.filter(isP).length,f=a.length-p;
+  const li=document.createElement("li");
+  li.innerHTML=`<div class="tn">${t}</div>
+    <div><div class="split" aria-hidden="true"><span style="width:${p/a.length*100}%;background:#1D4E89"></span><span style="width:${f/a.length*100}%;background:#2e7d5b"></span></div>
+    <div class="splitlbl">투수 ${p} · 야수 ${f} (총 ${a.length}명)</div></div>
+    <p>${TEXT[t]}</p>`;
+  ul.appendChild(li);
+});
+
+/* routes: 1R 40명 */
+const R=[
+["2023-1","한화","김서현","투","서울고","자양중","효제초"],
+["2023-2","KIA","윤영철","투","충암고","충암중","창서초|서대문구리틀"],
+["2023-3","롯데","김민석","내","휘문고","휘문중","신도초"],
+["2023-4","NC","신영우","투","경남고","센텀중","센텀초|해운대구리틀"],
+["2023-5","SSG","이로운","투","대구고","경복중","본리초"],
+["2023-6","키움","김건희","포","원주고 (북일고에서 전학)","온양중 (충남중에서 전학)","신흥초"],
+["2023-7","LG","김범석","포","경남고","경남중","김해삼성초"],
+["2023-8","삼성","이호성","투","인천고","동인천중","도원초|부천소사리틀"],
+["2023-9","두산","최준호","투","북일고","온양중","온양온천초"],
+["2023-10","KT","김정운","투","대구고","경주중","동천초 (나산초에서 전학)"],
+["2024-1","한화","황준서","투","장충고","상명중","면일초|중랑구리틀"],
+["2024-2","두산","김택연","투","인천고","상인천중","동막초"],
+["2024-3","롯데","전미르","투","경북고","협성경복중","본리초"],
+["2024-4","삼성","육선엽","투","장충고","신월중","백마초"],
+["2024-5","NC","김휘건","투","휘문고","춘천중","소양초"],
+["2024-6","KIA","조대현","투","강릉고","영남중","남정초"],
+["2024-7","KT","원상현","투","부산고","개성중","가산초|부산진구리틀"],
+["2024-8","키움","전준표","투","서울고","잠신중","잠일초|강동구리틀"],
+["2024-9","키움","김윤하","투","장충고","덕수중","와부초|남양주리틀"],
+["2024-10","SSG","박지환","내","세광고","군산중","군산남초"],
+["2025-1","키움","정현우","투","덕수고 (우신고에서 전학)","충암중","홍제초|서대문구리틀"],
+["2025-2","한화","정우주","투","전주고","건대부중","구남초|남양주리틀"],
+["2025-3","삼성","배찬승","투","대구고","협성경복중","대구옥산초"],
+["2025-4","롯데","김태현","투","광주제일고","진흥중","광주서림초"],
+["2025-5","KIA","김태형","투","덕수고","거원중","화순초"],
+["2025-6","두산","박준순","내","덕수고","청량중","배봉초|동대문구리틀"],
+["2025-7","키움","김서준","투","충훈고","원당중","고양화정초|일산서구리틀"],
+["2025-8","SSG","이율예","포","강릉고","원동중","중리초|함안리틀"],
+["2025-9","KT","김동현","투","서울고","잠신중","신천초|고양덕양구리틀"],
+["2025-10","LG","김영우","투","서울고","신월중","양원초|서대문구리틀"],
+["2026-1","키움","박준현","투","북일고","대구 소재 중학교","율하초 (대구)"],
+["2026-2","NC","신재인","내","유신고","매향중","–"],
+["2026-3","한화","오재원","외","유신고","부천중","신도초"],
+["2026-4","롯데","신동건","투","동산고","자양중","수유초"],
+["2026-5","SSG","김민준","투","대구고","–","–"],
+["2026-6","KT","박지훈","투","전주고","–","–"],
+["2026-7","두산","김주오","외","마산용마고","–","–"],
+["2026-8","LG","양우진","투","경기항공고","–","–"],
+["2026-9","삼성","이호범","투","서울고","–","–"],
+["2026-10","키움","박한결","내","전주고","–","–"]
+];
+let rt="<thead><tr><th>연도-순번</th><th>구단</th><th>이름</th><th>포지션</th><th>고교</th><th>중학교</th><th>초등학교·리틀</th></tr></thead><tbody>";
+R.forEach(r=>{
+  const [el,lit]=r[6].split("|");
+  rt+=`<tr><td>${r[0]}</td><td>${r[1]}</td><td><b>${r[2]}</b></td><td>${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td><td>${el}${lit?` <span class="little">${lit}</span>`:""}</td></tr>`;
+});
+document.getElementById("route").innerHTML=rt+"</tbody>";
+})();
+</script>
+</body>
+</html>

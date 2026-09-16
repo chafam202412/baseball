@@ -445,6 +445,18 @@ aside#sidebar{position:sticky;top:16px}
 .sec-card.adv{border-left-color:var(--sky)}
 .sec-card.adv .sechead .ttl{color:var(--blue-mid)}
 
+
+nav .navlink{
+  display:flex;align-items:baseline;gap:5px;
+  font-family:var(--sans);font-size:14px;font-weight:500;color:var(--ink-soft);
+  padding:11px 15px;white-space:nowrap;text-decoration:none;
+  border-bottom:3px solid transparent;
+}
+nav .navlink:hover{color:var(--blue);border-bottom-color:var(--rule)}
+nav .navlink::after{content:'↗';font-size:10px;color:var(--ink-faint);position:relative;top:-1px}
+nav .navlink:hover::after{color:var(--blue)}
+nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px}
+
 </style>
 </head>
 <body>
@@ -460,6 +472,7 @@ aside#sidebar{position:sticky;top:16px}
       <button data-tab="stats">통계</button>
       <button data-tab="train">훈련</button>
       <button data-tab="posts">칼럼</button>
+      <a class="navlink" href="draft-2023-2026.html">드래프트 현황</a>
       <button data-tab="entry">경기기록</button>
       <button data-tab="data">기초데이터 입력</button>
     </nav>
