@@ -634,7 +634,7 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
     2022년까지는 구단이 연고 지역 고교 선수를 먼저 데려가는 <span class="kw">1차 지명</span>이 있어서, 같은 "1라운드"라도 해마다 의미가 달랐습니다. <span class="kw">2023 드래프트부터 1차 지명이 폐지</span>되고 전 구단이 같은 규칙으로 뽑기 시작했습니다. 같은 규칙끼리 모아야 비교가 되기에 여기서부터 정리했습니다.
     <span style="display:block;margin-top:6px;font-size:14px;color:var(--muted)">연도는 입단 연도 기준입니다. 2023 드래프트는 2022년 9월에 열렸습니다. 제도의 자세한 내용은 0장에 정리했습니다.</span>
   </div>
-  <div class="dots" id="dots" aria-label="연도별 1~3라운드 지명자 포지션 분포"></div>
+  <div class="dots" id="dots" aria-label="연도별 1~5라운드 지명자 포지션 분포"></div>
   <div class="legend"><span><i style="background:var(--pitch)"></i>투수</span><span><i style="background:var(--field)"></i>야수(포수·내야·외야)</span><span>점 하나 = 지명 1명, 왼쪽부터 1·2·3라운드</span></div>
   <p class="meta" style="margin-top:14px">2026년 9월 기준 · 2027 드래프트는 9월 21일 예정</p>
 </header>
@@ -665,7 +665,7 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
       <div class="rn">03</div>
       <div class="rb">
         <b>11라운드까지</b>
-        <p>1차 지명이 사라지면서 라운드가 10개에서 11개로 늘었습니다. 한 구단이 최대 11명을 뽑고, 지명권 거래로 더 많이 뽑는 팀도 생깁니다. 이 페이지는 그중 <span class="kw">1~5라운드</span>를 다룹니다. 분석 장들은 기준을 맞추기 위해 1~3라운드를 기본으로 하고, 4·5라운드는 9장에서 따로 다룹니다.</p>
+        <p>1차 지명이 사라지면서 라운드가 10개에서 11개로 늘었습니다. 한 구단이 최대 11명을 뽑고, 지명권 거래로 더 많이 뽑는 팀도 생깁니다. 이 페이지는 그중 <span class="kw">1~5라운드</span>를 다룹니다. 통계는 200명 전체가 기본이고, 라운드별 차이는 3장과 9장에서 따로 다룹니다.</p>
       </div>
     </div>
     <div class="rule">
@@ -717,8 +717,8 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
       <button type="button" data-view="team" aria-pressed="false">구단별</button>
     </div>
     <div class="seg" role="group" aria-label="라운드 범위">
-      <button type="button" data-rnd="3" aria-pressed="true">1~3R</button>
-      <button type="button" data-rnd="5" aria-pressed="false">1~5R</button>
+      <button type="button" data-rnd="5" aria-pressed="true">1~5R</button>
+      <button type="button" data-rnd="3" aria-pressed="false">1~3R</button>
     </div>
     <div class="seg" role="group" aria-label="포지션 필터">
       <button type="button" data-pos="all" aria-pressed="true">전체</button>
@@ -736,22 +736,22 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
   <span class="chap">2장</span>
   <h2>숫자로 본 최근 드래프트의 특징</h2>
   <div class="grid2">
-    <figure><div id="chartYear"></div><figcaption>연도별 1~3라운드 투수 비율. 2026년 1라운드에서 야수가 4명으로 늘었습니다.</figcaption></figure>
-    <figure><div id="chartSchool"></div><figcaption>1~3라운드 배출 고교 상위권 (4년 합계)</figcaption></figure>
+    <figure><div id="chartYear"></div><figcaption>연도별 1~5라운드 투수 비율.</figcaption></figure>
+    <figure><div id="chartSchool"></div><figcaption>1~5라운드 배출 고교 상위권 (4년 합계)</figcaption></figure>
   </div>
 
   <div class="prose">
     <h3>1. 상위 라운드는 여전히 투수 중심</h3>
-    <p>4년간 1~3라운드 120명 중 <span class="kw">75명(약 63%)이 투수</span>입니다. 2024년 1라운드는 10명 중 9명이 투수였습니다. 구단들이 가장 먼저 찾는 것은 빠른 공을 던지는 고졸 투수입니다.</p>
+    <p>4년간 1~5라운드 200명 중 <span class="kw">119명(약 60%)이 투수</span>입니다. 2024년 1라운드는 10명 중 9명이 투수였습니다. 구단들이 가장 먼저 찾는 것은 빠른 공을 던지는 고졸 투수입니다.</p>
 
     <h3>2. 2026년, 야수 반등의 조짐</h3>
     <p>2026년 1라운드에서는 신재인·오재원·김주오·박한결까지 <span class="kw">야수 4명</span>이 뽑혔습니다. 투수 유망주를 어느 정도 모은 구단들이 유격수·중견수 같은 센터라인 야수로 눈을 돌린 결과로 보입니다.</p>
 
     <h3>3. 고졸이 압도, 대졸은 즉시전력 투수만</h3>
-    <p>2024년 전체 지명 110명 중 고졸이 79명이었고, 2025년에는 대학 선수가 16명만 뽑혔습니다. 1~3라운드 대졸은 4년 동안 <span class="kw">6명</span>(김유성·정현수·박준용·손용준·박정민·서준오)뿐이며, 대부분 바로 쓸 수 있는 투수였습니다.</p>
+    <p>1라운드 40명은 <span class="kw">4년 내내 전원 고졸</span>이고, 1~3라운드로 넓혀도 대졸은 6명뿐입니다. 그런데 4·5라운드에서는 대졸이 19명으로 늘어납니다. 라운드에 따라 성격이 확연히 갈리는데, 자세한 내용은 9장에서 다룹니다.</p>
 
     <h3>4. 서울권 명문고 쏠림</h3>
-    <p>120명 중 약 44명(37%)이 서울 소재 고교 출신입니다. <span class="kw">서울고·장충고·휘문고가 각 8명</span>으로 가장 많고, 지방에서는 전주고(7명)·인천고(6명)·경남고(6명)가 꾸준합니다.</p>
+    <p>200명의 절반 남짓이 수도권 학교 출신입니다. <span class="kw">휘문고가 11명</span>으로 가장 많고 서울고·장충고가 각 9명으로 뒤를 잇습니다. 지방에서는 전주고(9명)·인천고(8명)·부산고(8명)가 꾸준합니다.</p>
 
     <h3>5. 지명권이 트레이드 화폐가 됐다</h3>
     <p>키움은 베테랑을 내주고 받은 지명권으로 3년 연속 1라운드에서 2명씩 뽑았습니다. 반대로 LG(최원태), KIA(주효상·조상우), NC(김휘집), 한화(손아섭)는 당장의 전력을 위해 상위 지명권을 넘겼습니다.</p>
@@ -768,48 +768,63 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
 
 <section>
   <span class="chap">3장</span>
-  <h2>라운드가 내려갈수록 야수가 늘어난다</h2>
+  <h2>라운드마다 뽑는 유형이 다르다</h2>
   <div class="prose">
-    <p>120명을 라운드별로 갈라 보면 뚜렷한 기울기가 나옵니다. <span class="kw">1라운드는 넷 중 셋이 투수</span>인데, 3라운드로 내려오면 절반 아래로 떨어집니다. 대신 내야수가 다섯 배로 늘어납니다.</p>
+    <p>200명을 라운드별로 갈라 보면 기울기가 단순하지 않습니다. <span class="kw">1라운드는 넷 중 셋이 투수</span>인데 3라운드에서 절반 아래로 내려갔다가, 4·5라운드에서 다시 올라옵니다.</p>
   </div>
 
   <figure class="wide">
-    <svg viewBox="0 0 620 180" role="img" aria-label="라운드별 포지션 구성. 1라운드 투수 30명, 2라운드 26명, 3라운드 19명">
-      <text x="66" y="32" text-anchor="end" font-size="14" font-weight="700" fill="#1b2230">1라운드</text>
-      <rect x="74" y="10" width="357" height="34" fill="#1D4E89"/><text x="252" y="32" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">투수 30</text>
-      <rect x="431" y="10" width="36" height="34" fill="#2e7d5b"/><text x="449" y="32" text-anchor="middle" font-size="11" fill="#fff">3</text>
-      <rect x="467" y="10" width="60" height="34" fill="#5aa47f"/><text x="497" y="32" text-anchor="middle" font-size="11" fill="#fff">5</text>
-      <rect x="526" y="10" width="24" height="34" fill="#a3cbb6"/><text x="538" y="32" text-anchor="middle" font-size="11" fill="#1b2230">2</text>
-      <text x="560" y="32" font-size="12" fill="#646c7a">75%</text>
+    <svg viewBox="0 0 620 290" role="img" aria-label="라운드별 포지션 구성. 투수 비율이 1라운드 75퍼센트에서 3라운드 48퍼센트로 내려갔다가 4라운드 60퍼센트로 반등">
+      <text x="66" y="32" text-anchor="end" font-size="13.5" font-weight="700" fill="#12253F">1라운드</text>
+      <rect x="74" y="12" width="357" height="30" fill="#1D4E89"/><text x="252" y="32" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">투수 30</text>
+      <rect x="431" y="12" width="36" height="30" fill="#2F6B57"/><text x="449" y="32" text-anchor="middle" font-size="11" fill="#fff">3</text>
+      <rect x="467" y="12" width="59" height="30" fill="#5FA183"/><text x="496" y="32" text-anchor="middle" font-size="11" fill="#fff">5</text>
+      <rect x="526" y="12" width="24" height="30" fill="#A8CCB9"/>
+      <text x="560" y="32" font-size="12" font-family="monospace" fill="#546679">75%</text>
 
-      <text x="66" y="82" text-anchor="end" font-size="14" font-weight="700" fill="#1b2230">2라운드</text>
-      <rect x="74" y="60" width="309" height="34" fill="#1D4E89"/><text x="228" y="82" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">투수 26</text>
-      <rect x="383" y="60" width="12" height="34" fill="#2e7d5b"/>
-      <rect x="395" y="60" width="107" height="34" fill="#5aa47f"/><text x="448" y="82" text-anchor="middle" font-size="11" fill="#fff">내야 9</text>
-      <rect x="502" y="60" width="48" height="34" fill="#a3cbb6"/><text x="526" y="82" text-anchor="middle" font-size="11" fill="#1b2230">4</text>
-      <text x="560" y="82" font-size="12" fill="#646c7a">65%</text>
+      <text x="66" y="86" text-anchor="end" font-size="13.5" font-weight="700" fill="#12253F">2라운드</text>
+      <rect x="74" y="66" width="309" height="30" fill="#1D4E89"/><text x="228" y="86" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">투수 26</text>
+      <rect x="383" y="66" width="12" height="30" fill="#2F6B57"/>
+      <rect x="395" y="66" width="107" height="30" fill="#5FA183"/><text x="448" y="86" text-anchor="middle" font-size="11" fill="#fff">내야 9</text>
+      <rect x="502" y="66" width="48" height="30" fill="#A8CCB9"/><text x="526" y="86" text-anchor="middle" font-size="11" fill="#12253F">4</text>
+      <text x="560" y="86" font-size="12" font-family="monospace" fill="#546679">65%</text>
 
-      <text x="66" y="132" text-anchor="end" font-size="14" font-weight="700" fill="#1b2230">3라운드</text>
-      <rect x="74" y="110" width="226" height="34" fill="#1D4E89"/><text x="187" y="132" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">투수 19</text>
-      <rect x="300" y="110" width="48" height="34" fill="#2e7d5b"/><text x="324" y="132" text-anchor="middle" font-size="11" fill="#fff">포 4</text>
-      <rect x="348" y="110" width="155" height="34" fill="#5aa47f"/><text x="425" y="132" text-anchor="middle" font-size="12" fill="#fff">내야 13</text>
-      <rect x="502" y="110" width="48" height="34" fill="#a3cbb6"/><text x="526" y="132" text-anchor="middle" font-size="11" fill="#1b2230">4</text>
-      <text x="560" y="132" font-size="12" fill="#646c7a">48%</text>
+      <text x="66" y="140" text-anchor="end" font-size="13.5" font-weight="700" fill="#12253F">3라운드</text>
+      <rect x="74" y="120" width="226" height="30" fill="#1D4E89"/><text x="187" y="140" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">투수 19</text>
+      <rect x="300" y="120" width="48" height="30" fill="#2F6B57"/><text x="324" y="140" text-anchor="middle" font-size="11" fill="#fff">포 4</text>
+      <rect x="348" y="120" width="155" height="30" fill="#5FA183"/><text x="425" y="140" text-anchor="middle" font-size="12" fill="#fff">내야 13</text>
+      <rect x="503" y="120" width="47" height="30" fill="#A8CCB9"/><text x="526" y="140" text-anchor="middle" font-size="11" fill="#12253F">4</text>
+      <text x="560" y="140" font-size="12" font-family="monospace" fill="#B03A32" font-weight="700">48%</text>
 
-      <line x1="74" y1="156" x2="550" y2="156" stroke="#e2e5eb"/>
-      <text x="74" y="172" font-size="11" fill="#b9bec8">포지션 구성 · 막대 길이는 인원 비율</text>
+      <text x="66" y="194" text-anchor="end" font-size="13.5" font-weight="700" fill="#12253F">4라운드</text>
+      <rect x="74" y="174" width="286" height="30" fill="#1D4E89"/><text x="217" y="194" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">투수 24</text>
+      <rect x="360" y="174" width="12" height="30" fill="#2F6B57"/>
+      <rect x="372" y="174" width="119" height="30" fill="#5FA183"/><text x="431" y="194" text-anchor="middle" font-size="12" fill="#fff">내야 10</text>
+      <rect x="491" y="174" width="59" height="30" fill="#A8CCB9"/><text x="520" y="194" text-anchor="middle" font-size="11" fill="#12253F">외야 5</text>
+      <text x="560" y="194" font-size="12" font-family="monospace" fill="#546679">60%</text>
+
+      <text x="66" y="248" text-anchor="end" font-size="13.5" font-weight="700" fill="#12253F">5라운드</text>
+      <rect x="74" y="228" width="238" height="30" fill="#1D4E89"/><text x="193" y="248" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">투수 20</text>
+      <rect x="312" y="228" width="24" height="30" fill="#2F6B57"/>
+      <rect x="336" y="228" width="119" height="30" fill="#5FA183"/><text x="395" y="248" text-anchor="middle" font-size="12" fill="#fff">내야 10</text>
+      <rect x="455" y="228" width="95" height="30" fill="#A8CCB9"/><text x="502" y="248" text-anchor="middle" font-size="11.5" fill="#12253F">외야 8</text>
+      <text x="560" y="248" font-size="12" font-family="monospace" fill="#546679">50%</text>
+
+      <line x1="74" y1="268" x2="550" y2="268" stroke="#DFE6EE"/>
+      <text x="74" y="283" font-size="10.5" font-family="monospace" fill="#93A0B0">라운드당 40명 · 오른쪽 숫자는 투수 비율</text>
     </svg>
     <div class="legend">
       <span><i style="background:#1D4E89"></i>투수</span>
-      <span><i style="background:#2e7d5b"></i>포수</span>
-      <span><i style="background:#5aa47f"></i>내야수</span>
-      <span><i style="background:#a3cbb6"></i>외야수</span>
+      <span><i style="background:#2F6B57"></i>포수</span>
+      <span><i style="background:#5FA183"></i>내야수</span>
+      <span><i style="background:#A8CCB9"></i>외야수</span>
     </div>
   </figure>
 
   <div class="prose">
-    <p>4년 합계로는 <span class="kw">투수 75명, 내야수 27명, 외야수 10명, 포수 8명</span>입니다. 상위 지명의 60% 이상이 투수라는 뜻인데, 야구에서 투수가 차지하는 비중을 생각하면 놀랄 일은 아닙니다. 다만 <b>1라운드에서 유독 투수로 쏠린다</b>는 점은 짚어둘 만합니다. 구단들이 가장 먼저 부르는 이름은 대체로 공을 던지는 선수입니다.</p>
-    <p>포수가 3라운드에 몰리는 것도 눈에 띕니다. 1라운드 포수는 4년간 3명뿐입니다. 포수는 완성되는 데 시간이 오래 걸려 즉시 전력으로 보기 어렵고, 고교 시절 기록만으로 판단하기가 특히 까다로운 자리라는 통설과 맞닿아 있습니다.</p>
+    <p>4년 합계로는 <span class="kw">투수 119명, 내야수 47명, 외야수 23명, 포수 11명</span>입니다. 전체의 60%가 투수인 셈인데, 구단들이 가장 먼저 부르는 이름은 대체로 공을 던지는 선수입니다.</p>
+    <p>포수가 유독 적습니다. 200명 중 11명, <b>1라운드에서는 4년간 3명</b>뿐입니다. 포수는 완성되는 데 시간이 오래 걸려 고교 기록만으로 판단하기 특히 까다로운 자리라는 통설과 맞닿아 있습니다.</p>
+    <p>외야수는 반대 방향입니다. 1라운드 2명에서 5라운드 8명으로 <b>네 배</b>가 됩니다. 뒷라운드로 갈수록 외야에서 가능성을 보는 지명이 늘어납니다.</p>
   </div>
 </section>
 
@@ -818,30 +833,30 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
   <h2>지명권은 사고팔린다 — 키움이라는 예외</h2>
   <div class="prose">
     <p>드래프트에서 각 구단은 라운드마다 한 장씩 지명권을 갖습니다. 그런데 <span class="kw">이 지명권은 트레이드 대상</span>입니다. 선수를 내주고 다음 해 지명권을 받아올 수 있습니다.</p>
-    <p>4년간 1~3라운드에서 손바뀜이 일어난 지명권은 10장입니다. 그리고 그중 <span class="kw">8장을 키움이 가져갔습니다.</span></p>
+    <p>4년간 1~5라운드에서 손바뀜이 일어난 지명권은 11장입니다. 그리고 그중 <span class="kw">9장을 키움이 가져갔습니다.</span></p>
   </div>
 
   <figure class="wide">
     <div class="stack">
-      <div class="srow"><span class="sname">키움</span><span class="sbar" style="width:100%;background:#1D4E89"></span><span class="snum">20명</span></div>
-      <div class="srow"><span class="sname">삼성</span><span class="sbar" style="width:60%"></span><span class="snum">12명</span></div>
-      <div class="srow"><span class="sname">KT</span><span class="sbar" style="width:60%"></span><span class="snum">12명</span></div>
-      <div class="srow"><span class="sname">두산</span><span class="sbar" style="width:60%"></span><span class="snum">12명</span></div>
-      <div class="srow"><span class="sname">롯데</span><span class="sbar" style="width:55%"></span><span class="snum">11명</span></div>
-      <div class="srow"><span class="sname">NC</span><span class="sbar" style="width:55%"></span><span class="snum">11명</span></div>
-      <div class="srow"><span class="sname">한화</span><span class="sbar" style="width:55%"></span><span class="snum">11명</span></div>
-      <div class="srow"><span class="sname">SSG</span><span class="sbar" style="width:55%"></span><span class="snum">11명</span></div>
-      <div class="srow"><span class="sname">LG</span><span class="sbar" style="width:55%"></span><span class="snum">11명</span></div>
-      <div class="srow"><span class="sname">KIA</span><span class="sbar" style="width:45%;background:#c0553f"></span><span class="snum">9명</span></div>
+      <div class="srow"><span class="sname">키움</span><span class="sbar" style="width:100%;background:#1D4E89"></span><span class="snum">29명</span></div>
+      <div class="srow"><span class="sname">삼성</span><span class="sbar" style="width:69%"></span><span class="snum">20명</span></div>
+      <div class="srow"><span class="sname">두산</span><span class="sbar" style="width:69%"></span><span class="snum">20명</span></div>
+      <div class="srow"><span class="sname">KT</span><span class="sbar" style="width:69%"></span><span class="snum">20명</span></div>
+      <div class="srow"><span class="sname">한화</span><span class="sbar" style="width:66%"></span><span class="snum">19명</span></div>
+      <div class="srow"><span class="sname">롯데</span><span class="sbar" style="width:66%"></span><span class="snum">19명</span></div>
+      <div class="srow"><span class="sname">NC</span><span class="sbar" style="width:66%"></span><span class="snum">19명</span></div>
+      <div class="srow"><span class="sname">SSG</span><span class="sbar" style="width:66%"></span><span class="snum">19명</span></div>
+      <div class="srow"><span class="sname">LG</span><span class="sbar" style="width:66%"></span><span class="snum">19명</span></div>
+      <div class="srow"><span class="sname">KIA</span><span class="sbar" style="width:55%;background:#B03A32"></span><span class="snum">16명</span></div>
     </div>
-    <p class="meta" style="margin-top:10px">4년간 1~3라운드 지명 인원. 기본은 12명(3라운드 × 4년)입니다.</p>
+    <p class="meta" style="margin-top:10px">4년간 1~5라운드 지명 인원. 기본은 20명(5라운드 × 4년)입니다.</p>
   </figure>
 
   <div class="prose">
-    <p>기본값은 한 팀당 12명입니다. 키움은 <b>20명</b>을 뽑았고, KIA는 <b>9명</b>에 그쳤습니다. 키움은 2024·2025·2026 세 해 연속으로 <span class="kw">1라운드에서만 두 명씩</span> 지명했습니다.</p>
+    <p>기본값은 한 팀당 20명입니다. 키움은 <b>29명</b>을 뽑았고, KIA는 <b>16명</b>에 그쳤습니다. 키움은 2024·2025·2026 세 해 연속으로 <span class="kw">1라운드에서만 두 명씩</span> 지명했습니다.</p>
   </div>
 
-  <h3 class="sub">손바뀜이 일어난 지명권 10장</h3>
+  <h3 class="sub">손바뀜이 일어난 지명권 11장</h3>
   <div class="scroll">
   <table class="ord">
     <thead><tr><th>드래프트</th><th>원래 구단</th><th>라운드</th><th>행사한 구단</th></tr></thead>
@@ -856,6 +871,7 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
       <tr><td>2025</td><td>SSG</td><td>3R</td><td class="kw2">키움</td></tr>
       <tr><td>2026</td><td>KIA</td><td>1R</td><td class="kw2">키움</td></tr>
       <tr><td>2026</td><td>한화</td><td>3R</td><td>NC</td></tr>
+      <tr><td>2026</td><td>KIA</td><td>4R</td><td class="kw2">키움</td></tr>
     </tbody>
   </table>
   </div>
@@ -873,7 +889,7 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
 <section>
   <span class="chap">5장</span>
   <h2>구단별로 어떤 선수를 뽑았나</h2>
-  <div class="prose"><p>1~3라운드 지명자의 투수·야수 비율과 지명 흐름을 바탕으로 정리한 개인적인 분석입니다.</p></div>
+  <div class="prose"><p>1~5라운드 지명자의 투수·야수 비율과 지명 흐름을 바탕으로 정리한 개인적인 분석입니다.</p></div>
   <ul class="teams" id="teams"></ul>
   <div class="note">
     <b>한 줄 요약</b>
@@ -885,38 +901,40 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
   <span class="chap">6장</span>
   <h2>어느 학교에서 나오나</h2>
   <div class="prose">
-    <p>120명의 출신교를 세어보면 상위권이 뚜렷하게 갈립니다. 4년간 상위 라운드 지명자를 가장 많이 낸 곳은 <span class="kw">서울고·장충고·휘문고</span>로 각각 8명입니다.</p>
+    <p>200명의 출신교를 세어보면 상위권이 뚜렷합니다. 4년간 1~5라운드 지명자를 가장 많이 낸 곳은 <span class="kw">휘문고 11명</span>입니다.</p>
   </div>
 
   <figure class="wide">
     <div class="stack">
-      <div class="srow"><span class="sname">서울고</span><span class="sbar" style="width:100%;background:#1D4E89"></span><span class="snum">8</span></div>
-      <div class="srow"><span class="sname">장충고</span><span class="sbar" style="width:100%;background:#1D4E89"></span><span class="snum">8</span></div>
-      <div class="srow"><span class="sname">휘문고</span><span class="sbar" style="width:100%;background:#1D4E89"></span><span class="snum">8</span></div>
-      <div class="srow"><span class="sname">전주고</span><span class="sbar" style="width:88%"></span><span class="snum">7</span></div>
-      <div class="srow"><span class="sname">경남고</span><span class="sbar" style="width:75%"></span><span class="snum">6</span></div>
-      <div class="srow"><span class="sname">인천고</span><span class="sbar" style="width:75%"></span><span class="snum">6</span></div>
-      <div class="srow"><span class="sname">북일고</span><span class="sbar" style="width:63%"></span><span class="snum">5</span></div>
-      <div class="srow"><span class="sname">세광고</span><span class="sbar" style="width:63%"></span><span class="snum">5</span></div>
-      <div class="srow"><span class="sname">유신고</span><span class="sbar" style="width:50%"></span><span class="snum">4</span></div>
-      <div class="srow"><span class="sname">충암고</span><span class="sbar" style="width:50%"></span><span class="snum">4</span></div>
-      <div class="srow"><span class="sname">대구고</span><span class="sbar" style="width:50%"></span><span class="snum">4</span></div>
+      <div class="srow"><span class="sname">휘문고</span><span class="sbar" style="width:100%;background:#1D4E89"></span><span class="snum">11</span></div>
+      <div class="srow"><span class="sname">서울고</span><span class="sbar" style="width:82%"></span><span class="snum">9</span></div>
+      <div class="srow"><span class="sname">장충고</span><span class="sbar" style="width:82%"></span><span class="snum">9</span></div>
+      <div class="srow"><span class="sname">전주고</span><span class="sbar" style="width:82%"></span><span class="snum">9</span></div>
+      <div class="srow"><span class="sname">인천고</span><span class="sbar" style="width:73%"></span><span class="snum">8</span></div>
+      <div class="srow"><span class="sname">부산고</span><span class="sbar" style="width:73%"></span><span class="snum">8</span></div>
+      <div class="srow"><span class="sname">덕수고</span><span class="sbar" style="width:64%"></span><span class="snum">7</span></div>
+      <div class="srow"><span class="sname">세광고</span><span class="sbar" style="width:55%"></span><span class="snum">6</span></div>
+      <div class="srow"><span class="sname">유신고</span><span class="sbar" style="width:55%"></span><span class="snum">6</span></div>
+      <div class="srow"><span class="sname">충암고</span><span class="sbar" style="width:55%"></span><span class="snum">6</span></div>
+      <div class="srow"><span class="sname">경남고</span><span class="sbar" style="width:55%"></span><span class="snum">6</span></div>
+      <div class="srow"><span class="sname">대구상원고</span><span class="sbar" style="width:55%"></span><span class="snum">6</span></div>
+      <div class="srow"><span class="sname">경북고</span><span class="sbar" style="width:55%"></span><span class="snum">6</span></div>
     </div>
-    <p class="meta" style="margin-top:10px">4명 이상 배출한 학교 · 1~3라운드 기준</p>
+    <p class="meta" style="margin-top:10px">6명 이상 배출한 학교 · 1~5라운드 기준</p>
   </figure>
 
   <h3 class="sub">지역으로 묶으면</h3>
   <div class="regions">
-    <div class="reg"><div class="rv">56<span>%</span></div><div class="rl">수도권</div><div class="rm">66명 · 서울·경기·인천</div></div>
-    <div class="reg"><div class="rv">20<span>%</span></div><div class="rl">영남</div><div class="rm">24명</div></div>
-    <div class="reg"><div class="rv">10<span>%</span></div><div class="rl">충청</div><div class="rm">12명</div></div>
-    <div class="reg"><div class="rv">9<span>%</span></div><div class="rl">호남</div><div class="rm">11명</div></div>
-    <div class="reg"><div class="rv">4<span>%</span></div><div class="rl">강원·제주</div><div class="rm">5명</div></div>
+    <div class="reg"><div class="rv">52<span>%</span></div><div class="rl">수도권</div><div class="rm">102명</div></div>
+    <div class="reg"><div class="rv">25<span>%</span></div><div class="rl">영남</div><div class="rm">49명</div></div>
+    <div class="reg"><div class="rv">10<span>%</span></div><div class="rl">충청</div><div class="rm">19명</div></div>
+    <div class="reg"><div class="rv">9<span>%</span></div><div class="rl">호남</div><div class="rm">17명</div></div>
+    <div class="reg"><div class="rv">3<span>%</span></div><div class="rl">강원·제주</div><div class="rm">6명</div></div>
   </div>
 
   <div class="prose">
-    <p>절반 이상이 수도권입니다. 다만 이 숫자를 <b>"수도권 학교가 선수를 잘 키운다"</b>로 바로 읽으면 곤란합니다. 애초에 <span class="kw">고교 야구부 자체가 수도권에 많습니다.</span> 팀 수가 많으면 지명자도 많이 나오는 게 자연스럽습니다. 학교당 배출 인원으로 따지면 이야기가 달라질 수 있는데, 그건 전체 야구부 수를 같이 놓고 봐야 답이 나옵니다.</p>
-    <p>한 가지 더. 4년간 상위 3라운드 지명자 120명 중 <span class="kw">대학 출신은 5명</span>뿐입니다. 상위 지명은 사실상 고졸 선수의 자리라는 뜻입니다. 얼리 드래프트가 생겼어도 이 구도는 아직 크게 바뀌지 않았습니다.</p>
+    <p>절반이 수도권입니다. 다만 이 숫자를 <b>"수도권 학교가 선수를 잘 키운다"</b>로 바로 읽으면 곤란합니다. 애초에 <span class="kw">고교 야구부 자체가 수도권에 많습니다.</span> 팀 수가 많으면 지명자도 많이 나오는 게 자연스럽습니다. 학교당 배출 인원으로 따지면 이야기가 달라질 수 있는데, 그건 전체 야구부 수를 같이 놓고 봐야 답이 나옵니다.</p>
+    <p>1~3라운드만 볼 때보다 <b>영남 비중이 올라갔습니다</b>(20% → 25%). 뒷라운드에 영남권 대학 출신이 여럿 포함된 영향입니다.</p>
   </div>
 </section>
 
@@ -929,18 +947,18 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
 
   <div class="twocol">
     <div class="tc">
-      <div class="tch">고등학교 <span>1~3라운드 120명</span></div>
+      <div class="tch">고등학교 <span>1~5라운드 200명</span></div>
       <ol class="rank">
-        <li><b>서울고</b><i>8</i></li>
-        <li><b>장충고</b><i>8</i></li>
-        <li><b>휘문고</b><i>8</i></li>
-        <li><b>전주고</b><i>7</i></li>
-        <li><b>경남고</b><i>6</i></li>
-        <li><b>인천고</b><i>6</i></li>
-        <li><b>북일고</b><i>5</i></li>
-        <li><b>세광고</b><i>5</i></li>
+        <li><b>휘문고</b><i>11</i></li>
+        <li><b>서울고</b><i>9</i></li>
+        <li><b>장충고</b><i>9</i></li>
+        <li><b>전주고</b><i>9</i></li>
+        <li><b>인천고</b><i>8</i></li>
+        <li><b>부산고</b><i>8</i></li>
+        <li><b>덕수고</b><i>7</i></li>
+        <li><b>세광고</b><i>6</i></li>
       </ol>
-      <p class="tcm">상위 8개교가 53명 · 전체의 44%</p>
+      <p class="tcm">상위 8개교가 67명 · 전체의 34%</p>
     </div>
     <div class="tc">
       <div class="tch">중학교 <span>1라운드 33명</span></div>
@@ -959,7 +977,7 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
 
   <div class="note">
     <b>여기서 가장 중요한 숫자</b>
-    고교는 상위 8개교에 44%가 몰리는데, <span class="kw">중학교는 최다 배출이 2명</span>입니다. 33명이 27개 학교에서 나왔습니다. <b>특정 중학교로 몰리는 경향이 사실상 없다</b>는 뜻입니다.
+    고교는 상위 8개교에 34%가 몰리는데, <span class="kw">중학교는 최다 배출이 2명</span>입니다. 33명이 27개 학교에서 나왔습니다. <b>특정 중학교로 몰리는 경향이 사실상 없다</b>는 뜻입니다.
   </div>
 
   <h3 class="sub">중학교 → 고등학교, 대부분 갈아탑니다</h3>
@@ -1017,7 +1035,7 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
   <span class="chap">9장</span>
   <h2>4·5라운드에서 벌어지는 일</h2>
   <div class="prose">
-    <p>4·5라운드 80명을 더해 <span class="kw">200명</span>이 됐습니다. 상위 3라운드만 보던 그림에 뒷라운드를 붙이니 한 가지가 선명해집니다. <b>라운드가 내려갈수록 대학 출신이 급격히 늘어납니다.</b></p>
+    <p>4·5라운드 80명을 더해 <span class="kw">200명</span>이 됐습니다. 상위 라운드만 보던 그림에 뒷라운드를 붙이니 한 가지가 선명해집니다. <b>라운드가 내려갈수록 대학 출신이 급격히 늘어납니다.</b></p>
   </div>
 
   <figure class="wide">
@@ -1062,9 +1080,9 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
     <span style="display:block;margin-top:6px;font-size:14px;color:var(--ink-faint)">다만 이건 <b>입구</b>의 이야기지 <b>결과</b>의 이야기가 아닙니다. 5라운드 지명자가 1라운드 지명자보다 오래 뛰는 경우는 드물지 않습니다. 이 페이지의 데이터로는 그 뒷이야기까지 알 수 없습니다.</span>
   </div>
 
-  <h3 class="sub">투수 비율은 단순히 줄어들지 않습니다</h3>
+  <h3 class="sub">한눈에 보는 두 기울기</h3>
   <div class="prose">
-    <p>앞서 3장에서 1R 75% → 3R 48%로 투수 비중이 내려간다고 했습니다. 그런데 4·5라운드를 붙이면 <b>다시 올라갑니다.</b></p>
+    <p>3장에서 본 투수 비율과 이 장의 고졸 비율을 나란히 놓으면 이렇습니다.</p>
   </div>
 
   <div class="scrollhint">← 좌우로 밀어서 보기</div>
@@ -1093,7 +1111,7 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
   <div class="reads">
     <div class="read">
       <div class="rq">1라운드 75%가 투수라던데, 투수를 시켜야 하나</div>
-      <p>거꾸로입니다. 상위 지명이 투수에 쏠린다는 건 <b>투수 경쟁이 가장 치열하다</b>는 뜻이기도 합니다. 그리고 이 표에 오른 120명은 한 해 1,000명 넘는 지원자 중 극히 일부입니다. 포지션 선택은 지명 확률이 아니라 아이의 몸과 성향에서 나와야 합니다.</p>
+      <p>거꾸로입니다. 상위 지명이 투수에 쏠린다는 건 <b>투수 경쟁이 가장 치열하다</b>는 뜻이기도 합니다. 그리고 이 표에 오른 200명은 한 해 1,000명 넘는 지원자 중 극히 일부입니다. 포지션 선택은 지명 확률이 아니라 아이의 몸과 성향에서 나와야 합니다.</p>
     </div>
     <div class="read">
       <div class="rq">수도권 학교로 보내야 유리한가</div>
@@ -1101,7 +1119,7 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
     </div>
     <div class="read">
       <div class="rq">3라운드 안에 못 들면 끝인가</div>
-      <p>전혀 아닙니다. 드래프트는 11라운드까지 있고, 지명을 못 받아도 대학을 거쳐 <b>얼리 드래프트</b>로 다시 도전할 수 있습니다. 이 페이지가 1~3라운드만 다루는 건 데이터를 다루기 편해서지, 그 바깥이 의미 없어서가 아닙니다.</p>
+      <p>전혀 아닙니다. 드래프트는 11라운드까지 있고, 지명을 못 받아도 대학을 거쳐 <b>얼리 드래프트</b>로 다시 도전할 수 있습니다. 이 페이지가 1~5라운드만 다루는 건 데이터를 다루기 편해서지, 그 바깥이 의미 없어서가 아닙니다.</p>
     </div>
     <div class="read">
       <div class="rq">그럼 이 표는 뭐에 쓰나</div>
@@ -1111,7 +1129,7 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
 
   <div class="note">
     <b>한 가지만 덧붙이면</b>
-    중학생 단계에서 프로 지명을 목표로 훈련량을 늘리는 것은 대체로 역효과가 납니다. 이 표의 120명은 결과이지 경로가 아닙니다. 지금 단계에서 중요한 건 <span class="kw">다치지 않고 야구를 계속하는 것</span>, 그리고 몸이 자라는 속도에 맞춰 기술을 쌓는 것입니다.
+    중학생 단계에서 프로 지명을 목표로 훈련량을 늘리는 것은 대체로 역효과가 납니다. 이 표의 200명은 결과이지 경로가 아닙니다. 지금 단계에서 중요한 건 <span class="kw">다치지 않고 야구를 계속하는 것</span>, 그리고 몸이 자라는 속도에 맞춰 기술을 쌓는 것입니다.
   </div>
 </section>
 
@@ -3676,8 +3694,8 @@ function slotsOf(y,rd){
   });
 }
 const picks=D.filter(d=>d.n);
-const core=picks.filter(d=>d.r<=3);   /* 분석 장들은 1~3라운드 기준 */
-let RNDS=[1,2,3];                     /* 보드에 표시할 라운드 */
+const core=picks;                     /* 분석 장들도 1~5라운드 전체 기준 */
+let RNDS=[1,2,3,4,5];                 /* 보드에 표시할 라운드 */
 const isP=d=>d.pos==="투";
 
 /* hero dots: per year, sorted by round then pitcher first */
@@ -3836,7 +3854,7 @@ sel.addEventListener("change",()=>{schF=sel.value;applyFilter()});
 (function(){
   const top=Object.entries(schoolCount).filter(([s])=>/고$/.test(s)).sort((a,b)=>b[1]-a[1]).slice(0,10);
   const W=460,rowH=22,H=top.length*rowH+10,lw=86,max=top[0][1];
-  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="1~3라운드 배출 고교 상위 10곳">`;
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="1~5라운드 배출 고교 상위 10곳">`;
   top.forEach(([name,c],i)=>{
     const y=i*rowH+4,bw=(W-lw-40)*c/max;
     s+=`<text x="${lw-8}" y="${y+14}" font-size="12.5" text-anchor="end" fill="#1b2230">${name}</text>`;
@@ -3849,7 +3867,7 @@ sel.addEventListener("change",()=>{schF=sel.value;applyFilter()});
 /* teams */
 const TEXT={
 "한화":"3년 연속 1라운드에서 강속구 투수(김서현·황준서·정우주)를 모아 <span class='kw'>투수 왕국</span>의 기반을 만들었습니다. 2026년에는 방향을 바꿔 중견수 오재원을 3순위로 지명했고, 손아섭 영입에 3라운드 지명권을 쓰며 성적 모드로 전환했습니다.",
-"키움":"베테랑을 내주고 지명권을 모으는 <span class='kw'>리빌딩 모델</span>. 4년간 1~3라운드에서만 20명을 뽑았습니다. 2024년에는 투수에 집중했고, 2025~2026년에는 염승원·어준서·여동욱·박한결 등 유격수형 내야수를 대거 채웠습니다.",
+"키움":"베테랑을 내주고 지명권을 모으는 <span class='kw'>리빌딩 모델</span>. 4년간 1~5라운드에서 29명을 뽑았습니다. 2024년에는 투수에 집중했고, 2025~2026년에는 염승원·어준서·여동욱·박한결 등 유격수형 내야수를 대거 채웠습니다.",
 "롯데":"체격 좋은 고졸 투수에 <span class='kw'>대졸 즉시전력 투수</span>(정현수·박정민)를 섞는 조합입니다. 1~3라운드 11명 중 8명이 투수이고, 야수는 김민석·이호준·이서준 정도입니다.",
 "삼성":"지명한 해의 1라운드는 <span class='kw'>4년 모두 투수</span>, 2026년에는 1~3라운드를 전부 투수로 채웠습니다. 대구 출신 배찬승을 1라운드에 뽑는 등 지역 출신 선호도 보입니다.",
 "NC":"기본은 투수 위주지만 2026년 모두의 예상을 깨고 내야수 신재인을 2순위로 지명했습니다. 김휘집 영입 때는 1·3라운드 지명권을 내주고, 손아섭을 보낼 때는 3라운드 지명권을 받아오는 등 <span class='kw'>지명권 거래가 가장 활발</span>한 팀입니다.",
