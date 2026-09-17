@@ -594,10 +594,10 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
 .kd .board td .pick{text-align:left}
 
 /* ===== 드래프트 인트로: 격자 배경 위에 ===== */
-.kd header.intro{background:transparent;border:0;box-shadow:none;border-radius:0;padding:2px 2px 14px;margin:0 0 4px}
+.kd header.intro{background:var(--card);border:1px solid var(--rule);border-radius:4px;box-shadow:var(--shadow);padding:20px 22px 22px;margin:0 0 16px}
 .kd header.intro h1{font-family:var(--serif);font-size:clamp(19px,3vw,24px);margin:0 0 8px;color:var(--ink)}
 .kd header.intro .lede{font-size:14.5px;color:var(--ink-soft);margin:0 0 12px;max-width:760px}
-.kd header.intro .note{background:var(--card);border:1px solid var(--rule);border-left:3px solid var(--blue-mid);box-shadow:var(--shadow)}
+.kd header.intro .note{background:var(--blue-soft);border:0;border-left:3px solid var(--blue-mid);box-shadow:none}
 
 /* ===== 드래프트 패널: 기록장과 같은 외형으로 ===== */
 .kd{
@@ -776,25 +776,7 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
     </div>
   </div>
 
-  <h3 class="sub">연도별 지명 순서</h3>
-  <p class="meta">직전 시즌 최종 순위의 역순입니다. 모든 라운드가 같은 순서로 돕니다.</p>
-  <div class="scroll">
-  <table class="ord">
-    <thead><tr><th>드래프트</th><th>지명 순서 (1번 → 10번)</th></tr></thead>
-    <tbody>
-      <tr><td><b>2023</b></td><td>한화 · KIA · 롯데 · NC · SSG · 키움 · LG · 삼성 · 두산 · KT</td></tr>
-      <tr><td><b>2024</b></td><td>한화 · 두산 · 롯데 · 삼성 · NC · KIA · KT · LG · 키움 · SSG</td></tr>
-      <tr><td><b>2025</b></td><td>키움 · 한화 · 삼성 · 롯데 · KIA · 두산 · NC · SSG · KT · LG</td></tr>
-      <tr><td><b>2026</b></td><td>키움 · NC · 한화 · 롯데 · SSG · KT · 두산 · LG · 삼성 · KIA</td></tr>
-    </tbody>
-  </table>
-  </div>
-  
 
-  <div class="note">
-    <b>연도는 입단 연도 기준입니다</b>
-    드래프트는 그 전해 9월에 열립니다. 예를 들어 "2026 드래프트"는 2025년 9월에 치러졌고, 지명된 선수는 2026시즌부터 뜁니다.
-  </div>
 </section>
 
 <section>
@@ -1073,40 +1055,13 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
     고교는 상위 8개교에 34%가 몰리는데, <span class="kw">중학교는 최다 배출이 2명</span>입니다. 33명이 27개 학교에서 나왔습니다. <b>특정 중학교로 몰리는 경향이 사실상 없다</b>는 뜻입니다.
   </div>
 
-  <h3 class="sub">중학교 → 고등학교, 대부분 갈아탑니다</h3>
-
-  <figure class="wide">
-    <svg viewBox="0 0 620 130" role="img" aria-label="확인된 33명 중 같은 재단 고교로 진학한 경우는 3명, 다른 학교로 옮긴 경우가 30명">
-      <rect x="20" y="24" width="150" height="58" rx="5" fill="var(--card-tint)" stroke="var(--rule)"/>
-      <text x="95" y="48" text-anchor="middle" font-size="13" font-weight="700" fill="#12253F">중학교</text>
-      <text x="95" y="68" text-anchor="middle" font-size="12" fill="#546679">27개교 · 33명</text>
-
-      <path d="M170 45 L300 38" stroke="#2F6B57" stroke-width="3" fill="none"/>
-      <path d="M170 62 L300 86" stroke="#9FB8D2" stroke-width="10" fill="none" opacity=".75"/>
-
-      <rect x="300" y="18" width="150" height="40" rx="5" fill="#E7F0EB" stroke="#B9D6C9"/>
-      <text x="375" y="36" text-anchor="middle" font-size="12.5" font-weight="700" fill="#2F6B57">같은 재단 고교로</text>
-      <text x="375" y="52" text-anchor="middle" font-size="12" fill="#2F6B57">3명 · 9%</text>
-
-      <rect x="300" y="68" width="150" height="40" rx="5" fill="#E3ECF7" stroke="#C2D6EC"/>
-      <text x="375" y="86" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1D4E89">다른 학교로</text>
-      <text x="375" y="102" text-anchor="middle" font-size="12" fill="#1D4E89">30명 · 91%</text>
-
-      <text x="470" y="46" font-size="12" fill="#546679">충암중→충암고</text>
-      <text x="470" y="62" font-size="12" fill="#546679">휘문중→휘문고</text>
-      <text x="470" y="78" font-size="12" fill="#546679">경남중→경남고</text>
-      <text x="470" y="96" font-size="11" fill="#93A0B0">— 같은 재단 3건 전부</text>
-    </svg>
-  </figure>
-
   <div class="prose">
-    <p>확인된 33명 중 <span class="kw">같은 재단의 고교로 올라간 경우는 3명</span>뿐입니다. 나머지 30명은 전혀 다른 학교로 옮겼습니다. 거주지와 무관하게 고교를 고르는 일이 흔하다는 뜻이고, 실제로 지방 중학교에서 서울 고교로, 혹은 그 반대로 이동한 사례가 여럿입니다.</p>
     <p>초등학교까지 내려가면 또 하나가 보입니다. 확인된 33명 중 <span class="kw">14명이 리틀야구단 경력</span>을 함께 갖고 있습니다. 학교 야구부가 아니라 지역 리틀야구단에서 시작한 경우가 40% 이상이라는 뜻입니다.</p>
   </div>
 
   <div class="note">
     <b>읽는 법</b>
-    "어느 중학교를 가야 하나"라는 질문에 이 데이터가 주는 답은 <b>"그 질문의 무게가 생각보다 가볍다"</b>입니다. 중학교는 흩어져 있고, 같은 재단으로 올라가는 비율도 낮습니다. 다만 표본이 33명뿐이라 <b>단정할 수는 없습니다.</b> 경향으로만 보시길 권합니다.
+    "어느 중학교를 가야 하나"라는 질문에 이 데이터가 주는 답은 <b>"그 질문의 무게가 생각보다 가볍다"</b>입니다. 다만 표본이 33명뿐이라 <b>단정할 수는 없습니다.</b> 경향으로만 보시길 권합니다.
   </div>
 </section>
 
@@ -3890,11 +3845,11 @@ sel.addEventListener("change",()=>{schF=sel.value;applyFilter()});
   const W=460,H=260,pad={l:34,r:10,t:18,b:40};
   const cw=(W-pad.l-pad.r)/YEARS.length;
   let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="연도별 투수·야수 지명 수">`;
-  for(let v=0;v<=30;v+=10){const yy=pad.t+(H-pad.t-pad.b)*(1-v/30);
+  for(let v=0;v<=50;v+=10){const yy=pad.t+(H-pad.t-pad.b)*(1-v/50);
     s+=`<line x1="${pad.l}" x2="${W-pad.r}" y1="${yy}" y2="${yy}" stroke="#e2e5eb"/><text x="${pad.l-6}" y="${yy+4}" font-size="11" text-anchor="end" fill="#646c7a">${v}</text>`;}
   YEARS.forEach((y,i)=>{
     const arr=core.filter(d=>d.y===y);const p=arr.filter(isP).length,f=arr.length-p;
-    const bw=cw*.52,x=pad.l+i*cw+(cw-bw)/2,sc=(H-pad.t-pad.b)/30;
+    const bw=cw*.52,x=pad.l+i*cw+(cw-bw)/2,sc=(H-pad.t-pad.b)/50;
     const hp=p*sc,hf=f*sc,base=H-pad.b;
     s+=`<rect x="${x}" y="${base-hp}" width="${bw}" height="${hp}" fill="#1D4E89"/>`;
     s+=`<rect x="${x}" y="${base-hp-hf}" width="${bw}" height="${hf}" fill="#2e7d5b"/>`;
