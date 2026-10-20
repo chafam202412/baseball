@@ -7,6 +7,63 @@
   },
   "games": [
     {
+      "id": "mvg63uj526ulr",
+      "date": "2026-10-20",
+      "type": "정식",
+      "opp": "광진구",
+      "venue": "화성",
+      "tour": "26용산구청장기",
+      "round": "32강",
+      "sb": 0,
+      "cs": 0,
+      "dec": "",
+      "role": "",
+      "vid": "",
+      "vid2": "",
+      "album": "",
+      "photo": "",
+      "memo": "",
+      "pas": [
+        {
+          "seq": "FBSBBFF",
+          "res": "FO",
+          "run": "none",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "C",
+          "qual": "FB"
+        },
+        {
+          "seq": "FX",
+          "res": "FO",
+          "run": "none",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "C",
+          "qual": "FB"
+        },
+        {
+          "seq": "X",
+          "res": "GO",
+          "run": "first",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "R",
+          "qual": "GB"
+        }
+      ],
+      "bfs": [],
+      "fds": [
+        {
+          "pos": "유격수",
+          "inn": 6,
+          "po": 2,
+          "a": 1,
+          "e": 0
+        }
+      ]
+    },
+    {
       "id": "mvbt9ew88d6ww",
       "date": "2026-10-16",
       "type": "정식",
