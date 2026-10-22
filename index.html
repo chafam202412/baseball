@@ -697,6 +697,11 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
 .kd table.consist tr.burst td.sc{color:var(--ink-soft)}
 .kd table.consist td,.kd table.consist th{padding:8px 8px}
 
+
+.restbox .kbsa{margin-top:10px;padding:9px 11px;background:var(--card-tint);border:1px solid var(--rule-soft);border-radius:3px;font-size:12.5px;color:var(--ink);line-height:1.6}
+.restbox .kbsa b{color:var(--blue)}
+.restbox .kbsa span{display:block;font-size:11px;color:var(--ink-faint);margin-top:1px}
+
 </style>
 </head>
 <body>
@@ -1919,7 +1924,8 @@ function r2(x){ return (x==null||!isFinite(x)) ? '–' : x.toFixed(2); }
 function r1(x){ return (x==null||!isFinite(x)) ? '–' : x.toFixed(1); }
 function pct(x){ return (x==null||!isFinite(x)) ? '–' : (x*100).toFixed(1)+'%'; }
 function ipText(outs){ return Math.floor(outs/3) + (outs%3 ? ' '+(outs%3)+'/3' : ''); }
-function today(){ return new Date().toISOString().slice(0,10); }
+function ymd(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function today(){ return ymd(new Date()); }
 function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(t._x); t._x=setTimeout(()=>t.classList.remove('on'),2400); }
 function ytid(url){ if(!url) return ''; const m=String(url).match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([A-Za-z0-9_-]{6,})/); return m?m[1]:''; }
 
@@ -2577,12 +2583,12 @@ function restDaysFor(pitches){
   return c.tiers[c.tiers.length-1][1];
 }
 function addDays(iso, n){
-  const d=new Date(iso+'T00:00:00');
-  d.setDate(d.getDate()+n);
-  return d.toISOString().slice(0,10);
+  const p=iso.split('-').map(Number);
+  return ymd(new Date(p[0], p[1]-1, p[2]+n));
 }
 function daysBetween(a,b){
-  return Math.round((new Date(b+'T00:00:00') - new Date(a+'T00:00:00'))/86400000);
+  const pa=a.split('-').map(Number), pb=b.split('-').map(Number);
+  return Math.round((new Date(pb[0],pb[1]-1,pb[2]) - new Date(pa[0],pa[1]-1,pa[2]))/86400000);
 }
 function lastOuting(){
   const gs=(DB.games||[]).filter(function(g){ return (g.bfs||[]).length || (g.ips||[]).length; })
@@ -2591,14 +2597,18 @@ function lastOuting(){
   const g=gs[0], p=pitchAgg([g]);
   return {date:g.date, pitches:p.P, opp:g.opp};
 }
+function md(iso){ const p=iso.split('-'); return (+p[1])+'/'+(+p[2]); }
 function restStatus(){
   const lo=lastOuting(); if(!lo || !lo.date) return null;
   const need=restDaysFor(lo.pitches);
-  const ready=addDays(lo.date, need);
+  const ready=addDays(lo.date, need+1);          /* 등판 가능일 */
+  const restFrom=addDays(lo.date, 1), restTo=addDays(lo.date, need);
   const today0=today();
   const gap=daysBetween(lo.date, today0);
-  const left=daysBetween(today0, ready);
-  return {last:lo, need:need, ready:ready, gap:gap, left:left, ok:left<=0};
+  const left=daysBetween(today0, ready);         /* 등판 가능일까지 남은 날 */
+  const kbsa=addDays(lo.date, 2);                 /* 협회 규정: 이틀 연속 등판 금지 */
+  return {last:lo, need:need, ready:ready, restFrom:restFrom, restTo:restTo, gap:gap, left:left, ok:left<=0,
+          kbsa:kbsa, kbsaOk:daysBetween(today0,kbsa)<=0};
 }
 function pitchWarnHTML(total){
   const c=restCfg();
@@ -3301,9 +3311,13 @@ function renderSidebar(){
   if(rs){
     h+='<div class="sidebox"><div class="sh"><span class="t">등판 상태</span><span class="e">Rest</span></div>'+
        '<div class="restbox">'+
-         '<div class="big'+(rs.ok?'':' wait')+'">'+(rs.ok?'등판 가능':'앞으로 '+rs.left+'일 휴식')+'</div>'+
-         '<div class="sm">최근 등판 '+esc(rs.last.date||'')+' · '+rs.last.pitches+'구 · 권장 휴식 '+rs.need+'일</div>'+
-         '<div class="sm">'+(rs.ok?'마지막 등판 후 '+rs.gap+'일 지남':'권장 등판일 '+esc(rs.ready))+'</div>'+
+         '<div class="big'+(rs.ok?'':' wait')+'">'+(rs.ok?'등판 가능':md(rs.ready)+'부터 등판 가능')+'</div>'+
+         '<div class="sm">최근 등판 '+esc(rs.last.date||'')+' · '+rs.last.pitches+'구 · 권장 휴식 '+rs.need+'일'+
+           (rs.need>0?' ('+md(rs.restFrom)+(rs.need>1?'~'+md(rs.restTo):'')+')':'')+'</div>'+
+         '<div class="sm">'+(rs.ok?'마지막 등판 후 '+rs.gap+'일 지남':'등판 가능일까지 '+rs.left+'일')+'</div>'+
+         ((!rs.ok && rs.kbsa!==rs.ready)?
+           '<div class="kbsa">'+(rs.kbsaOk?'협회 규정상으로는 <b>오늘 등판 가능</b>':'협회 규정상으로는 <b>'+md(rs.kbsa)+'부터</b> 가능')+
+           '<span>권고 기준보다 '+daysBetween(rs.kbsa,rs.ready)+'일 빠름 · 이틀 연속 등판 금지 기준</span></div>':'')+
        '</div></div>';
   }
 
@@ -3445,7 +3459,7 @@ function download(name,text,mime){
   a.href=url; a.download=name; document.body.appendChild(a); a.click();
   setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); },300);
 }
-function stamp(){ return new Date().toISOString().slice(0,10).replace(/-/g,''); }
+function stamp(){ return today().replace(/-/g,''); }
 function csv(rows){
   return '\uFEFF'+rows.map(r=>r.map(function(c){
     const s=c==null?'':String(c);
