@@ -7,6 +7,134 @@
   },
   "games": [
     {
+      "id": "mvj3jap5sghsp",
+      "date": "2026-10-22",
+      "type": "정식",
+      "opp": "동대문구",
+      "venue": "화성",
+      "tour": "26용산구청장기",
+      "round": "16강",
+      "sb": 1,
+      "cs": 0,
+      "dec": "",
+      "role": "",
+      "vid": "",
+      "vid2": "",
+      "album": "",
+      "photo": "",
+      "memo": "",
+      "pas": [
+        {
+          "seq": "BWBSBB",
+          "res": "BB",
+          "run": "risp",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "",
+          "qual": ""
+        },
+        {
+          "seq": "H",
+          "res": "HBP",
+          "run": "none",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "",
+          "qual": ""
+        },
+        {
+          "seq": "FFS",
+          "res": "SO_L",
+          "run": "none",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "",
+          "qual": ""
+        }
+      ],
+      "bfs": [
+        {
+          "seq": "BBBB",
+          "res": "BB",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "SSS",
+          "res": "SO_L",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "SBFW",
+          "res": "SO_S",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "SWS",
+          "res": "SO_L",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "SBFBX",
+          "res": "1B",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "BBBB",
+          "res": "BB",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "BBBSFW",
+          "res": "SO_S",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "FX",
+          "res": "E",
+          "inn": 0,
+          "r": 1,
+          "er": 0
+        },
+        {
+          "seq": "BBSWBW",
+          "res": "SO_S",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "WBWBS",
+          "res": "SO_L",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        }
+      ],
+      "fds": [
+        {
+          "pos": "유격수",
+          "inn": 4,
+          "po": 0,
+          "a": 0,
+          "e": 0
+        }
+      ]
+    },
+    {
       "id": "mvg63uj526ulr",
       "date": "2026-10-20",
       "type": "정식",
