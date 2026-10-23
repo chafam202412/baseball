@@ -7,6 +7,118 @@
   },
   "games": [
     {
+      "id": "mvknolb04qoei",
+      "date": "2026-10-23",
+      "type": "정식",
+      "opp": "천안시",
+      "venue": "화성",
+      "tour": "26용산구청장기",
+      "round": "8강",
+      "sb": 0,
+      "cs": 0,
+      "dec": "",
+      "role": "",
+      "vid": "",
+      "vid2": "",
+      "album": "",
+      "photo": "",
+      "memo": "",
+      "pas": [
+        {
+          "seq": "BSSW",
+          "res": "SO_S",
+          "run": "none",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "",
+          "qual": ""
+        },
+        {
+          "seq": "WWBW",
+          "res": "SO_S",
+          "run": "none",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "",
+          "qual": ""
+        }
+      ],
+      "bfs": [
+        {
+          "seq": "SBX",
+          "res": "IFH",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "BWFBB",
+          "res": "2B",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "FX",
+          "res": "GO",
+          "inn": 0,
+          "r": 1,
+          "er": 1
+        },
+        {
+          "seq": "BX",
+          "res": "GO",
+          "inn": 0,
+          "r": 1,
+          "er": 1
+        },
+        {
+          "seq": "X",
+          "res": "FO",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "WBSBW",
+          "res": "SO_S",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "SBSBBS",
+          "res": "SO_L",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "X",
+          "res": "2B",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "SWW",
+          "res": "SO_S",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        }
+      ],
+      "fds": [
+        {
+          "pos": "유격수",
+          "inn": 4,
+          "po": 1,
+          "a": 0,
+          "e": 0
+        }
+      ]
+    },
+    {
       "id": "mvj3jap5sghsp",
       "date": "2026-10-22",
       "type": "정식",
