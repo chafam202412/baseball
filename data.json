@@ -41,6 +41,15 @@
           "scored": 0,
           "dir": "",
           "qual": ""
+        },
+        {
+          "seq": "BFBBSB",
+          "res": "BB",
+          "run": "none",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "",
+          "qual": ""
         }
       ],
       "bfs": [
