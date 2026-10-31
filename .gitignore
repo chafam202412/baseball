@@ -1,0 +1,6 @@
+# Local review snapshots and synthetic browser QA only
+*.original.html
+*.original.json
+qa-preview/
+qa-artifacts/
+.openai/

@@ -703,16 +703,19 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
 .restbox .kbsa span{display:block;font-size:11px;color:var(--ink-faint);margin-top:1px}
 
 </style>
+<link rel="stylesheet" href="design-refresh.css?v=20261031">
 </head>
 <body>
 
-<header>
+<header class="site-header">
   <div class="hwrap">
+    <div class="masthead-row"><div class="brand-text">
     <div class="eyebrow" id="eyebrow">SCOREBOOK</div>
     <h1 id="title">야구 <em>기록장</em></h1>
     <div id="syncbar"></div>
     <p class="sub" id="subtitle">경기 하나하나가 쌓여서 시즌이 됩니다.</p>
-    <nav id="nav">
+    </div><div class="archive-mark" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none"><path d="M32 7 57 32 32 57 7 32Z" stroke="currentColor" stroke-width="1.2"/><path d="M32 19 45 32 32 45 19 32Z" stroke="currentColor" stroke-width="1.2"/><circle cx="32" cy="32" r="3" fill="currentColor"/><path d="M32 7v8M57 32h-8M32 57v-8M7 32h8" stroke="currentColor" stroke-width="2"/></svg><div><b>EVERY GAME,<br>A CHAPTER.</b><span>한 경기씩, 나만의 야구 기록</span></div></div></div>
+    <nav id="nav" aria-label="기록장 메뉴">
       <button data-tab="log" class="on">경기 일지</button>
       <button data-tab="stats">통계</button>
       <button data-tab="train">훈련</button>
@@ -729,11 +732,13 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
 
   <!-- ============ 01 LOG ============ -->
   <section class="panel on" id="p-log">
+    <div class="panel-heading"><div><span class="chapter">THE GAME JOURNAL</span><h2>경기 일지</h2><p>한 경기씩 쌓이는, 나만의 야구 이야기.</p></div><div class="period" id="log-period"></div></div>
+    <div id="log-overview"></div>
     <div class="filterbar">
-      <select id="f-type"><option value="">전체 경기</option><option value="정식">정식경기</option><option value="연습">연습경기</option></select>
-      <select id="f-year"><option value="">전체 연도</option></select>
-      <select id="f-tour"><option value="">전체 대회</option></select>
-      <input type="search" id="f-q" placeholder="상대팀·대회·메모 검색">
+      <select id="f-type" aria-label="경기 구분"><option value="">전체 경기</option><option value="정식">정식경기</option><option value="연습">연습경기</option></select>
+      <select id="f-year" aria-label="경기 연도"><option value="">전체 연도</option></select>
+      <select id="f-tour" aria-label="대회"><option value="">전체 대회</option></select>
+      <input type="search" id="f-q" aria-label="경기 검색" placeholder="상대팀·대회·메모 검색">
       <span class="tiny muted" id="f-count"></span>
     </div>
     <div class="withside">
@@ -1332,14 +1337,16 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
 
   <!-- ============ 03 STATS ============ -->
   <section class="panel" id="p-stats">
+    <div class="panel-heading"><div><span class="chapter">BEHIND THE NUMBERS</span><h2>기록으로 보는 성장</h2><p>핵심 지표부터, 궁금한 내용은 자세히.</p></div></div>
     <div class="filterbar">
-      <select id="s-type"><option value="">정식+연습 합산</option><option value="정식">정식경기만</option><option value="연습">연습경기만</option></select>
-      <select id="s-year"><option value="">전체 기간</option></select>
-      <select id="s-tour"><option value="">전체 대회</option></select>
+      <select id="s-type" aria-label="통계 경기 구분"><option value="">정식+연습 합산</option><option value="정식">정식경기만</option><option value="연습">연습경기만</option></select>
+      <select id="s-year" aria-label="통계 기간"><option value="">전체 기간</option></select>
+      <select id="s-tour" aria-label="통계 대회"><option value="">전체 대회</option></select>
     </div>
     <div id="statbody"></div>
 
-    <div class="card sec-card split" style="margin-top:30px">
+    <details class="breakdown" id="split-details"><summary>기준별 집계 <small>대회 · 월 · 상대팀별로 비교하기</small></summary><div class="breakdown-body">
+    <div class="card sec-card split" style="margin-top:0">
       <div class="sechead"><span class="ttl">기준별 집계</span><span class="en">Splits</span>
         <span class="meta">무엇을 기준으로 나눠 볼지 고르세요</span></div>
       <div class="grid g3">
@@ -1359,11 +1366,12 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
         <div><label for="sp-year">기간 필터</label><select id="sp-year"><option value="">전체 기간</option></select></div>
       </div>
     </div>
-    <div id="splitbody"></div>
+    <div id="splitbody"></div></div></details>
   </section>
 
   <!-- ============ TRAINING ============ -->
   <section class="panel" id="p-train">
+    <div class="panel-heading"><div><span class="chapter">THE DAILY WORK</span><h2>훈련 일지</h2><p>경기 밖에서 쌓아가는 과정도 소중한 기록입니다.</p></div></div>
     <div class="card" id="train-form">
       <h2>훈련 기록 추가</h2>
       <div class="grid g4">
@@ -1378,15 +1386,17 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
         <div><label for="t-album">사진 앨범 링크 <span class="muted">— 구글 포토 공유</span></label><input id="t-album" placeholder="https://photos.app.goo.gl/..."></div>
         <div><label for="t-photo">대표 사진 파일명 <span class="muted">— photos/ 폴더</span></label><input id="t-photo" placeholder="20260817_bullpen.jpg"></div>
       </div>
-      <div class="row-actions" style="margin-top:12px"><button class="btn" id="save-train">훈련 저장</button></div>
+      <div id="train-edit-note" class="hint" role="status" style="margin-top:12px"></div>
+      <div class="row-actions" style="margin-top:12px"><button class="btn" id="save-train">훈련 저장</button><button class="btn ghost" id="cancel-train" type="button" hidden>수정 취소</button></div>
     </div>
     <div id="trainbody"></div>
   </section>
 
   <!-- ============ POSTS ============ -->
   <section class="panel" id="p-posts">
+    <div class="panel-heading"><div><span class="chapter">NOTES ON BASEBALL</span><h2>야구를 더 깊이</h2><p>함께 읽고, 생각하고, 오래 남겨둘 이야기.</p></div></div>
     <div class="filterbar" id="po-bar">
-      <input type="search" id="po-q" placeholder="제목·내용 검색">
+      <input type="search" id="po-q" aria-label="칼럼 검색" placeholder="제목·내용 검색">
       <button class="btn sm" id="po-new" style="margin-left:auto">＋ 새 글</button>
     </div>
 
@@ -2008,7 +2018,7 @@ function paBlock(d){
       '<button class="xbtn" data-del title="이 타석 삭제">×</button></div>'+
     '<div class="seqline">'+seqChips(seq)+'</div>'+padHTML()+
     '<div class="grid g4">'+
-      '<div><label>최종 결과</label><select class="pa-res">'+optList(RESULTS, d.res||'1B', true)+'</select></div>'+
+      '<div><label>최종 결과</label><select class="pa-res">'+optList([{v:'',t:'결과 선택'}].concat(RESULTS), d.res||'', true)+'</select></div>'+
       '<div><label>주자 상황</label><select class="pa-run">'+optList(RUNNERS, d.run||'none', true)+'</select></div>'+
       '<div><label>타점</label><input type="number" min="0" class="pa-rbi" value="'+(d.rbi??'')+'"></div>'+
       '<div><label>득점</label><input type="number" min="0" max="1" class="pa-scored" value="'+(d.scored??'')+'"></div>'+
@@ -2065,7 +2075,8 @@ function liveSummary(){
   if(ps){
     let PA=0,AB=0,H=0,RBI=0,P=0,S=0;
     $$('#pa-rows .blk').forEach(function(el){
-      const r=RMAP[el.querySelector('.pa-res').value]||{};
+      const r=RMAP[el.querySelector('.pa-res').value];
+      if(!r) return;
       const q=seqStats(el.dataset.seq||'');
       PA++; AB+=r.ab||0; H+=r.h||0; RBI+=iv(el.querySelector('.pa-rbi').value);
       P+=q.pitches; S+=q.strikes;
@@ -2120,13 +2131,21 @@ if($('#pa-rows')){
 
 /* ================= 폼 <-> 객체 ================= */
 let EDIT_ID = null;
+function isBlankPA(pa){
+  return !pa.seq && !pa.res && (!pa.run || pa.run==='none') &&
+    !pa.rbi && !pa.scored && !pa.dir && !pa.qual;
+}
+function battingEntryError(pas){
+  const i=pas.findIndex(pa=>!isBlankPA(pa) && !RMAP[pa.res]);
+  return i<0 ? '' : '입력 중인 타석의 최종 결과를 선택해 주세요.';
+}
 function readForm(){
   const pas=$$('#pa-rows .blk').map(r=>({
     seq:r.dataset.seq||'', res:r.querySelector('.pa-res').value, run:r.querySelector('.pa-run').value,
     rbi:iv(r.querySelector('.pa-rbi').value), scored:iv(r.querySelector('.pa-scored').value),
     dir: r.querySelector('.pa-dir') ? r.querySelector('.pa-dir').value : '',
     qual: r.querySelector('.pa-qual') ? r.querySelector('.pa-qual').value : ''
-  }));
+  })).filter(pa=>!isBlankPA(pa));
   const bfs=$$('#bf-rows .blk').map(r=>({
     seq:r.dataset.seq||'', res:r.querySelector('.bf-res').value, inn:iv(r.querySelector('.bf-inn').value),
     r:iv(r.querySelector('.bf-r').value), er:iv(r.querySelector('.bf-er').value)
@@ -2150,6 +2169,7 @@ function readForm(){
 }
 function fillForm(g){
   if(!$('#pa-rows')) return;
+  const isNew=!g;
   EDIT_ID = g?g.id:null;
   g = g||{};
   $('#e-date').value=g.date||today();
@@ -2159,7 +2179,7 @@ function fillForm(g){
   $('#e-dec').value=g.dec||''; $('#e-role').value=g.role||'';
   $('#e-vid').value=g.vid||''; $('#e-vid2').value=g.vid2||'';
   $('#e-album').value=g.album||''; $('#e-photo').value=g.photo||'';
-  $('#pa-rows').innerHTML=(g.pas&&g.pas.length?g.pas:[{}]).map(paBlock).join('');
+  $('#pa-rows').innerHTML=(Array.isArray(g.pas)?g.pas:(isNew?[{}]:[])).map(paBlock).join('');
   $('#bf-rows').innerHTML=(g.bfs&&g.bfs.length?g.bfs:[]).map(bfBlock).join('');
   $('#fd-rows').innerHTML=(g.fds&&g.fds.length?g.fds:[]).map(fdBlock).join('');
   reindex();
@@ -2169,6 +2189,8 @@ function fillForm(g){
 if($('#save-game')){
   $('#save-game').addEventListener('click',()=>{
     const g=readForm();
+    const battingError=battingEntryError(g.pas);
+    if(battingError){ toast(battingError); return; }
     if(!g.opp && !g.tour && !confirm('상대팀이 비어 있습니다. 그래도 저장할까요?')) return;
     const i=DB.games.findIndex(x=>x.id===g.id);
     if(i>=0) DB.games[i]=g; else DB.games.push(g);
@@ -2187,7 +2209,7 @@ let draftTimer=null;
 function hasContent(g){
   if(!g) return false;
   if(g.opp||g.tour||g.venue||g.memo||g.vid||g.album) return true;
-  const pa=(g.pas||[]).some(function(x){ return x.seq || x.rbi || x.inn; });
+  const pa=(g.pas||[]).some(function(x){ return !isBlankPA(x); });
   const bf=(g.bfs||[]).some(function(x){ return x.seq || x.inn || x.r || x.er; });
   const fd=(g.fds||[]).some(function(x){ return x.inn || x.po || x.a || x.e; });
   return pa||bf||fd;
@@ -2301,10 +2323,10 @@ function pitchAgg(games){
   const ip=a.OUT/3;
   a.IP=ip;
   a.ERA=ip?a.ER*9/ip:null;
-  a.WHIP=ip?(a.H+a.BB+a.HBP)/ip:null;
+  a.WHIP=ip?(a.H+a.BB)/ip:null;
   a.K9=ip?a.K*9/ip:null;
-  a.BB9=ip?(a.BB+a.HBP)*9/ip:null;
-  a.KBB=(a.BB+a.HBP)?a.K/(a.BB+a.HBP):(a.K?Infinity:null);
+  a.BB9=ip?a.BB*9/ip:null;
+  a.KBB=a.BB?a.K/a.BB:(a.K?Infinity:null);
   a.STRP=a.P?a.STRK/a.P:null;
   a.WHF=a.SWING?a.WHIFF/a.SWING:null;
   a.FPSP=a.BF?a.FPS/a.BF:null;
@@ -2312,17 +2334,20 @@ function pitchAgg(games){
   a.PIP=ip?a.P/ip:null;
   a.PG=a.G?a.P/a.G:null;
   a.KRT=a.BF?a.K/a.BF:null;
-  a.BBRT=a.BF?(a.BB+a.HBP)/a.BF:null;
+  a.BBRT=a.BF?a.BB/a.BF:null;
+  a.BBRTHBP=a.BF?(a.BB+a.HBP)/a.BF:null;
   return a;
 }
 function fieldAgg(games){
   const a={PO:0,A:0,E:0,INN:0,byPos:{}};
   games.forEach(g=>{
+    const playedPositions=new Set();
     (g.fds||[]).forEach(f=>{
       a.PO+=f.po||0; a.A+=f.a||0; a.E+=f.e||0; a.INN+=f.inn||0;
       if(f.pos){
         const p=a.byPos[f.pos]||(a.byPos[f.pos]={INN:0,PO:0,A:0,E:0,G:0});
-        p.INN+=f.inn||0; p.PO+=f.po||0; p.A+=f.a||0; p.E+=f.e||0; p.G++;
+        p.INN+=f.inn||0; p.PO+=f.po||0; p.A+=f.a||0; p.E+=f.e||0;
+        if(!playedPositions.has(f.pos)){ p.G++; playedPositions.add(f.pos); }
       }
     });
   });
@@ -2348,7 +2373,7 @@ function advPitch(games){
            quick:0, long:0, twoStrikeBF:0, twoStrikeK:0, twoStrikeEsc:0,
            buckets:{}, maxBallRun:0};
   games.forEach(function(g){
-    let idx=0;
+    let idx=0,run=0;
     (g.bfs||[]).forEach(function(bf){
       const q=seqStats(bf.seq), r=RMAP[bf.res]||{};
       if(!q.pitches && !bf.res) return;
@@ -2361,7 +2386,7 @@ function advPitch(games){
       if(q.pitches && q.pitches<=3) a.quick++;
       if(q.pitches>=6) a.long++;
       /* 2스트라이크를 잡은 적이 있는가 */
-      let b=0,st=0,reached2=false,run=0;
+      let b=0,st=0,reached2=false;
       for(let i=0;i<(bf.seq||'').length;i++){
         const p=PMAP[bf.seq[i]]; if(!p) continue;
         idx++;
@@ -2591,11 +2616,11 @@ function daysBetween(a,b){
   return Math.round((new Date(pb[0],pb[1]-1,pb[2]) - new Date(pa[0],pa[1]-1,pa[2]))/86400000);
 }
 function lastOuting(){
-  const gs=(DB.games||[]).filter(function(g){ return (g.bfs||[]).length || (g.ips||[]).length; })
-    .slice().sort(function(a,b){ return (b.date||'').localeCompare(a.date||''); });
+  const gs=(DB.games||[]).filter(g=>g.date && ((g.bfs||[]).length || (g.ips||[]).length))
+    .slice().sort((a,b)=>(b.date||'').localeCompare(a.date||''));
   if(!gs.length) return null;
-  const g=gs[0], p=pitchAgg([g]);
-  return {date:g.date, pitches:p.P, opp:g.opp};
+  const date=gs[0].date, sameDay=gs.filter(g=>g.date===date), p=pitchAgg(sameDay);
+  return {date:date, pitches:p.P, games:sameDay.length};
 }
 function md(iso){ const p=iso.split('-'); return (+p[1])+'/'+(+p[2]); }
 function restStatus(){
@@ -2606,9 +2631,7 @@ function restStatus(){
   const today0=today();
   const gap=daysBetween(lo.date, today0);
   const left=daysBetween(today0, ready);         /* 등판 가능일까지 남은 날 */
-  const kbsa=addDays(lo.date, 2);                 /* 협회 규정: 이틀 연속 등판 금지 */
-  return {last:lo, need:need, ready:ready, restFrom:restFrom, restTo:restTo, gap:gap, left:left, ok:left<=0,
-          kbsa:kbsa, kbsaOk:daysBetween(today0,kbsa)<=0};
+  return {last:lo, need:need, ready:ready, restFrom:restFrom, restTo:restTo, gap:gap, left:left, ok:left<=0};
 }
 function pitchWarnHTML(total){
   const c=restCfg();
@@ -2616,14 +2639,14 @@ function pitchWarnHTML(total){
   const lim=c.limit;
   const pct2=Math.min(100, Math.round(total/lim*100));
   let cls='ok', msg='';
-  if(total>=lim){ cls='over'; msg='설정한 상한('+lim+'구)을 넘었습니다'; }
+  if(total>=lim){ cls='over'; msg=total===lim?'설정한 상한('+lim+'구)에 도달했습니다':'설정한 상한('+lim+'구)을 넘었습니다'; }
   else if(total>=lim*0.85){ cls='near'; msg='상한 '+lim+'구에 근접했습니다'; }
   else { msg='상한 '+lim+'구 기준'; }
   const need=restDaysFor(total);
   return '<div class="pcwarn '+cls+'">'+
     '<div class="pcbar"><span style="width:'+pct2+'%"></span></div>'+
     '<div class="pctxt"><b>'+total+'구</b> · '+esc(msg)+
-    ' · 이 투구수면 <b>휴식 '+need+'일</b> 권장</div></div>';
+    ' · 설정 기준 <b>휴식 '+need+'일</b> · 대회 규정 우선</div></div>';
 }
 
 /* ================= 01 경기 일지 ================= */
@@ -2647,6 +2670,19 @@ function gameLine(g){
   }
   return h;
 }
+function renderLogOverview(games){
+  const el=$('#log-overview'), period=$('#log-period'); if(!el) return;
+  const dates=games.map(g=>g.date).filter(Boolean).sort();
+  if(period) period.textContent=dates.length?dates[0].replaceAll('-','.')+' — '+dates[dates.length-1].replaceAll('-','.'):'';
+  if(!games.length){ el.innerHTML=''; return; }
+  const b=battingAgg(games), p=pitchAgg(games);
+  const item=(k,v,d)=>'<div class="overview-item"><span class="k">'+k+'</span><span class="v">'+v+'</span><span class="d">'+d+'</span></div>';
+  el.innerHTML='<div class="overview-strip" aria-label="선택한 경기 요약">'+
+    item('타율 · AVG',r3(b.AVG),b.H+'안타 / '+b.AB+'타수')+
+    item('출루 + 장타 · OPS',r3(b.OPS),b.PA+'타석의 기록')+
+    item('탈삼진 · K',p.K+'<small>개</small>',p.G+'경기 · '+ipText(p.OUT)+'이닝')+
+    item('누적 투구수',p.P+'<small>구</small>',games.length+'경기 기준')+'</div>';
+}
 function renderLog(){
   syncSelects();
   setTimeout(renderSidebar,0);
@@ -2654,12 +2690,13 @@ function renderLog(){
   let list=filtered(type,year,tour);
   if(q) list=list.filter(g=>((g.opp||'')+' '+(g.tour||'')+' '+(g.round||'')+' '+(g.memo||'')+' '+(g.venue||'')).toLowerCase().indexOf(q)>=0);
   $('#f-count').textContent=list.length?list.length+'경기':'';
+  renderLogOverview(list);
   const el=$('#loglist');
   if(!list.length){
     el.innerHTML='<div class="empty"><b>아직 기록된 경기가 없습니다</b>경기 입력 탭에서 첫 경기를 남겨보세요. 날짜와 상대팀만으로도 저장됩니다.</div>';
     return;
   }
-  el.innerHTML=list.map(g=>{
+  el.innerHTML=list.map((g,idx)=>{
     const res=(g.ts!=null&&g.os!=null)?(g.ts>g.os?'win':(g.ts<g.os?'loss':'')):'';
     const resTxt=(g.ts!=null&&g.os!=null)?(g.ts>g.os?'승':(g.ts<g.os?'패':'무')):'';
     const dia=(g.pas||[]).map(pa=>{
@@ -2678,10 +2715,10 @@ function renderLog(){
             (bf.seq?'<span>'+esc(seqText(bf.seq))+'</span>':'')+'</div>';
     });
     const det=rows?'<details class="seqdet"><summary>한 구씩 보기</summary>'+rows+'</details>':'';
-    return '<article class="logcard '+res+'">'+
+    return '<article class="logcard '+res+(idx===0?' latest':'')+'">'+
       '<div class="top">'+
-        '<div><div class="dt">'+esc(g.date||'')+' · '+esc(g.type||'')+(g.tour?' · '+esc(g.tour):'')+(g.round?' '+esc(g.round):'')+'</div>'+
-        '<div class="vs">vs '+esc(g.opp||'상대 미기재')+'</div></div>'+
+        '<div><div class="dt">'+esc(g.date||'')+' · '+esc(g.type||'')+(g.tour?' · '+esc(g.tour):'')+(g.round?' '+esc(g.round):'')+(idx===0?'<span class="latest-label">최근 경기</span>':'')+'</div>'+
+        '<div class="vs"><span class="vs-prefix">vs</span>'+esc(g.opp||'상대 미기재')+'</div></div>'+
         '<div style="text-align:right">'+
           (resTxt?'<span class="chip '+(resTxt==='승'?'off':(resTxt==='패'?'red':''))+'">'+resTxt+'</span> ':'')+
           ((g.ts!=null&&g.os!=null)?'<span class="score">'+g.ts+' : '+g.os+'</span>':'')+
@@ -2720,16 +2757,18 @@ function renderStats(){
   syncSelects();
   const games=filtered($('#s-type').value,$('#s-year').value,$('#s-tour').value);
   const el=$('#statbody');
+  const opened=Array.from(el.querySelectorAll('details[open][data-detail]')).map(x=>x.dataset.detail);
   if(!games.length){ el.innerHTML='<div class="empty"><b>집계할 경기가 없습니다</b>경기를 저장하면 타율·방어율·득점권 타율이 이 자리에 자동으로 채워집니다.</div>'; return; }
   const b=battingAgg(games), p=pitchAgg(games), f=fieldAgg(games), t=teamAgg(games);
   let h='';
 
   h+='<div class="card sec-card bat"><div class="sechead"><span class="ttl">타격</span><span class="en">Batting</span>'+
-     '<span class="meta">'+b.G+'경기 · '+b.PA+'타석 · '+b.P+'구</span></div><div class="statgrid">'+
+     '<span class="meta">'+b.G+'경기 · '+b.PA+'타석 · '+b.P+'구</span></div><div class="statgrid key-stats">'+
     statCell('AVG 타율', r3(b.AVG), b.H+'안타 / '+b.AB+'타수', true)+
     statCell('OBP 출루율', r3(b.OBP), '볼넷 '+b.BB+' 사구 '+b.HBP)+
     statCell('SLG 장타율', r3(b.SLG), '루타 '+b.TB)+
     statCell('OPS', r3(b.OPS), '출루+장타', true)+
+    '</div><details class="detail-panel" data-detail="batting"><summary><span>타격 자세히 보기</span><small>상황별 성적 · 타구 방향 · 카운트</small></summary><div class="detail-content"><div class="statgrid">'+
     statCell('득점권 타율', r3(b.RISP), b.rispH+' / '+b.rispAB+'타수 · '+b.rispRBI+'타점', true)+
     statCell('P/PA 타석당 투구수', r2(b.PPA), '총 '+b.P+'구', true)+
     statCell('R 득점', b.R, '')+
@@ -2784,24 +2823,25 @@ function renderStats(){
   const dist={}; games.forEach(g=>(g.pas||[]).forEach(pa=>{ dist[pa.res]=(dist[pa.res]||0)+1; }));
   const dk=Object.keys(dist).sort((a,b)=>dist[b]-dist[a]);
   if(dk.length) h+='<h3 class="sec">타석 결과 분포</h3>'+barChart(dk.map(k=>SHORT[k]||k), dk.map(k=>dist[k]), '#16263F');
-  h+='</div>';
+  h+='</div></details></div>';
 
   if(p.G){
     h+='<div class="card sec-card pit"><div class="sechead"><span class="ttl">투구</span><span class="en">Pitching</span>'+
-      '<span class="meta">'+p.G+'경기 · '+ipText(p.OUT)+'이닝 · 상대 '+p.BF+'타자 · '+p.P+'구</span></div><div class="statgrid">'+
+      '<span class="meta">'+p.G+'경기 · '+ipText(p.OUT)+'이닝 · 상대 '+p.BF+'타자 · '+p.P+'구</span></div><div class="statgrid key-stats">'+
       statCell('ERA 방어율', r2(p.ERA), p.ER+'자책 / '+ipText(p.OUT)+'이닝', true)+
-      statCell('WHIP', r2(p.WHIP), '피안타 '+p.H+' 사사구 '+(p.BB+p.HBP))+
+      statCell('WHIP', r2(p.WHIP), '피안타 '+p.H+' 볼넷 '+p.BB)+
       statCell('스트라이크 비율', pct(p.STRP), p.STRK+' / '+p.P+'구', true)+
       statCell('초구 스트라이크', pct(p.FPSP), p.FPS+' / '+p.BF+'타자', true)+
+      '</div><details class="detail-panel" data-detail="pitching"><summary><span>투구 자세히 보기</span><small>제구 · 효율 · 경기별 변화</small></summary><div class="detail-content"><div class="statgrid">'+
       statCell('K/9', r2(p.K9), '총 '+p.K+'삼진')+
-      statCell('BB/9', r2(p.BB9), '사사구 '+(p.BB+p.HBP))+
+      statCell('BB/9', r2(p.BB9), '볼넷 '+p.BB)+
       statCell('K/BB', p.KBB===Infinity?'∞':r2(p.KBB), '')+
       statCell('헛스윙 유도율', pct(p.WHF), p.WHIFF+' / '+p.SWING+'스윙')+
       statCell('타자당 투구수', r2(p.PBF), '적을수록 효율적')+
       statCell('이닝당 투구수', r1(p.PIP), '')+
       statCell('경기당 투구수', r1(p.PG), '')+
       statCell('삼진율', pct(p.KRT), '타자 기준')+
-      statCell('사사구율', pct(p.BBRT), '타자 기준')+
+      statCell('사사구율', pct(p.BBRTHBP), '타자 기준')+
       statCell('승-패-세이브', p.W+'-'+p.L+'-'+p.SV, '')+
     '</div>';
 
@@ -2829,7 +2869,7 @@ function renderStats(){
         {name:'스트라이크% (×100)', data:pg.map(function(g){ const x=pitchAgg([g]); return x.STRP!=null?x.STRP*100:null; }), color:'#C1332B'}
       ], {labels:pg.map(g=>(g.date||'').slice(5).replace('-','/')), fmt:v=>Math.round(v), min:0});
     }
-    h+='</div>';
+    h+='</div></details></div>';
   }
 
   if(f.PO+f.A+f.E>0 || Object.keys(f.byPos).length){
@@ -2839,6 +2879,7 @@ function renderStats(){
       statCell('수비 이닝', r1(f.INN), '')+
       statCell('실책', f.E, '')+
     '</div>';
+    h+='<details class="detail-panel" data-detail="fielding"><summary><span>포지션별 기록 보기</span><small>경기 수 · 이닝 · 수비 기회</small></summary><div class="detail-content">';
     const pk=Object.keys(f.byPos);
     if(pk.length){
       h+='<h3 class="sec">포지션별</h3><div class="scrollhint">← 좌우로 밀어서 보기</div><div class="scroll"><table><thead><tr><th>포지션</th><th>경기</th><th>이닝</th><th>자살</th><th>보살</th><th>실책</th><th>수비율</th></tr></thead><tbody>'+
@@ -2846,19 +2887,19 @@ function renderStats(){
           return '<tr><td>'+esc(k)+'</td><td class="num">'+o.G+'</td><td class="num">'+r1(o.INN)+'</td><td class="num">'+o.PO+'</td><td class="num">'+o.A+'</td><td class="num">'+o.E+'</td><td class="num">'+r3(ch?(o.PO+o.A)/ch:null)+'</td></tr>';
         }).join('')+'</tbody></table></div>';
     }
-    h+='</div>';
+    h+='</div></details></div>';
   }
 
   /* ===== 심화 지표 ===== */
   const ab=advBat(games), ap=advPitch(games);
   if(b.PA>=8 || ap.BF>=8){
-    h+='<div class="card sec-card adv"><div class="sechead"><span class="ttl">심화 지표</span><span class="en">Advanced</span>'+
+    h+='<details class="breakdown advanced" data-detail="advanced"><summary>조금 더 깊이 <small>투구 흐름과 타석 접근 방식</small></summary><div class="breakdown-body"><div class="card sec-card adv"><div class="sechead"><span class="ttl">심화 지표</span><span class="en">Advanced</span>'+
        '<span class="meta">표본이 쌓일수록 정확해집니다</span></div>';
 
     if(ap.BF>=8){
       const kbb = (p.KRT!=null && p.BBRT!=null) ? p.KRT-p.BBRT : null;
       h+='<h3 class="sec">투구 <span class="q">— 표본이 적어도 비교적 안정적인 지표들</span></h3><div class="statgrid">'+
-        statCell('K−BB%', pct(kbb), '삼진율 '+pct(p.KRT)+' − 사사구율 '+pct(p.BBRT), true)+
+        statCell('K−BB%', pct(kbb), '삼진율 '+pct(p.KRT)+' − 볼넷율 '+pct(p.BBRT), true)+
         statCell('결정구 성공률', pct(ap.putAway), '2스트라이크 '+ap.twoStrikeBF+'타자 중 '+ap.twoStrikeK+'삼진', true)+
         statCell('2S 놓침', pct(ap.escaped), '2스트라이크 잡고 출루 허용 '+ap.twoStrikeEsc)+
         statCell('3구 이내 처리', pct(ap.quickRate), ap.quick+' / '+ap.BF+'타자')+
@@ -2896,9 +2937,9 @@ function renderStats(){
     }
 
     h+='<p class="tiny muted" style="margin:16px 0 0;line-height:1.7">'+
-       '이 지표들은 <b>비율</b>이라 몇 경기만으로도 방향은 읽히지만, 20타석·50타자 정도는 쌓여야 믿을 만해집니다. '+
-       '지금은 참고 수준으로 보시고 <b>추세</b>를 보세요.</p>';
-    h+='</div>';
+       '표본이 적을 때는 한두 경기만으로 비율이 크게 달라집니다. '+
+       '절대적인 평가보다 경기 내용과 함께 <b>변화의 흐름</b>을 살펴보세요.</p>';
+    h+='</div></div></details>';
   }
 
   if(t.G){
@@ -2912,6 +2953,7 @@ function renderStats(){
     '</div></div>';
   }
   el.innerHTML=h;
+  el.querySelectorAll('details[data-detail]').forEach(d=>{ d.open=opened.includes(d.dataset.detail); });
 }
 ['#s-type','#s-year','#s-tour'].forEach(s=>$(s).addEventListener('change',renderStats));
 
@@ -3026,17 +3068,32 @@ function renderSplits(){
 ['#sp-by','#sp-type','#sp-year'].forEach(s=>$(s).addEventListener('change',renderSplits));
 
 /* ================= 05 훈련 ================= */
+let TRAIN_EDIT_ID=null;
+function resetTrainForm(){
+  TRAIN_EDIT_ID=null;
+  ['#t-hours','#t-pitch','#t-memo','#t-vid','#t-album','#t-photo'].forEach(s=>{ if($(s)) $(s).value=''; });
+  if($('#t-date')) $('#t-date').value=today();
+  if($('#t-type')) $('#t-type').value='팀훈련';
+  if($('#save-train')) $('#save-train').textContent='훈련 저장';
+  if($('#cancel-train')) $('#cancel-train').hidden=true;
+  if($('#train-edit-note')) $('#train-edit-note').textContent='';
+}
 if($('#save-train')){
   $('#save-train').addEventListener('click',()=>{
-    const t={id:uid(), date:$('#t-date').value||today(), type:$('#t-type').value,
+    if(!ADMIN) return;
+    const editing=TRAIN_EDIT_ID!==null;
+    const i=editing?DB.trainings.findIndex(t=>t.id===TRAIN_EDIT_ID):-1;
+    if(editing && i<0){ alert('수정하던 훈련 기록이 더 이상 없습니다. 목록을 확인한 뒤 다시 입력해 주세요.'); resetTrainForm(); renderTrain(); return; }
+    const t={id:TRAIN_EDIT_ID||uid(), date:$('#t-date').value||today(), type:$('#t-type').value,
              hours:num($('#t-hours').value), pitch:iv($('#t-pitch').value), memo:$('#t-memo').value,
              vid:$('#t-vid').value.trim(), album:$('#t-album').value.trim(), photo:$('#t-photo').value.trim()};
-    DB.trainings.push(t);
+    if(editing) DB.trainings[i]=t; else DB.trainings.push(t);
     DB.trainings.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
-    persist(); toast('훈련을 저장했습니다');
-    ['#t-hours','#t-pitch','#t-memo','#t-vid','#t-album','#t-photo'].forEach(s=>$(s).value='');
+    persist(); toast(editing?'훈련을 수정했습니다':'훈련을 저장했습니다');
+    resetTrainForm();
     renderTrain();
   });
+  $('#cancel-train').addEventListener('click',()=>{ resetTrainForm(); toast('수정을 취소했습니다. 기존 기록은 그대로입니다'); });
 }
 function renderTrain(){
   const el=$('#trainbody');
@@ -3097,6 +3154,7 @@ function renderTrainList(){
   }).join('');
 }
 $('#trainbody').addEventListener('click',ev=>{
+  if(!ADMIN) return;
   const e=ev.target.closest('[data-edit-t]');
   if(e){
     ev.preventDefault();
@@ -3104,15 +3162,17 @@ $('#trainbody').addEventListener('click',ev=>{
     $('#t-date').value=t.date||today(); $('#t-type').value=t.type||'팀훈련';
     $('#t-hours').value=t.hours||''; $('#t-pitch').value=t.pitch||''; $('#t-memo').value=t.memo||'';
     $('#t-vid').value=t.vid||''; $('#t-album').value=t.album||''; $('#t-photo').value=t.photo||'';
-    DB.trainings=DB.trainings.filter(x=>x.id!==t.id);
-    persist(); renderTrain();
+    TRAIN_EDIT_ID=t.id;
+    $('#save-train').textContent='수정 저장';
+    $('#cancel-train').hidden=false;
+    $('#train-edit-note').textContent='훈련 수정 중 · 저장하기 전까지 기존 기록은 바뀌지 않습니다.';
     window.scrollTo({top:0,behavior:'smooth'});
-    toast('위 입력창으로 불러왔습니다. 고친 뒤 다시 저장하세요');
+    toast('수정할 기록을 불러왔습니다');
     return;
   }
   const b=ev.target.closest('[data-del-t]'); if(!b) return;
   ev.preventDefault();
-  if(confirm('이 훈련 기록을 삭제할까요?')){ DB.deleted.push(b.dataset.delT); DB.trainings=DB.trainings.filter(x=>x.id!==b.dataset.delT); persist(); renderTrain(); toast('삭제했습니다'); }
+  if(confirm('이 훈련 기록을 삭제할까요?')){ DB.deleted.push(b.dataset.delT); DB.trainings=DB.trainings.filter(x=>x.id!==b.dataset.delT); if(TRAIN_EDIT_ID===b.dataset.delT) resetTrainForm(); persist(); renderTrain(); toast('삭제했습니다'); }
 });
 
 /* 성장 기록: 화면에서는 제거했으나 기존 데이터는 그대로 보존됩니다 */
@@ -3178,29 +3238,57 @@ function mdRender(src){
 }
 
 
+function safeContentUrl(value, image){
+  const raw=String(value||'').trim();
+  if(!raw) return true;
+  // URL parsers ignore embedded tabs/newlines in schemes; normalize before checking.
+  const compact=raw.replace(/[\u0000-\u0020\u007f]/g,'');
+  if(image && /^data:image\/(?:png|jpe?g|gif|webp|avif);base64,[a-z0-9+/=]+$/i.test(compact)) return true;
+  try{
+    const u=new URL(compact,'https://archive.invalid/');
+    return ['https:','http:'].includes(u.protocol) || (!image && ['mailto:','tel:'].includes(u.protocol));
+  }catch(e){ return false; }
+}
+function youtubeEmbedUrl(value){
+  try{
+    const u=new URL(String(value||''));
+    const hosts=['youtube.com','www.youtube.com','youtube-nocookie.com','www.youtube-nocookie.com'];
+    if(u.protocol!=='https:' || u.username || u.password || u.port || !hosts.includes(u.hostname)) return '';
+    return /^\/embed\/[A-Za-z0-9_-]{6,}$/.test(u.pathname)?u.href:'';
+  }catch(e){ return ''; }
+}
 function sanitizeHTML(html){
-  const box=document.createElement('div');
-  box.innerHTML=String(html||'');
-  box.querySelectorAll('script,iframe[src^="javascript"],object,embed,form,meta,link,base').forEach(function(n){
-    if(n.tagName==='IFRAME'){ return; }
-    n.remove();
-  });
+  // Parse inertly: pasted resources and iframe srcdoc must never run during cleanup.
+  const template=document.createElement('template');
+  template.innerHTML=String(html||'');
+  const box=template.content;
+  box.querySelectorAll('script,object,embed,form,meta,link,base,template,foreignObject,animate,animateMotion,animateTransform,set').forEach(function(n){ n.remove(); });
   box.querySelectorAll('*').forEach(function(n){
     Array.from(n.attributes||[]).forEach(function(a){
-      const nm=a.name.toLowerCase(), v=String(a.value||'').trim().toLowerCase();
-      if(nm.indexOf('on')===0) n.removeAttribute(a.name);
-      if((nm==='href'||nm==='src'||nm==='xlink:href') && v.indexOf('javascript:')===0) n.removeAttribute(a.name);
+      const nm=a.name.toLowerCase();
+      if(nm.indexOf('on')===0 || nm==='srcdoc' || nm==='srcset' || nm==='formaction') n.removeAttribute(a.name);
+      if((nm==='href'||nm==='src'||nm==='xlink:href') && !safeContentUrl(a.value,nm==='src')) n.removeAttribute(a.name);
     });
-    if(n.tagName==='A'){ n.setAttribute('target','_blank'); n.setAttribute('rel','noopener'); }
-    if(n.tagName==='IFRAME'){
-      const src=String(n.getAttribute('src')||'');
-      if(!/^https:\/\/(www\.)?(youtube\.com|youtube-nocookie\.com)\//.test(src)) n.remove();
+    if(n.localName==='a'){ n.setAttribute('target','_blank'); n.setAttribute('rel','noopener noreferrer'); }
+    if(n.localName==='iframe'){
+      const src=youtubeEmbedUrl(n.getAttribute('src'));
+      if(!src){ n.remove(); return; }
+      // Keep presentation only; no caller-supplied browsing context or execution options.
+      Array.from(n.attributes).forEach(function(a){
+        if(!['title','width','height','class','style'].includes(a.name.toLowerCase())) n.removeAttribute(a.name);
+      });
+      n.setAttribute('src',src);
+      n.setAttribute('sandbox','allow-scripts allow-same-origin allow-presentation');
+      n.setAttribute('allow','accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen');
+      n.setAttribute('allowfullscreen','');
+      n.setAttribute('loading','lazy');
+      n.setAttribute('referrerpolicy','strict-origin-when-cross-origin');
     }
   });
-  return box.innerHTML;
+  return template.innerHTML;
 }
 function renderBody(p){
-  return (p && p.fmt==='html') ? sanitizeHTML(p.body) : mdRender(p?p.body:'');
+  return sanitizeHTML((p && p.fmt==='html') ? p.body : mdRender(p?p.body:''));
 }
 function stripTags(html){
   const box=document.createElement('div');
@@ -3287,7 +3375,7 @@ function renderSidebar(){
   const gs=DB.games||[];
   if(gs.length){
     const b=battingAgg(gs), p=pitchAgg(gs);
-    h+='<div class="sidebox"><div class="sh"><span class="t">한눈에</span><span class="e">At a glance</span>'+
+    h+='<div class="sidebox"><div class="sh"><span class="t">전체 기록</span><span class="e">All games</span>'+
        '<a class="more" data-go="stats">통계 →</a></div>';
     if(b.PA){
       h+='<div class="sideline"><div class="lb">타격 <span>Batting</span></div><div class="sidestat3">'+
@@ -3306,18 +3394,14 @@ function renderSidebar(){
     h+='</div>';
   }
 
-  /* 1-2. 등판 휴식 */
+  /* 1-2. 설정한 투구수 기준에 따른 참고용 휴식 안내 */
   const rs=restStatus();
   if(rs){
-    h+='<div class="sidebox"><div class="sh"><span class="t">등판 상태</span><span class="e">Rest</span></div>'+
+    h+='<div class="sidebox"><div class="sh"><span class="t">휴식 체크</span><span class="e">Reference</span></div>'+
        '<div class="restbox">'+
-         '<div class="big'+(rs.ok?'':' wait')+'">'+(rs.ok?'등판 가능':md(rs.ready)+'부터 등판 가능')+'</div>'+
-         '<div class="sm">최근 등판 '+esc(rs.last.date||'')+' · '+rs.last.pitches+'구 · 권장 휴식 '+rs.need+'일'+
-           (rs.need>0?' ('+md(rs.restFrom)+(rs.need>1?'~'+md(rs.restTo):'')+')':'')+'</div>'+
-         '<div class="sm">'+(rs.ok?'마지막 등판 후 '+rs.gap+'일 지남':'등판 가능일까지 '+rs.left+'일')+'</div>'+
-         ((!rs.ok && rs.kbsa!==rs.ready)?
-           '<div class="kbsa">'+(rs.kbsaOk?'협회 규정상으로는 <b>오늘 등판 가능</b>':'협회 규정상으로는 <b>'+md(rs.kbsa)+'부터</b> 가능')+
-           '<span>권고 기준보다 '+daysBetween(rs.kbsa,rs.ready)+'일 빠름 · 이틀 연속 등판 금지 기준</span></div>':'')+
+         '<div class="big'+(rs.ok?'':' wait')+'">'+(rs.ok?'설정상 휴식 기간 경과':md(rs.ready)+'부터 · 설정 기준')+'</div>'+
+         '<div class="sm">최근 투구일 '+esc(rs.last.date||'')+'<br>'+rs.last.games+'경기 합산 '+rs.last.pitches+'구 · 설정 휴식 '+rs.need+'일</div>'+
+         '<div class="reference-note">입력한 투구수와 이 기기의 설정으로 계산합니다. 실제 등판 여부는 대회 규정·컨디션·지도자 판단을 우선해 주세요.</div>'+
        '</div></div>';
   }
 
@@ -3453,6 +3537,25 @@ function wirePosts(){
 }
 
 /* ================= 07 데이터 ================= */
+function mergeArchive(current,incoming){
+  // Explicit backup/public-file merge: keep local edits, but honor deletions from either side.
+  // Build a new object first so a rejected file cannot leave a half-completed merge behind.
+  const result=Object.assign({},current);
+  const deleted=new Set([...(current.deleted||[]),...(incoming.deleted||[])]);
+  result.deleted=Array.from(deleted);
+  ['games','trainings','growth','posts'].forEach(function(key){
+    const records=new Map();
+    const local=Array.isArray(current[key])?current[key]:[];
+    const added=Array.isArray(incoming[key])?incoming[key]:[];
+    local.concat(added).forEach(function(record){
+      if(!record || typeof record!=='object' || typeof record.id!=='string' || !record.id) throw new Error('기록 ID 형식이 다릅니다');
+      if(!deleted.has(record.id) && !records.has(record.id)) records.set(record.id,record);
+    });
+    result[key]=Array.from(records.values());
+  });
+  if(!result.player || !result.player.name) result.player=incoming.player||result.player;
+  return normalize(result);
+}
 function download(name,text,mime){
   const blob=new Blob([text],{type:mime||'application/json;charset=utf-8'});
   const url=URL.createObjectURL(blob), a=document.createElement('a');
@@ -3484,16 +3587,10 @@ if($('#exp-pub')){
         const keep=DB.games.filter(g=>!pids.has(g.id)).length;
         const msg='공개본에서 새로 가져올 경기: '+add+'건\n'+
                   '이 기기에만 있는 경기: '+keep+'건\n\n'+
-                  '[확인] 합치기 — 양쪽을 모두 보존합니다 (권장)\n'+
+                  '[확인] 합치기 — 칼럼을 포함해 새 기록을 합칩니다 (삭제 기록 제외)\n'+
                   '[취소] 공개본으로 전부 교체 — 이 기기에만 있는 기록은 사라집니다';
         if(confirm(msg)){
-          (d.games||[]).forEach(g=>{ if(!ids.has(g.id)) DB.games.push(g); });
-          const ti=new Set(DB.trainings.map(x=>x.id));
-          (d.trainings||[]).forEach(x=>{ if(!ti.has(x.id)) DB.trainings.push(x); });
-          const wi=new Set(DB.growth.map(x=>x.id));
-          (d.growth||[]).forEach(x=>{ if(!wi.has(x.id)) DB.growth.push(x); });
-          if(!DB.player || !DB.player.name) DB.player=d.player||DB.player;
-          DB=normalize(DB);
+          DB=mergeArchive(DB,d);
         }else{
           if(keep && !confirm('이 기기에만 있는 '+keep+'건이 삭제됩니다. 정말 교체할까요?')){
             btn.disabled=false; btn.textContent='발행본 가져와 합치기'; return;
@@ -3502,7 +3599,9 @@ if($('#exp-pub')){
         }
         DB.games.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
         DB.trainings.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
-        persist(); applyPlayer(); refreshDatalists(); renderLog(); renderData();
+        DB.growth.sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+        DB.posts.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+        persist(); applyPlayer(); refreshDatalists(); renderLog(); renderData(); renderPosts(); renderSidebar();
         toast('가져왔습니다 · 경기 '+DB.games.length+'건');
       })
       .catch(e=>{ alert('가져오지 못했습니다.\n\n'+e.message+'\n\n아직 data.json을 올리지 않으셨거나, 인터넷 연결을 확인해 보세요.'); })
@@ -3520,19 +3619,15 @@ if($('#exp-pub')){
       try{
         const d=JSON.parse(rd.result);
         if(!d||!Array.isArray(d.games)) throw new Error('형식이 다릅니다');
-        const has=DB.games.length||DB.trainings.length||DB.growth.length;
-        const replace=!has||confirm('기존 기록이 있습니다.\n\n[확인] 불러온 파일로 전부 바꾸기\n[취소] 기존 기록에 합치기');
+        const has=DB.games.length||DB.trainings.length||DB.growth.length||DB.posts.length||DB.deleted.length;
+        const replace=!has||confirm('기존 기록이 있습니다.\n\n[확인] 불러온 파일로 전부 바꾸기\n[취소] 칼럼을 포함해 기존 기록에 합치기 (삭제 기록 제외)');
         if(replace){ DB=normalize(d); }
-        else{
-          const gi=new Set(DB.games.map(x=>x.id)); (d.games||[]).forEach(x=>{ if(!gi.has(x.id)) DB.games.push(x); });
-          const ti=new Set(DB.trainings.map(x=>x.id)); (d.trainings||[]).forEach(x=>{ if(!ti.has(x.id)) DB.trainings.push(x); });
-          const wi=new Set(DB.growth.map(x=>x.id)); (d.growth||[]).forEach(x=>{ if(!wi.has(x.id)) DB.growth.push(x); });
-          DB=normalize(DB);
-        }
+        else{ DB=mergeArchive(DB,d); }
         DB.games.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
         DB.trainings.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
         DB.growth.sort((a,b)=>(a.date||'').localeCompare(b.date||''));
-        persist(); applyPlayer(); refreshDatalists(); renderLog(); renderData();
+        DB.posts.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+        persist(); applyPlayer(); refreshDatalists(); renderLog(); renderData(); renderPosts(); renderSidebar();
         toast('불러왔습니다 · 경기 '+DB.games.length+'건');
       }catch(e){ alert('불러오지 못했습니다. 이 기록장에서 내려받은 JSON 파일인지 확인해 주세요.\n\n('+e.message+')'); }
       ev.target.value='';
@@ -4126,3 +4221,4 @@ document.addEventListener('visibilitychange',function(){
 </script>
 </body>
 </html>
+
