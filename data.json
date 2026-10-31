@@ -7,6 +7,99 @@
   },
   "games": [
     {
+      "id": "mvvreu7z2i2vi",
+      "date": "2026-10-31",
+      "type": "정식",
+      "opp": "당진시",
+      "venue": "유천초",
+      "tour": "26박찬호배",
+      "round": "80강",
+      "sb": 0,
+      "cs": 0,
+      "dec": "",
+      "role": "",
+      "vid": "",
+      "vid2": "",
+      "album": "",
+      "photo": "",
+      "memo": "",
+      "pas": [
+        {
+          "seq": "X",
+          "res": "2B",
+          "run": "risp",
+          "rbi": 2,
+          "scored": 1,
+          "dir": "RC",
+          "qual": "LD"
+        },
+        {
+          "seq": "X",
+          "res": "2B",
+          "run": "risp",
+          "rbi": 2,
+          "scored": 0,
+          "dir": "LC",
+          "qual": "LD"
+        },
+        {
+          "seq": "FX",
+          "res": "GO",
+          "run": "none",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "LC",
+          "qual": "GB"
+        }
+      ],
+      "bfs": [
+        {
+          "seq": "FSW",
+          "res": "SO_S",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "BWSW",
+          "res": "SO_S",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "WBFBBW",
+          "res": "SO_S",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        }
+      ],
+      "fds": [
+        {
+          "pos": "중견수",
+          "inn": 1,
+          "po": 0,
+          "a": 0,
+          "e": 0
+        },
+        {
+          "pos": "유격수",
+          "inn": 1,
+          "po": 0,
+          "a": 0,
+          "e": 0
+        },
+        {
+          "pos": "포수",
+          "inn": 1,
+          "po": 0,
+          "a": 0,
+          "e": 0
+        }
+      ]
+    },
+    {
       "id": "mvknolb04qoei",
       "date": "2026-10-23",
       "type": "정식",
