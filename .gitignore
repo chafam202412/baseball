@@ -4,3 +4,5 @@
 qa-preview/
 qa-artifacts/
 .openai/
+# Local source evidence (PDFs, extracts, research notes)
+research/

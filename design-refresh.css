@@ -253,3 +253,107 @@ button.btn.sm{min-height:40px}
   .site-header,#nav,.filterbar,button,.links{display:none!important}
   main{padding:0;max-width:none}.card,.logcard{box-shadow:none;break-inside:avoid}
 }
+
+/* Verified draft reference: keep the journal's established visual language. */
+.kd .draft-jump{font-size:13px;line-height:2}
+.kd .draft-jump a{display:inline-block;min-height:36px;padding:4px 2px}
+.kd .draft-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:22px 0}
+.kd .draft-facts>div{background:var(--blue-soft);border:1px solid var(--rule);border-radius:9px;padding:22px 18px}
+.kd .draft-facts strong{display:block;font:600 30px/1.4 var(--mono);color:var(--blue)}
+.kd .draft-facts strong small{display:inline;font:400 13px var(--sans);margin-left:5px}
+.kd .draft-facts span{font-size:12px;color:var(--ink-soft)}
+.kd .audited-board{table-layout:fixed;min-width:940px!important}
+.kd .audited-board th:first-child{width:80px}
+.kd .audited-board th.team{vertical-align:middle;position:static}
+.kd .audited-board .pick,.kd .audited-board.slotview .pick{grid-template-columns:45px minmax(0,1fr);gap:7px;padding:6px 2px}
+.kd .audited-board .rd{height:auto;line-height:1.6;padding:3px 0}
+.kd .audited-board .rd small{display:block;font-size:8px;font-weight:400;color:inherit;white-space:nowrap}
+.kd .audited-board .sc{display:block;margin-top:4px}
+.kd .audited-board .sc a{padding:3px 5px;font-size:13px}
+.kd .audited-board .pick.x{font-size:11px;color:var(--ink-soft)}
+.kd table small{display:block;font-size:11px;font-weight:400;color:var(--ink-soft);line-height:1.7;margin-top:3px}
+.kd table.route{min-width:1100px}
+.kd .route td:last-child{text-align:left;min-width:210px}
+.kd .controls button{min-height:42px}
+.kd .controls label{display:flex;align-items:center;gap:8px;margin:0;font-size:12px;flex-wrap:wrap}
+.kd .controls select{max-width:270px;min-height:42px}
+.kd .srow{grid-template-columns:90px minmax(0,1fr) 48px}
+.kd .draft-sources{padding-left:23px;font-size:13px;line-height:1.9}
+.kd .draft-sources li{margin-bottom:10px;overflow-wrap:anywhere}
+.kd .draft-sources li span{display:block;color:var(--ink-soft);font-size:12px}
+.kd .draft-method{border:1px solid var(--rule);border-radius:8px;padding:16px;margin-top:22px;color:var(--ink-soft)}
+.kd .draft-method summary{cursor:pointer;font-weight:700;min-height:30px}
+.kd .draft-method ul{padding-left:20px;font-size:13px}
+.kd [id^="draft-"]{scroll-margin-top:20px}
+@media(max-width:600px){
+  .kd .draft-facts{gap:7px}
+  .kd .draft-facts>div{padding:15px 10px}
+  .kd .draft-facts strong{font-size:24px}
+  .kd .draft-facts span{font-size:10px}
+  .kd .draft-facts strong small{font-size:10px;margin-left:2px}
+  .kd .controls{gap:9px}
+  .kd .controls .seg{display:flex;flex-wrap:nowrap}
+  .kd .controls button{padding:7px 11px;font-size:12px}
+  .kd .controls label{width:100%}
+  .kd .controls select{max-width:100%;width:100%}
+  .kd .srow{grid-template-columns:78px minmax(0,1fr) 42px;gap:7px}
+  .kd .sname{font-size:12px}
+}
+
+/* Column reading: presentation only. Stored article HTML and diagrams stay intact. */
+#p-posts .postcard.reading{max-width:940px;border-left-width:1px;padding:36px 40px}
+#p-posts .postcard.reading>.postmeta{padding-bottom:6px}
+#p-posts .posttitle.big{font-family:var(--sans);font-size:30px;font-weight:800;line-height:1.5;color:#142c43}
+#p-posts .postbody{max-width:800px;margin:28px auto 0;padding-top:28px;color:#24384b;font-family:var(--sans);font-size:16px;line-height:1.9}
+#p-posts .postbody :is(#jaea-plyo-20261024,.ks,.baseball-bowl){
+  --ink:#24384b;--navy:#142c43;--blue:#245b82;--muted:#516476;--gray:#516476;--sub:#516476;--faint:#627487;
+  --line:#dce5ed;--ice:#f0f5f9;--tint:#f5f8fa;--soft:#f5f8fa;
+  max-width:100%;margin:0;background:#fff;color:#24384b;font-family:var(--sans);font-size:16px;line-height:1.9;
+  word-break:keep-all;overflow-wrap:anywhere;text-align:left;
+}
+#p-posts .postbody :is(h1,h2,h3,h4){font-family:var(--sans)!important;color:#142c43!important;letter-spacing:-.035em!important;line-height:1.5!important}
+#p-posts .postbody h1{font-size:28px!important;font-weight:800!important}
+#p-posts .postbody h2{font-size:24px!important;font-weight:800!important;margin:34px 0 16px!important}
+#p-posts .postbody h3{font-size:20px!important;font-weight:750!important;margin:28px 0 13px!important}
+#p-posts .postbody h4{font-size:17px!important;margin:24px 0 12px!important}
+#p-posts .postbody p{line-height:1.9;margin:0 0 16px}
+#p-posts .postbody :is(strong,b){font-weight:700}
+#p-posts .postbody :is(.jp-hero,.jp-quote,.philosophy){background:#f0f5f9!important;color:#142c43!important;border:1px solid #dce5ed;border-radius:10px;box-shadow:none}
+#p-posts .postbody :is(.jp-hero,.jp-quote,.philosophy) :is(p,span,strong,b){color:#24384b!important}
+#p-posts .postbody .jp-hero{padding:28px 30px!important}
+#p-posts .postbody .jp-hero:after{display:none}
+#p-posts .postbody .jp-kicker{color:#516476!important;letter-spacing:.07em;margin-bottom:16px}
+#p-posts .postbody .jp-subtitle{font-size:17px;line-height:1.9}
+#p-posts .postbody .jp-wrap{padding:0!important}
+#p-posts .postbody .jp-lead{font-size:18px;padding:26px 0 14px}
+#p-posts .postbody .jp-section{padding-top:16px}
+#p-posts .postbody :is(.jp-card,.jp-source,.jp-torque,.jp-audit,.pillar,.exercise,figure){border-color:#dce5ed;border-radius:10px;box-shadow:none}
+#p-posts .postbody :is(.jp-card,.pillar) h3{margin-top:0!important;font-size:18px!important}
+#p-posts .postbody :is(.jp-note,.lead,.unpack,.note,.caution,.point,.closing){border-radius:8px;line-height:1.85}
+#p-posts .postbody :is(.jp-small,.jp-detail,.jp-card p,.pillar p,.seq .d,.cue){font-size:14px;line-height:1.85}
+#p-posts .postbody :is(.src,.source,.jp-foot,figcaption){color:#516476;font-size:13px;line-height:1.8}
+#p-posts .postbody :is(.term,.jp-url){white-space:normal;overflow-wrap:anywhere}
+#p-posts .postbody :is(.jp-tablewrap,.tw){max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+#p-posts .postbody table{display:block;width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;border-collapse:collapse;font-size:14px;line-height:1.8;margin:20px 0}
+#p-posts .postbody :is(th,td){padding:13px 14px!important;vertical-align:top;text-align:left;border-color:#dce5ed;white-space:normal;min-width:78px}
+#p-posts .postbody th{background:#f0f5f9!important;color:#24384b!important;font-size:13px!important;letter-spacing:0!important}
+#p-posts .postbody :is(img,svg){max-width:100%;height:auto}
+#p-posts .postbody :is(summary,.jp-linkrow a){min-height:44px}
+#p-posts .postbody :is(.exercise-title,.jp-meta){flex-wrap:wrap}
+#p-posts .postbody .jp-stat{color:#142c43}
+@media(max-width:640px){
+  #p-posts .postcard.reading{padding:24px 18px}
+  #p-posts .posttitle.big{font-size:24px;line-height:1.55}
+  #p-posts .postbody{margin-top:22px;padding-top:22px;font-size:16px}
+  #p-posts .postbody :is(#jaea-plyo-20261024,.ks,.baseball-bowl){font-size:16px;line-height:1.9}
+  #p-posts .postbody h1{font-size:24px!important}
+  #p-posts .postbody h2{font-size:21px!important;margin-top:30px!important}
+  #p-posts .postbody h3{font-size:18px!important}
+  #p-posts .postbody .jp-hero{padding:23px 19px!important}
+  #p-posts .postbody :is(.jp-grid,.jp-grid.jp-metrics,.jp-duo,.baseball-bowl .grid){grid-template-columns:minmax(0,1fr)}
+  #p-posts .postbody .jp-metrics .jp-card:last-child{grid-column:auto}
+  #p-posts .postbody :is(.jp-card,.jp-note,.jp-source,.jp-torque,.jp-quote,.pillar,.exercise){padding:17px}
+  #p-posts .postbody .jp-barline{grid-template-columns:65px minmax(0,1fr) 40px;gap:8px}
+  #p-posts .postbody :is(th,td){padding:11px 10px!important;font-size:13px}
+  #p-posts .postbody .jp-cite{white-space:normal}
+}
