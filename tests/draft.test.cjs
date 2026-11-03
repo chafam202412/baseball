@@ -73,11 +73,17 @@ test('pathway rows match first-round identities, preserve nulls and never publis
   for(const r of data.pathways){const [year,overall]=r.key.split('-').map(Number);const p=get(year,overall);assert.equal(p.round,1);assert.equal(p.name,r.name);assert.equal('unverifiedLeads' in r,false);}
   assert.equal(data.pathways.find(r=>r.key==='2025-1').highschool,undefined);
   assert.doesNotMatch(JSON.stringify(data.pathways),/덕수고 \(우신고에서 전학\)/);
-  assert.equal(data.pathways.filter(r=>r.middle).length,49);
-  assert.equal(data.pathways.filter(r=>r.elementary||r.little).length,48);
-  assert.equal(data.pathways.find(r=>r.key==='2027-5').elementary,null);
+  assert.equal(data.pathways.filter(r=>r.middle).length,50);
+  assert.equal(data.pathways.filter(r=>r.elementary||r.little).length,49);
+  assert.equal(data.pathways.find(r=>r.key==='2027-5').elementary,'교하초');
+  assert.equal(data.pathways.find(r=>r.key==='2027-5').little,'파주리틀야구단');
   assert.equal(data.pathways.find(r=>r.key==='2027-8').elementary,null);
-  assert.equal(data.pathways.find(r=>r.key==='2027-9').middle,null);
+  assert.equal(data.pathways.find(r=>r.key==='2027-8').little,null);
+  const minRoute=data.pathways.find(r=>r.key==='2027-9');
+  assert.equal(minRoute.middle,'평택시주니어야구단');
+  assert.equal(minRoute.status,'partial');
+  assert.match(minRoute.note,/재학 중학교명과 전체 이동 이력은 확인하지 못했습니다/);
+  assert.doesNotMatch(JSON.stringify(data.pathways),/한광중|탕정중|MSG유소년야구단/);
   for(const r of data.pathways)for(const id of r.sourceIds)assert.ok(data.sources.find(s=>s.id===id));
 });
 test('slot and club board views keep the correct number of actual players for every round range',()=>{
@@ -99,5 +105,5 @@ test('data text is HTML-escaped, not executable markup',()=>{
 test('legacy route forwards to one source of truth and main journal script still parses',()=>{
   const legacy=fs.readFileSync(path.join(root,'draft-2023-2026.html'),'utf8');assert.match(legacy,/url=\.\/#draft/);assert.doesNotMatch(legacy,/const D\s*=/);
   const index=fs.readFileSync(path.join(root,'index.html'),'utf8');for(const m of index.matchAll(/<script>([\s\S]*?)<\/script>/g))assert.doesNotThrow(()=>new vm.Script(m[1]));
-  assert.match(index,/draft-data\.js\?v=20261102/);assert.match(index,/draft-page\.js\?v=20261102/);
+  assert.match(index,/draft-data\.js\?v=20261103/);assert.match(index,/draft-page\.js\?v=20261102/);
 });

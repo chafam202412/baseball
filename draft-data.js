@@ -597,6 +597,30 @@ window.BASEBALL_DRAFT_DATA = {
       "title": "윤예성 — KBSA 공개 선수 등록 이력",
       "url": "https://www.korea-baseball.com/info/player/player_view?person_no=201902002665&gubun=P",
       "category": "pathway"
+    },
+    {
+      "id": "source-81",
+      "title": "이승원 — 더게이트 인터뷰 취재: 교하초 재학·파주리틀 경력 (2026-01-28)",
+      "url": "https://v.daum.net/v/20260128170354054",
+      "category": "pathway"
+    },
+    {
+      "id": "source-82",
+      "title": "이승원 — 스포츠조선 드래프트 현장: 가족의 파주리틀·율곡중·유신고 언급 (2026-09-21)",
+      "url": "https://www.sportschosun.com/baseball/2026-09-21/202609210100144120009381",
+      "category": "pathway"
+    },
+    {
+      "id": "source-83",
+      "title": "민주홍 — 썸타임즈 본인 인터뷰, 6:27~7:16 주니어팀 경력 (2026-09-06)",
+      "url": "https://www.youtube.com/watch?v=1CCqGixDLGc&t=387s",
+      "category": "pathway"
+    },
+    {
+      "id": "source-84",
+      "title": "민주홍 — 더베이스볼팩토리: 평택시주니어야구단 투수 영상 (2022-04-01)",
+      "url": "https://www.youtube.com/watch?v=9SXfvjeZBUk",
+      "category": "pathway"
     }
   ],
   "picks": [
@@ -5047,18 +5071,20 @@ window.BASEBALL_DRAFT_DATA = {
       "key": "2027-5",
       "name": "이승원",
       "middle": "율곡중",
-      "elementary": null,
-      "little": null,
-      "status": "partial",
+      "elementary": "교하초",
+      "little": "파주리틀야구단",
+      "status": "verified",
       "sourceIds": [
         "result-2027",
         "source-24",
         "source-72",
         "source-73",
-        "source-74"
+        "source-74",
+        "source-81",
+        "source-82"
       ],
-      "evidenceType": "KBO 공식 지명 결과 + 개별 경력 출처; 더그아웃 매거진 2026년 3월호 본인 인터뷰; KBSA 공개 연도별 소속 경력",
-      "note": "확인된 단계만 표시합니다. 나머지 경력이 없다는 뜻은 아닙니다."
+      "evidenceType": "KBO 공식 지명 결과 + 개별 경력 출처; 더그아웃 매거진 2026년 3월호 본인 인터뷰; KBSA 공개 연도별 소속 경력; 더게이트 본인 인터뷰 취재(2026-01-28); 스포츠조선 드래프트 현장 가족 발언(2026-09-21)",
+      "note": "2026-11-03 추가 확인. 교하초는 인터뷰 보도의 초등 4학년 재학 학교이며, 파주리틀야구단은 야구팀 경력입니다. 교하초 야구부 소속·졸업 여부를 뜻하지 않습니다."
     },
     {
       "key": "2027-6",
@@ -5109,17 +5135,19 @@ window.BASEBALL_DRAFT_DATA = {
     {
       "key": "2027-9",
       "name": "민주홍",
-      "middle": null,
+      "middle": "평택시주니어야구단",
       "elementary": "천안남산초",
       "little": null,
       "status": "partial",
       "sourceIds": [
         "result-2027",
         "source-24",
-        "source-78"
+        "source-78",
+        "source-83",
+        "source-84"
       ],
-      "evidenceType": "KBO 공식 지명 결과 + 개별 경력 출처; KBSA 공개 연도별 소속 경력",
-      "note": "확인된 단계만 표시합니다. 나머지 경력이 없다는 뜻은 아닙니다."
+      "evidenceType": "KBO 공식 지명 결과 + 개별 경력 출처; KBSA 공개 연도별 소속 경력; 본인 인터뷰 자막(2026-09-06, 6:27~7:16); 당시 선수 영상 제목(2022-04-01)",
+      "note": "2026-11-03 추가 확인. 평택시주니어야구단은 중학 단계 야구팀 경력입니다. 본인 인터뷰 자막과 2022년 선수 영상 제목을 대조했습니다. 재학 중학교명과 전체 이동 이력은 확인하지 못했습니다."
     },
     {
       "key": "2027-10",
