@@ -7,6 +7,134 @@
   },
   "games": [
     {
+      "id": "mw1yeie1tihqh",
+      "date": "2026-11-04",
+      "type": "정식",
+      "opp": "군포시",
+      "venue": "유천초",
+      "tour": "26박찬호배",
+      "round": "32강",
+      "sb": 0,
+      "cs": 0,
+      "dec": "",
+      "role": "",
+      "vid": "",
+      "vid2": "",
+      "album": "",
+      "photo": "",
+      "memo": "",
+      "pas": [
+        {
+          "seq": "WFBFX",
+          "res": "GO",
+          "run": "none",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "LC",
+          "qual": "GB"
+        },
+        {
+          "seq": "FBX",
+          "res": "LO",
+          "run": "first",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "RC",
+          "qual": "LD"
+        },
+        {
+          "seq": "BX",
+          "res": "2B",
+          "run": "none",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "RC",
+          "qual": "LD"
+        }
+      ],
+      "bfs": [
+        {
+          "seq": "SBSBW",
+          "res": "SO_S",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "BBFFS",
+          "res": "SO_L",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "X",
+          "res": "GO",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "SWBBBW",
+          "res": "SO_S",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "BBSBB",
+          "res": "BB",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "SBFBBFFB",
+          "res": "BB",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "BSSBBW",
+          "res": "SO_S",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "BBBSB",
+          "res": "BB",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "SBSS",
+          "res": "SO_L",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        }
+      ],
+      "fds": [
+        {
+          "pos": "3루수",
+          "inn": 3,
+          "po": 0,
+          "a": 0,
+          "e": 0
+        },
+        {
+          "pos": "중견수",
+          "inn": 1,
+          "po": 0,
+          "a": 0,
+          "e": 0
+        }
+      ]
+    },
+    {
       "id": "mvxc7v9f7qg7r",
       "date": "2026-11-01",
       "type": "정식",
