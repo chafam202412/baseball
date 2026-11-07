@@ -7,6 +7,118 @@
   },
   "games": [
     {
+      "id": "mw6239j3sd5j5",
+      "date": "2026-11-07",
+      "type": "정식",
+      "opp": "미추홀구",
+      "venue": "중촌",
+      "tour": "26박찬호배",
+      "round": "8강",
+      "sb": 0,
+      "cs": 0,
+      "dec": "",
+      "role": "",
+      "vid": "",
+      "vid2": "",
+      "album": "",
+      "photo": "",
+      "memo": "",
+      "pas": [
+        {
+          "seq": "SX",
+          "res": "1B",
+          "run": "none",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "R",
+          "qual": "LD"
+        },
+        {
+          "seq": "WWFBW",
+          "res": "SO_S",
+          "run": "none",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "",
+          "qual": ""
+        }
+      ],
+      "bfs": [
+        {
+          "seq": "BFSBBW",
+          "res": "SO_S",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "SBSFBX",
+          "res": "GO",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "BBBSX",
+          "res": "HR",
+          "inn": 0,
+          "r": 1,
+          "er": 1
+        },
+        {
+          "seq": "SWBW",
+          "res": "SO_S",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "BBBB",
+          "res": "BB",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "SBX",
+          "res": "E",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "BWSW",
+          "res": "SO_S",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "BBSFBX",
+          "res": "FO",
+          "inn": 0,
+          "r": 1,
+          "er": 1
+        },
+        {
+          "seq": "BWBBB",
+          "res": "BB",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        }
+      ],
+      "fds": [
+        {
+          "pos": "3루수",
+          "inn": 1,
+          "po": 1,
+          "a": 0,
+          "e": 0
+        }
+      ]
+    },
+    {
       "id": "mw37uo1d1pq89",
       "date": "2026-11-05",
       "type": "정식",
