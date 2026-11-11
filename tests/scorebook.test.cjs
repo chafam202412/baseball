@@ -62,13 +62,31 @@ test('scorebook shows only stored results, runner positions, contact and badges,
  const {api}=setup();
  const g={pas:[{res:'2B',run:'risp',rbi:2,scored:1,seq:'BX',dir:'RC',qual:'LD'},{res:'SO_L',bases:[1]}]};
  const before=JSON.stringify(g),out=api.scorebookHTML(g);
- assert.match(out,/1타석/);assert.match(out,/2타석/);assert.match(out,/2타점/);assert.match(out,/득점/);assert.match(out,/라인드라이브/);assert.match(out,/정확한 루 미기록/);
+ assert.match(out,/1타석/);assert.match(out,/2타석/);assert.match(out,/2타점/);assert.match(out,/득점/);assert.match(out,/라인드라이브/);assert.match(out,/<div class="score-runner">2루 또는 3루<\/div>/);
  assert.equal((out.match(/score-base occupied/g)||[]).length,1);
  assert.doesNotMatch(out,/<line |6-3|F8|E6|[0-9]회 [초말]/);
  assert.equal(JSON.stringify(g),before);
  assert.equal(api.scorebookHTML({pas:[]}), '');
  assert.equal(api.scorebookHTML({pas:[{res:'',seq:'',run:'none'}]}), '');
 });
+test('scorebook labels separate coarse scoring position from confirmed occupied bases',()=>{
+ const {api}=setup();
+ const cases=[
+  [{run:'none'},'',0], [{},'',0], [{bases:[]},'',0],
+  [{run:'first'},'1루',1], [{run:'risp'},'2루 또는 3루',0],
+  [{bases:[2]},'2루',1], [{bases:[3]},'3루',1], [{bases:[2,3]},'2·3루',2]
+ ];
+ for(const [fields,label,occupied] of cases){
+  const pa={res:'1B',...fields}, before=JSON.stringify(pa);
+  const html=api.scorebookHTML({pas:[pa]});
+  const caption=html.match(/<div class="score-runner">([^<]*)<\/div>/);
+  assert.equal(caption?.[1]||'',label);
+  assert.equal((html.match(/class="score-base occupied"/g)||[]).length,occupied);
+  assert.equal((html.match(/class="base-number"/g)||[]).length,occupied);
+  assert.equal(JSON.stringify(pa),before);
+ }
+});
+
 test('scorebook and stored form source escape untrusted strings',()=>{
  const {api}=setup();
  assert.doesNotMatch(api.scorebookHTML({pas:[{res:'<img onerror="x">',dir:'<script>x</script>',rbi:'<svg onload=x>'}]}),/<img|<script|<svg onload/);

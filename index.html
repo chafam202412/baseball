@@ -2154,12 +2154,15 @@ function refreshDatalists(){
 
 /* ================= 다이아몬드 ================= */
 const SCORE_SYMBOLS={SO_S:'K',SO_L:'ꓘ',IFH:'IFH',GO:'GO',FO:'FO',LO:'LO',PO:'PO',DP:'DP',SF:'SF',SH:'SH',E:'E',FC:'FC',CI:'CI'};
-function scoreDiamond(pa){
-  const state=runnerState(pa);
+function scoreRunnerLabel(state){
+  if(state.bases===null) return state.group==='risp'?'2루 또는 3루':'';
+  return state.bases.length?state.label:'';
+}
+function scoreDiamond(pa,state=runnerState(pa)){
   const marks=[[1,89,58],[2,58,27],[3,27,58]].map(([base,x,y])=>{
-    const known=state.bases!==null, occupied=known&&state.bases.includes(base);
+    const occupied=state.bases?.includes(base);
     return '<rect x="'+(x-5)+'" y="'+(y-5)+'" width="10" height="10" transform="rotate(45 '+x+' '+y+')" class="score-base'+(occupied?' occupied':'')+'"/>'+
-      '<text x="'+x+'" y="'+(y+(base===2?-12:21))+'" class="base-number">'+base+'루'+(!known?' ?':'')+'</text>';
+      (occupied?'<text x="'+x+'" y="'+(y+(base===2?-12:21))+'" class="base-number">'+base+'루</text>':'');
   }).join('');
   const symbol=SCORE_SYMBOLS[pa.res]||pa.res||'—';
   return '<svg class="score-diamond" viewBox="0 0 116 116" role="img" aria-label="'+esc('타석 시작: '+state.label)+'">'+
@@ -2174,10 +2177,11 @@ function scorebookHTML(g){
     const direction=pa.dir?((DMAP[pa.dir]||{}).t||pa.dir):'';
     const quality=pa.qual?((QMAP[pa.qual]||{}).t||pa.qual):'';
     const contact=[direction,quality].filter(Boolean).join(' · ');
+    const state=runnerState(pa), runners=scoreRunnerLabel(state);
     return '<li class="score-pa"><div class="score-pa-top"><b>'+(i+1)+'타석</b>'+
-      (pa.scored?'<span class="score-badge scored">득점</span>':'')+'</div>'+scoreDiamond(pa)+
+      (pa.scored?'<span class="score-badge scored">득점</span>':'')+'</div>'+scoreDiamond(pa,state)+
       '<div class="score-result">'+esc(result)+'</div>'+
-      '<div class="score-runner">'+esc(runnerLabel(pa))+'</div>'+
+      (runners?'<div class="score-runner">'+esc(runners)+'</div>':'')+
       (pa.rbi?'<span class="score-badge">'+esc(pa.rbi)+'타점</span>':'')+
       (contact?'<div class="score-contact">'+esc(contact)+'</div>':'')+
       (pa.seq?'<details class="score-pitches"><summary>한 구씩 보기 · '+seqStats(pa.seq).pitches+'구</summary><div class="seqline">'+seqChips(pa.seq)+'</div><p>'+esc(countLabel(pa.seq))+'</p></details>':'<span class="score-no-pitches">투구 순서 미기록</span>')+'</li>';
