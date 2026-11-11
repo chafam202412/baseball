@@ -703,7 +703,7 @@ nav .navlink:focus-visible{outline:2px solid var(--blue-mid);outline-offset:-3px
 .restbox .kbsa span{display:block;font-size:11px;color:var(--ink-faint);margin-top:1px}
 
 </style>
-<link rel="stylesheet" href="design-refresh.css?v=20261111">
+<link rel="stylesheet" href="design-refresh.css?v=20261112">
 </head>
 <body>
 
@@ -1511,11 +1511,11 @@ function padHTML(){
 }
 function runnerInput(d){
   const state=runnerState(d);
-  return '<fieldset class="runner-input" data-exact="'+(state.bases!==null?'1':'0')+'"><legend>타석 시작 주자 <span class="muted">복수 선택</span></legend>'+
+  return '<fieldset class="runner-input" data-legacy="'+esc(state.bases===null?(state.group||'unknown'):'')+'" data-exact="'+(state.bases!==null?'1':'0')+'"><legend>타석 시작 주자 <span class="muted">복수 선택</span></legend>'+
     '<input type="hidden" class="pa-run" value="'+esc(state.group)+'">'+
     '<div class="base-options">'+[1,2,3].map(b=>'<label class="base-choice"><input type="checkbox" class="pa-base" value="'+b+'"'+(state.bases&&state.bases.includes(b)?' checked':'')+'><span>'+b+'루</span></label>').join('')+
     '<button type="button" class="base-none">주자 없음</button></div>'+
-    '<p class="runner-help" aria-live="polite">'+runnerHint(state)+'</p></fieldset>';
+    '<p class="runner-help" aria-live="polite">'+runnerHint(state)+'</p><button type="button" class="base-restore btn ghost sm" hidden>기존 주자 기록으로 되돌리기</button></fieldset>';
 }
 function runnerHint(state){
   if(state.bases===null) return state.group==='risp'?'기존 득점권 기록을 유지합니다. 정확한 루를 알 때만 선택하세요.':'주자 상황 미기록. 아는 경우에만 선택하세요.';
@@ -1528,13 +1528,23 @@ function readRunnerFields(row){
   const bases=Array.from(field.querySelectorAll('.pa-base:checked')).map(x=>iv(x.value));
   return {bases,run:runnerState({bases}).group};
 }
-function updateRunnerInput(field,clear){
-  if(clear) field.querySelectorAll('.pa-base').forEach(x=>{ x.checked=false; });
-  field.dataset.exact='1';
+function updateRunnerInput(field,clear,restore=false){
+  if(clear || restore) field.querySelectorAll('.pa-base').forEach(x=>{ x.checked=false; });
   const bases=Array.from(field.querySelectorAll('.pa-base:checked')).map(x=>iv(x.value));
-  const state=runnerState({bases});
+  const legacy=field.dataset.legacy;
+  const revert=legacy && (restore || (!clear && !bases.length));
+  const state=revert?runnerState({run:legacy}):runnerState({bases});
+  field.dataset.exact=revert?'0':'1';
+  field.querySelector('.base-restore').hidden=!legacy || !!revert;
   field.querySelector('.pa-run').value=state.group;
   field.querySelector('.runner-help').textContent=runnerHint(state);
+}
+function pitchEnded(seq){
+  return seq.includes('X') || !!autoResult(seq);
+}
+function quickResults(seq){
+  return '<div class="quick-results"'+(seq.endsWith('X')?'':' hidden')+'>'+
+    ['1B','GO','FO'].map(v=>'<button type="button" data-quick="'+v+'">'+RMAP[v].t+'</button>').join('')+'</div>';
 }
 function originalRow(row){
   try{ return JSON.parse(row.dataset.original||'{}'); }catch(e){ return {}; }
@@ -1545,15 +1555,16 @@ function paBlock(d){
     '<div class="bhead"><span class="idx">타석</span>'+
       '<span class="cnt">'+countLabel(seq)+' <small>볼-스트 · '+q.pitches+'구</small></span>'+
       '<button class="xbtn" data-del title="이 타석 삭제">×</button></div>'+
-    '<div class="seqline">'+seqChips(seq)+'</div>'+padHTML()+
+    '<div class="seqline">'+seqChips(seq)+'</div>'+padHTML()+quickResults(seq)+
     '<div class="grid g4">'+
       '<div><label>최종 결과</label><select class="pa-res">'+optList([{v:'',t:'결과 선택'}].concat(RESULTS), d.res||'', true)+'</select></div>'+
-      runnerInput(d)+
+      runnerInput(d)+'</div>'+
+    '<details class="entry-details"'+(d.rbi||d.scored||d.dir||d.qual?' open':'')+'><summary>상세 기록 · 타점, 득점, 타구</summary><div class="grid g4">'+
       '<div><label>타점</label><input type="number" min="0" class="pa-rbi" value="'+(d.rbi??'')+'"></div>'+
       '<div><label>득점</label><input type="number" min="0" max="1" class="pa-scored" value="'+(d.scored??'')+'"></div>'+
       '<div><label>타구 방향 <span class="muted">— 친 경우만</span></label><select class="pa-dir">'+optList(DIRS, d.dir||'', true)+'</select></div>'+
       '<div><label>타구 유형</label><select class="pa-qual">'+optList(QUALS, d.qual||'', true)+'</select></div>'+
-    '</div></div>';
+    '</div></details></div>';
 }
 function bfBlock(d){
   d=d||{}; const seq=d.seq||''; const q=seqStats(seq);
@@ -1561,9 +1572,9 @@ function bfBlock(d){
     '<div class="bhead"><span class="idx">타자</span>'+
       '<span class="cnt">'+countLabel(seq)+' <small>볼-스트 · '+q.pitches+'구</small></span>'+
       '<button class="xbtn" data-del title="이 타자 삭제">×</button></div>'+
-    '<div class="seqline">'+seqChips(seq)+'</div>'+padHTML()+
+    '<div class="seqline">'+seqChips(seq)+'</div>'+padHTML()+quickResults(seq)+
     '<div class="grid g4">'+
-      '<div><label>결과 <span class="muted">(상대 타자)</span></label><select class="bf-res">'+optList(RESULTS, d.res||'GO', true)+'</select></div>'+
+      '<div><label>결과 <span class="muted">(상대 타자)</span></label><select class="bf-res">'+optList([{v:'',t:'결과 선택'}].concat(RESULTS), d.res||'', true)+'</select></div>'+
       '<div><label>이닝</label><input type="number" min="1" class="bf-inn" value="'+(d.inn??'')+'"></div>'+
       '<div><label>이 타석 실점</label><input type="number" min="0" class="bf-r" value="'+(d.r??'')+'"></div>'+
       '<div><label>그중 자책</label><input type="number" min="0" class="bf-er" value="'+(d.er??'')+'"></div>'+
@@ -1592,11 +1603,8 @@ function refreshBlock(blk){
   const seq=blk.dataset.seq||'', q=seqStats(seq);
   blk.querySelector('.cnt').innerHTML=countLabel(seq)+' <small>볼-스트 · '+q.pitches+'구</small>';
   blk.querySelector('.seqline').innerHTML=seqChips(seq);
-  const auto=autoResult(seq);
-  if(auto){
-    const sel=blk.querySelector('.pa-res')||blk.querySelector('.bf-res');
-    if(sel) sel.value=auto;
-  }
+  blk.querySelector('.quick-results').hidden=!seq.endsWith('X');
+  blk.querySelectorAll('[data-p]').forEach(button=>{button.disabled=pitchEnded(seq);});
   liveSummary();
 }
 function liveSummary(){
@@ -1621,6 +1629,7 @@ function liveSummary(){
     $$('#bf-rows .blk').forEach(function(el){
       const r=RMAP[el.querySelector('.bf-res').value]||{};
       const q=seqStats(el.dataset.seq||'');
+      if(!r.v && !q.pitches) return;
       BF++; OUT+=r.out||0; P+=q.pitches; S+=q.strikes;
       H+=r.hit?1:0; BB+=(r.bb||0)+(r.hbp||0); K+=r.so||0;
       R+=iv(el.querySelector('.bf-r').value); ER+=iv(el.querySelector('.bf-er').value);
@@ -1638,11 +1647,42 @@ function liveSummary(){
 function wirePad(container){
   container.addEventListener('click',ev=>{
     const del=ev.target.closest('[data-del]');
-    if(del){ del.closest('.blk').remove(); reindex(); liveSummary(); return; }
-    const undo=ev.target.closest('[data-undo]');
-    if(undo){ const blk=undo.closest('.blk'); blk.dataset.seq=(blk.dataset.seq||'').slice(0,-1); refreshBlock(blk); return; }
-    const pb=ev.target.closest('[data-p]');
-    if(pb){ const blk=pb.closest('.blk'); blk.dataset.seq=(blk.dataset.seq||'')+pb.dataset.p; refreshBlock(blk); }
+    if(del){
+      const row=del.closest('.blk'), message=document.createElement('div');
+      message.className='deleted-row';
+      message.innerHTML='<span></span> <button type="button" class="btn ghost sm">되돌리기</button>';
+      message.querySelector('span').textContent=row.querySelector('.idx').textContent+' 삭제됨';
+      row.replaceWith(message);
+      message.querySelector('button').onclick=()=>{
+        message.replaceWith(row); reindex(); liveSummary(); saveDraft();
+      };
+      reindex(); liveSummary(); saveDraft(); return;
+    }
+    const btn=ev.target.closest('[data-p],[data-undo],[data-quick]');
+    if(!btn) return;
+    const blk=btn.closest('.blk'), result=blk.querySelector('.pa-res,.bf-res');
+    const seq=blk.dataset.seq;
+    if(btn.hasAttribute('data-undo')){
+      if(!seq) return;
+      if('priorResult' in blk.dataset){
+        result.value=blk.dataset.priorResult;
+        delete blk.dataset.priorResult;
+      }else if(autoResult(seq)===result.value){
+        result.value='';
+      }
+      blk.dataset.seq=seq.slice(0,-1);
+    }else if(btn.hasAttribute('data-quick')){
+      result.value=btn.dataset.quick;
+    }else{
+      if(pitchEnded(seq)) return;
+      blk.dataset.seq=seq+btn.dataset.p;
+      if(pitchEnded(blk.dataset.seq)){
+        blk.dataset.priorResult=result.value;
+        const auto=autoResult(blk.dataset.seq);
+        if(auto) result.value=auto;
+      }
+    }
+    refreshBlock(blk); saveDraft();
   });
 }
 if($('#pa-rows')){
@@ -1656,13 +1696,23 @@ if($('#pa-rows')){
   });
   $('#pa-rows').addEventListener('click',ev=>{
     const clear=ev.target.closest('.base-none');
-    if(clear){ updateRunnerInput(clear.closest('.runner-input'),true); liveSummary(); queueDraft(); }
+    const restore=ev.target.closest('.base-restore');
+    if(clear || restore){
+      updateRunnerInput((clear||restore).closest('.runner-input'),!!clear,!!restore);
+      liveSummary(); saveDraft();
+    }
   });
   const ep=$('#p-entry');
-  if(ep){ ep.addEventListener('input',queueDraft); ep.addEventListener('change',queueDraft); ep.addEventListener('click',function(ev){ if(ev.target.closest('[data-p],[data-undo],[data-del]')) queueDraft(); }); }
-  $('#add-pa').addEventListener('click',()=>{ $('#pa-rows').insertAdjacentHTML('beforeend',paBlock()); reindex(); liveSummary(); });
-  $('#add-bf').addEventListener('click',()=>{ $('#bf-rows').insertAdjacentHTML('beforeend',bfBlock()); reindex(); liveSummary(); });
-  $('#add-fd').addEventListener('click',()=>{ $('#fd-rows').insertAdjacentHTML('beforeend',fdBlock()); });
+  ep.addEventListener('input',saveDraft);
+  ep.addEventListener('change',saveDraft);
+  for(const [kind,block] of [['pa',paBlock],['bf',bfBlock],['fd',fdBlock]]){
+    $('#add-'+kind).addEventListener('click',()=>{
+      const rows=$('#'+kind+'-rows');
+      rows.insertAdjacentHTML('beforeend',block());
+      reindex(); liveSummary(); saveDraft();
+      rows.lastElementChild.scrollIntoView?.({block:'start'});
+    });
+  }
 }
 
 /* ================= 폼 <-> 객체 ================= */
@@ -1676,18 +1726,22 @@ function battingEntryError(pas){
   const i=pas.findIndex(pa=>!isBlankPA(pa) && !RMAP[pa.res]);
   return i<0 ? '' : '입력 중인 타석의 최종 결과를 선택해 주세요.';
 }
-function readForm(){
-  const pas=$$('#pa-rows .blk').map(r=>({
-    ...originalRow(r), ...readRunnerFields(r),
-    seq:r.dataset.seq||'', res:r.querySelector('.pa-res').value,
-    rbi:iv(r.querySelector('.pa-rbi').value), scored:iv(r.querySelector('.pa-scored').value),
-    dir: r.querySelector('.pa-dir') ? r.querySelector('.pa-dir').value : '',
-    qual: r.querySelector('.pa-qual') ? r.querySelector('.pa-qual').value : ''
-  })).filter(pa=>!isBlankPA(pa));
+function readForm(includeBlank=false){
+  const pas=$$('#pa-rows .blk').map(r=>{
+    const original=originalRow(r);
+    delete original.bases;
+    return {
+      ...original, ...readRunnerFields(r),
+      seq:r.dataset.seq||'', res:r.querySelector('.pa-res').value,
+      rbi:iv(r.querySelector('.pa-rbi').value), scored:iv(r.querySelector('.pa-scored').value),
+      dir: r.querySelector('.pa-dir') ? r.querySelector('.pa-dir').value : '',
+      qual: r.querySelector('.pa-qual') ? r.querySelector('.pa-qual').value : ''
+    };
+  }).filter(pa=>includeBlank || !isBlankPA(pa));
   const bfs=$$('#bf-rows .blk').map(r=>({
     ...originalRow(r), seq:r.dataset.seq||'', res:r.querySelector('.bf-res').value, inn:iv(r.querySelector('.bf-inn').value),
     r:iv(r.querySelector('.bf-r').value), er:iv(r.querySelector('.bf-er').value)
-  }));
+  })).filter(bf=>includeBlank || bf.res || bf.seq || bf.inn || bf.r || bf.er);
   const fds=$$('#fd-rows .blk').map(r=>({
     ...originalRow(r), pos:r.querySelector('.fd-pos').value, inn:num(r.querySelector('.fd-inn').value),
     po:iv(r.querySelector('.fd-po').value), a:iv(r.querySelector('.fd-a').value), e:iv(r.querySelector('.fd-e').value)
@@ -1720,6 +1774,9 @@ function fillForm(g){
   $('#pa-rows').innerHTML=(Array.isArray(g.pas)?g.pas:(isNew?[{run:'none'}]:[])).map(paBlock).join('');
   $('#bf-rows').innerHTML=(g.bfs&&g.bfs.length?g.bfs:[]).map(bfBlock).join('');
   $('#fd-rows').innerHTML=(g.fds&&g.fds.length?g.fds:[]).map(fdBlock).join('');
+  for(const row of $$('#pa-rows .blk, #bf-rows .blk')){
+    if(pitchEnded(row.dataset.seq)) row.querySelectorAll('[data-p]').forEach(b=>{ b.disabled=true; });
+  }
   reindex();
   $('#edit-note').textContent = EDIT_ID?'수정 중인 경기입니다. 저장하면 덮어씁니다.':'';
   liveSummary();
@@ -1729,64 +1786,105 @@ if($('#save-game')){
     const g=readForm();
     const battingError=battingEntryError(g.pas);
     if(battingError){ toast(battingError); return; }
+    if(g.bfs.some(bf=>!RMAP[bf.res])){ toast('입력 중인 상대 타자의 최종 결과를 선택해 주세요.'); return; }
     if(!g.opp && !g.tour && !confirm('상대팀이 비어 있습니다. 그래도 저장할까요?')) return;
     const i=DB.games.findIndex(x=>x.id===g.id);
     if(i>=0) DB.games[i]=g; else DB.games.push(g);
     DB.games.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
     persist();
     toast(i>=0?'경기를 수정했습니다':'경기를 저장했습니다');
-    clearDraft(); fillForm(null); refreshDatalists(); renderLog(); goTab('log');
+    clearDraft(); openNewEntry(); refreshDatalists(); renderLog(); goTab('log');
   });
-  $('#reset-game').addEventListener('click',()=>{ clearDraft(); fillForm(null); toast('새 경기 입력으로 비웠습니다'); });
+  $('#reset-game').addEventListener('click',()=>{
+    if(!EDIT_ID && hasContent(readForm()) && !confirm('작성 중인 새 경기를 비울까요?')) return;
+    if(!EDIT_ID) clearDraft();
+    openNewEntry();
+  });
 }
 
 
 /* ================= 작성 중 임시저장 ================= */
 const DRAFT_KEY='baseball_entry_draft';
-let draftTimer=null;
+function draftKey(edit){ return edit ? DRAFT_KEY+':'+edit : DRAFT_KEY; }
 function hasContent(g){
   if(!g) return false;
-  if(g.opp||g.tour||g.venue||g.memo||g.vid||g.album) return true;
-  const pa=(g.pas||[]).some(function(x){ return !isBlankPA(x); });
-  const bf=(g.bfs||[]).some(function(x){ return x.seq || x.inn || x.r || x.er; });
-  const fd=(g.fds||[]).some(function(x){ return x.inn || x.po || x.a || x.e; });
-  return pa||bf||fd;
+  return !!(g.opp||g.tour||g.venue||g.round||g.memo||g.vid||g.vid2||g.album||g.photo||
+    g.sb||g.cs||(g.type && g.type!=='정식')||(g.date && g.date!==today())||
+    (g.pas||[]).some(pa=>!isBlankPA(pa))||
+    (g.bfs||[]).some(bf=>bf.res||bf.seq||bf.inn||bf.r||bf.er)||
+    (g.fds||[]).some(fd=>fd.pos||fd.inn||fd.po||fd.a||fd.e));
 }
 function saveDraft(){
   if(!ADMIN || !$('#pa-rows')) return;
+  const g=readForm(true), key=draftKey(EDIT_ID);
   try{
-    const g=readForm();
-    if(hasContent(g)) localStorage.setItem(DRAFT_KEY, JSON.stringify({at:Date.now(), edit:EDIT_ID, g:g}));
-    else localStorage.removeItem(DRAFT_KEY);
-  }catch(e){}
+    if(!EDIT_ID && !hasContent(g)){ localStorage.removeItem(key); return; }
+    const rows=$$('#pa-rows .blk, #bf-rows .blk').map(row=>({
+      prior:row.dataset.priorResult,
+      legacy:row.querySelector('.runner-input')?.dataset.legacy
+    }));
+    localStorage.setItem(key,JSON.stringify({at:Date.now(),edit:EDIT_ID,g,rows}));
+  }catch(e){ toast('임시저장 실패 · 창을 닫기 전에 경기 저장을 확인하세요'); }
 }
-function queueDraft(){ clearTimeout(draftTimer); draftTimer=setTimeout(saveDraft, 700); }
-function clearDraft(){ try{ localStorage.removeItem(DRAFT_KEY); }catch(e){} const b=$('#draftbar'); if(b) b.innerHTML=''; }
+function clearDraft(){
+  try{ localStorage.removeItem(draftKey(EDIT_ID)); }catch(e){}
+}
+function getDraft(key){
+  try{
+    const d=JSON.parse(localStorage.getItem(key));
+    return d && d.g ? d : null;
+  }catch(e){ return null; }
+}
+function resumeDraft(d){
+  fillForm(d.g);
+  EDIT_ID=d.edit||null;
+  $('#edit-note').textContent=EDIT_ID?'수정 중인 경기입니다. 저장하면 덮어씁니다.':'새 경기 임시저장을 불러왔습니다.';
+  $$('#pa-rows .blk, #bf-rows .blk').forEach((row,i)=>{
+    const meta=d.rows?.[i];
+    if(meta?.prior!==undefined) row.dataset.priorResult=meta.prior;
+    const field=row.querySelector('.runner-input');
+    if(field && meta?.legacy){
+      field.dataset.legacy=meta.legacy;
+      field.querySelector('.base-restore').hidden=field.dataset.exact!=='1';
+    }
+  });
+}
+function openNewEntry(){
+  const d=getDraft(DRAFT_KEY);
+  if(d && !d.edit) resumeDraft(d); else fillForm(null);
+  offerDraft();
+}
 function offerDraft(){
   if(!ADMIN) return;
-  let d=null;
-  try{ d=JSON.parse(localStorage.getItem(DRAFT_KEY)||'null'); }catch(e){}
-  if(!d || !d.g) return;
-  const bar=$('#draftbar'); if(!bar) return;
-  const when=new Date(d.at||Date.now());
-  const ago=Math.round((Date.now()-(d.at||Date.now()))/60000);
-  const t=(when.getMonth()+1)+'/'+when.getDate()+' '+String(when.getHours()).padStart(2,'0')+':'+String(when.getMinutes()).padStart(2,'0');
-  bar.innerHTML='<div class="diffbox"><b>작성하다 만 경기가 있습니다.</b> '+esc(t)+
-    (ago<600?' ('+ago+'분 전)':'')+' · '+esc(d.g.opp||'상대 미기재')+
-    '<div class="row-actions" style="margin-top:10px">'+
-      '<button class="btn sm" data-draft="resume">이어서 쓰기</button>'+
-      '<button class="btn ghost sm" data-draft="drop">버리기</button>'+
-    '</div></div>';
-  bar.onclick=function(ev){
-    const b=ev.target.closest('[data-draft]'); if(!b) return;
-    if(b.dataset.draft==='resume'){
-      fillForm(d.g); EDIT_ID=d.edit||null;
-      $('#edit-note').textContent = EDIT_ID?'수정 중인 경기입니다. 저장하면 덮어씁니다.':'';
-      bar.innerHTML=''; toast('이어서 쓰기로 불러왔습니다');
-    }else{
-      if(confirm('작성 중이던 내용을 버릴까요?')) clearDraft();
-    }
+  const bar=$('#draftbar');
+  let keys;
+  try{ keys=Object.keys(localStorage); }catch(e){ return; }
+  const others=keys.filter(k=>k===DRAFT_KEY || k.startsWith(DRAFT_KEY+':'))
+    .map(k=>({k,d:getDraft(k)})).filter(({k,d})=>d && k!==draftKey(EDIT_ID))
+    .sort((a,b)=>b.d.at-a.d.at);
+  bar.innerHTML=others.map(({k,d})=>'<div class="diffbox" data-key="'+esc(k)+'">'+
+    (d.edit?'수정 중':'작성 중')+' · '+esc(d.g.date||'')+' · '+esc(d.g.opp||'상대 미기재')+
+    ' <button class="btn sm" data-draft="resume">이어서 쓰기</button> <button class="btn ghost sm" data-draft="drop">버리기</button></div>').join('');
+  bar.onclick=ev=>{
+    const button=ev.target.closest('[data-draft]');
+    if(!button) return;
+    const key=button.closest('[data-key]').dataset.key, draft=getDraft(key);
+    if(button.dataset.draft==='resume' && draft) resumeDraft(draft);
+    else if(button.dataset.draft==='drop' && confirm('이 임시저장을 버릴까요?')) localStorage.removeItem(key);
+    offerDraft();
   };
+}
+function initDrafts(){
+  if(!ADMIN) return;
+  const old=getDraft(DRAFT_KEY);
+  if(old?.edit){
+    try{
+      const key=draftKey(old.edit), existing=getDraft(key);
+      if(!existing || old.at>existing.at) localStorage.setItem(key,JSON.stringify(old));
+      localStorage.removeItem(DRAFT_KEY);
+    }catch(e){ toast('임시저장을 옮기지 못했습니다'); return; }
+  }
+  openNewEntry();
 }
 
 /* ================= 집계 ================= */
@@ -2294,7 +2392,7 @@ function renderLog(){
 }
 $('#loglist').addEventListener('click',ev=>{
   const e=ev.target.closest('[data-edit]'), d=ev.target.closest('[data-del-game]');
-  if(e){ ev.preventDefault(); const g=DB.games.find(x=>x.id===e.dataset.edit); if(g){ fillForm(g); goTab('entry'); } }
+  if(e){ ev.preventDefault(); const g=DB.games.find(x=>x.id===e.dataset.edit); if(g){ const d=getDraft(draftKey(g.id)); if(d) resumeDraft(d); else fillForm(g); offerDraft(); goTab('entry'); } }
   if(d){ ev.preventDefault();
     if(confirm('이 경기 기록을 삭제할까요? 되돌릴 수 없습니다.')){
       DB.deleted.push(d.dataset.delGame);
@@ -3338,7 +3436,7 @@ renderLog();
 ghLoad();
 wireSyncUI();
 wirePosts();
-offerDraft();
+initDrafts();
 setSync(ghOn()?'idle':'idle','');
 if(ghOn()) ghPull(false); else loadPublished();
 if(ADMIN && !LS_OK) showStoreWarn();

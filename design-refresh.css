@@ -352,6 +352,19 @@ button.btn.sm{min-height:40px}
   .scorebook-grid{grid-template-columns:1fr}
 }
 
+/* Live scoring controls */
+#p-entry .xbtn{width:44px;height:44px}
+#p-entry .blk{scroll-margin-top:12px}
+.quick-results{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}
+.quick-results[hidden],.base-restore[hidden]{display:none}
+.quick-results button{min-height:44px;padding:6px 14px;border:1px solid var(--blue);border-radius:5px;background:var(--blue-soft);color:var(--ink);font:inherit}
+.pad button:disabled{opacity:.45}
+.entry-details{margin-top:10px}
+.entry-details summary{cursor:pointer;min-height:44px;align-content:center;font-size:13px;color:var(--ink-soft)}
+.deleted-row{display:flex;align-items:center;gap:12px;padding:8px;color:var(--ink-soft)}
+.score-runner,.score-pitches summary,.score-pitches p{font-size:13px}
+.score-pitches .pchip{font-size:12px}
+
 /* Column reading: presentation only. Stored article HTML and diagrams stay intact. */
 #p-posts .postcard.reading{max-width:940px;border-left-width:1px;padding:36px 40px}
 #p-posts .postcard.reading>.postmeta{padding-bottom:6px}

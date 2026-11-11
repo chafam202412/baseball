@@ -43,7 +43,7 @@ function setup() {
     reindex() {}, pitchWarnHTML() { return ''; },
     toast(message) { state.messages.push(message); },
     persist() { state.persisted++; }, confirm() { return true; },
-    clearDraft() {}, refreshDatalists() {}, renderLog() {}, goTab() {}
+    clearDraft() {}, openNewEntry() {}, refreshDatalists() {}, renderLog() {}, goTab() {}
   };
   vm.runInNewContext(source, context, {timeout: 1000});
   return {api: context.subject, context, $, lists, state};
