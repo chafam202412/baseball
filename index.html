@@ -2188,7 +2188,7 @@ function scorebookHTML(g){
   }).filter(Boolean).join('');
   if(!cards) return '';
   return '<section class="scorebook" aria-label="타석별 스코어북"><div class="scorebook-title">타석별 스코어북</div>'+
-    '<p class="scorebook-key">◆ 타석 시작 주자 · 가운데는 타석 결과<br>진루 경로·이닝·아웃카운트는 추정하지 않습니다.</p><ol class="scorebook-grid">'+cards+'</ol></section>';
+    '<ol class="scorebook-grid">'+cards+'</ol></section>';
 }
 
 /* ================= 차트 ================= */
@@ -2253,7 +2253,22 @@ function barChart(labels,data,color,fmt){
   return '<div class="chartbox"><svg class="chart" viewBox="0 0 '+W+' '+H+'" role="img">'+g+'</svg></div>';
 }
 function statCell(k,v,d,hi){
-  return '<div class="stat"><div class="k">'+esc(k)+'</div><div class="v'+(hi?' hi':'')+'">'+v+'</div>'+(d?'<div class="d">'+esc(d)+'</div>':'')+'</div>';
+  const explanations={
+    'AVG 타율':'타수 중 안타를 친 비율',
+    'OBP 출루율':'안타·볼넷·사구로 출루한 비율',
+    'SLG 장타율':'타수당 얻은 루타 수',
+    'OPS':'출루율 + 장타율, 종합 타격 지표',
+    'ERA 방어율':'9이닝당 허용한 자책점',
+    'WHIP':'이닝당 허용한 안타 + 볼넷',
+    '스트라이크 비율':'전체 투구 중 스트라이크 비율',
+    '초구 스트라이크':'첫 공이 스트라이크인 비율',
+    '수비율 FPCT':'수비 기회 중 실책 없이 처리한 비율',
+    '직접 아웃 (PO)':'포구·태그 등으로 아웃을 직접 완성',
+    '아웃 도움 (A)':'송구·터치로 동료의 아웃 처리를 도움',
+    '수비 이닝':'수비에 참여한 누적 이닝',
+    '실책':'공식 기록상 수비 실수 횟수'
+  };
+  return '<div class="stat"><div class="k">'+esc(k)+'</div><div class="v'+(hi?' hi':'')+'">'+v+'</div>'+(d?'<div class="d">'+esc(d)+'</div>':'')+(explanations[k]?'<div class="stat-explain">'+esc(explanations[k])+'</div>':'')+'</div>';
 }
 
 
@@ -2530,14 +2545,16 @@ function renderStats(){
   if(f.PO+f.A+f.E>0 || Object.keys(f.byPos).length){
     h+='<div class="card sec-card def"><div class="sechead"><span class="ttl">수비</span><span class="en">Fielding</span>'+
       '<span class="meta">'+r1(f.INN)+'이닝</span></div><div class="statgrid">'+
-      statCell('수비율 FPCT', r3(f.FPCT), '자살 '+f.PO+' 보살 '+f.A+' 실책 '+f.E, true)+
+      statCell('수비율 FPCT', r3(f.FPCT), '직접 아웃 '+f.PO+' · 아웃 도움 '+f.A+' · 실책 '+f.E, true)+
+      statCell('직접 아웃 (PO)', f.PO, '')+
+      statCell('아웃 도움 (A)', f.A, '')+
       statCell('수비 이닝', r1(f.INN), '')+
       statCell('실책', f.E, '')+
     '</div>';
     h+='<details class="detail-panel" data-detail="fielding"><summary><span>포지션별 기록 보기</span><small>경기 수 · 이닝 · 수비 기회</small></summary><div class="detail-content">';
     const pk=Object.keys(f.byPos);
     if(pk.length){
-      h+='<h3 class="sec">포지션별</h3><div class="scrollhint">← 좌우로 밀어서 보기</div><div class="scroll"><table><thead><tr><th>포지션</th><th>경기</th><th>이닝</th><th>자살</th><th>보살</th><th>실책</th><th>수비율</th></tr></thead><tbody>'+
+      h+='<h3 class="sec">포지션별</h3><div class="scrollhint">← 좌우로 밀어서 보기</div><div class="scroll"><table><thead><tr><th>포지션</th><th>경기</th><th>이닝</th><th>직접 아웃 (PO)</th><th>아웃 도움 (A)</th><th>실책</th><th>수비율</th></tr></thead><tbody>'+
         pk.map(function(k){ const o=f.byPos[k], ch=o.PO+o.A+o.E;
           return '<tr><td>'+esc(k)+'</td><td class="num">'+o.G+'</td><td class="num">'+r1(o.INN)+'</td><td class="num">'+o.PO+'</td><td class="num">'+o.A+'</td><td class="num">'+o.E+'</td><td class="num">'+r3(ch?(o.PO+o.A)/ch:null)+'</td></tr>';
         }).join('')+'</tbody></table></div>';
@@ -3054,9 +3071,8 @@ function renderSidebar(){
   if(rs){
     h+='<div class="sidebox"><div class="sh"><span class="t">휴식 체크</span><span class="e">Reference</span></div>'+
        '<div class="restbox">'+
-         '<div class="big'+(rs.ok?'':' wait')+'">'+(rs.ok?'설정상 휴식 기간 경과':md(rs.ready)+'부터 · 설정 기준')+'</div>'+
+         '<div class="big'+(rs.ok?'':' wait')+'">'+(rs.ok?'등판 가능 · 설정 기준':'휴식 권고 · '+md(rs.ready)+'부터 · 설정 기준')+'</div>'+
          '<div class="sm">최근 투구일 '+esc(rs.last.date||'')+'<br>'+rs.last.games+'경기 합산 '+rs.last.pitches+'구 · 설정 휴식 '+rs.need+'일</div>'+
-         '<div class="reference-note">입력한 투구수와 이 기기의 설정으로 계산합니다. 실제 등판 여부는 대회 규정·컨디션·지도자 판단을 우선해 주세요.</div>'+
        '</div></div>';
   }
 

@@ -151,6 +151,9 @@ button.btn.sm{min-height:40px}
 .kd{border-radius:12px;overflow:hidden}
 .kd .wrap{padding:0 25px}
 .kd .intro{box-shadow:none}
+/* Keep the full desktop sidebar reachable on short screens. */
+@media(min-width:901px){aside#sidebar{max-height:calc(100dvh - 48px);overflow-y:auto;scrollbar-gutter:stable;padding-right:4px}}
+.stat-explain{margin-top:8px;padding-top:8px;border-top:1px solid var(--rule-soft);font-size:11px;line-height:1.6;color:var(--ink-soft);word-break:keep-all;overflow-wrap:anywhere}
 @media(min-width:901px){aside#sidebar{top:24px}}
 @media(max-width:1000px){
   .withside{grid-template-columns:minmax(0,1fr) 250px;gap:18px}
