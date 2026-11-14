@@ -7,6 +7,110 @@
   },
   "games": [
     {
+      "id": "mwfz9gxpzag0z",
+      "date": "2026-11-14",
+      "type": "정식",
+      "opp": "장안구",
+      "venue": "강릉둔치",
+      "tour": "26강릉솔향기",
+      "round": "64강",
+      "sb": 1,
+      "cs": 0,
+      "vid": "",
+      "vid2": "",
+      "album": "",
+      "photo": "",
+      "memo": "",
+      "pas": [
+        {
+          "run": "risp",
+          "bases": [
+            2,
+            3
+          ],
+          "seq": "BBX",
+          "res": "GO",
+          "rbi": 1,
+          "scored": 1,
+          "dir": "L",
+          "qual": "GB"
+        },
+        {
+          "run": "none",
+          "bases": [],
+          "seq": "WH",
+          "res": "HBP",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "",
+          "qual": ""
+        },
+        {
+          "run": "none",
+          "bases": [],
+          "seq": "WBWS",
+          "res": "SO_L",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "",
+          "qual": ""
+        }
+      ],
+      "bfs": [
+        {
+          "seq": "SFBX",
+          "res": "IFH",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "BBSBSX",
+          "res": "DP",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "BWFW",
+          "res": "SO_S",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "BSBBB",
+          "res": "BB",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        },
+        {
+          "seq": "BBSH",
+          "res": "HBP",
+          "inn": 0,
+          "r": 0,
+          "er": 0
+        }
+      ],
+      "fds": [
+        {
+          "pos": "유격수",
+          "inn": 2,
+          "po": 0,
+          "a": 0,
+          "e": 0
+        },
+        {
+          "pos": "3루수",
+          "inn": 1,
+          "po": 0,
+          "a": 0,
+          "e": 0
+        }
+      ]
+    },
+    {
       "id": "mw6239j3sd5j5",
       "date": "2026-11-07",
       "type": "정식",
