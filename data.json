@@ -7,6 +7,54 @@
   },
   "games": [
     {
+      "id": "mwn23fe14p09m",
+      "date": "2026-11-19",
+      "type": "정식",
+      "opp": "화성시",
+      "venue": "강릉둔치",
+      "tour": "26강릉솔향기",
+      "round": "16강",
+      "sb": 0,
+      "cs": 0,
+      "vid": "",
+      "vid2": "",
+      "album": "",
+      "photo": "",
+      "memo": "",
+      "pas": [
+        {
+          "run": "none",
+          "seq": "FBSBS",
+          "res": "SO_L",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "",
+          "qual": "",
+          "bases": []
+        },
+        {
+          "run": "none",
+          "bases": [],
+          "seq": "SX",
+          "res": "FO",
+          "rbi": 0,
+          "scored": 0,
+          "dir": "C",
+          "qual": "FB"
+        }
+      ],
+      "bfs": [],
+      "fds": [
+        {
+          "pos": "3루수",
+          "inn": 4,
+          "po": 0,
+          "a": 2,
+          "e": 1
+        }
+      ]
+    },
+    {
       "id": "mwlgy0g4oyj0f",
       "date": "2026-11-18",
       "type": "정식",
